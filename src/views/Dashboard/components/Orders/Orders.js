@@ -40,7 +40,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Budget = props => {
+const Orders = props => {
+  
+  let total_orders = props.total_orders;
+
   const { className, ...rest } = props;
 
   const classes = useStyles();
@@ -62,9 +65,9 @@ const Budget = props => {
               gutterBottom
               variant="body2"
             >
-              BUDGET
+              ORDERS
             </Typography>
-            <Typography variant="h3">$24,000</Typography>
+            <Typography variant="h3">{total_orders}</Typography>
           </Grid>
           <Grid item>
             <Avatar className={classes.avatar}>
@@ -72,7 +75,7 @@ const Budget = props => {
             </Avatar>
           </Grid>
         </Grid>
-        <div className={classes.difference}>
+        {/* <div className={classes.difference}>
           <ArrowDownwardIcon className={classes.differenceIcon} />
           <Typography
             className={classes.differenceValue}
@@ -86,14 +89,14 @@ const Budget = props => {
           >
             Since last month
           </Typography>
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   );
 };
 
-Budget.propTypes = {
+Orders.propTypes = {
   className: PropTypes.string
 };
 
-export default Budget;
+export default Orders;

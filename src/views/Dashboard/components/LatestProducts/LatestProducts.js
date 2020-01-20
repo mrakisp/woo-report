@@ -53,7 +53,7 @@ const LatestProducts = props => {
         title="Latest products"
       />
       <Divider />
-      <CardContent className={classes.content}>
+      <CardContent className={classes.content}>aa
         <List>
           {products.map((product, i) => (
             <ListItem
