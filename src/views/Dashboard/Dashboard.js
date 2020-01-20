@@ -16,7 +16,8 @@ import {
   TotalProfit,
   UsersByDevice,
   LatestProducts,
-  LatestOrders
+  LatestOrders,
+  TopSellers
 } from './components';
 
 
@@ -168,7 +169,8 @@ export default class Dashboard extends Component {
           xl={3}
           xs={12}
         >
-          <LatestProducts />
+           <TopSellers topSellers={topSellers} />
+          {/* <LatestProducts /> */}
         </Grid>
         <Grid
           item
@@ -178,7 +180,7 @@ export default class Dashboard extends Component {
           xs={12}
         >
           <PieChart topSellers={topSellers}/>
-          {/* <LatestOrders /> */}
+         
         </Grid>
       </Grid>
     </div>
