@@ -144,24 +144,15 @@ export default class Dashboard extends Component {
         </Grid>
         <Grid
           item
-          lg={8}
+          lg={12}
           md={12}
-          xl={9}
+          xl={12}
           xs={12}
         >
           <LineChart sales={sales}/>
           {/* <LatestSales /> */}
         </Grid>
-        <Grid
-          item
-          lg={4}
-          md={6}
-          xl={3}
-          xs={12}
-        >
-           <LineChart customers={customers}/>
-          {/* <UsersByDevice /> */}
-        </Grid>
+       
         <Grid
           item
           lg={4}
