@@ -14,9 +14,9 @@ class ColumnChart extends Component {
 
 		let dataPoints = [];
 		const data = this.props.topSellers;
-		debugger;
+	
 		if(data.length > 0){
-			debugger;
+	
 			data.forEach((row) => {
 				dataPoints.push({ y: row.quantity, label: row.name + ' - ID: ' + row.product_id })
 			});
