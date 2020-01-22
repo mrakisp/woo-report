@@ -41,42 +41,6 @@ export default class Dashboard extends Component {
     this.getData() 
   }
 
-  login(){
-
-    window.gapi.auth2.init({
-      client_id: '462148689287-omlkrm6phhnahdkr4vdqam352t3sujpn.apps.googleusercontent.com'
-    }).then(() => {
-      console.log('signed in', window.gapi.auth2.getAuthInstance().isSignedIn.get());
-      window.gapi.client.request({
-        path: '/v4/reports:batchGet',
-        root: 'https://analyticsreporting.googleapis.com/',
-        method: 'POST',
-        body: {
-          reportRequests: [
-            {
-              viewId: '133587325',
-              dateRanges: [
-                {
-                  startDate: '7daysAgo',
-                  endDate: 'today'
-                }
-              ],
-              metrics: [
-                {
-                  expression: 'ga:sessions'
-                }
-              ]
-            }
-          ]
-        }
-      }).then(function(response){ 
-        let formattedJson = JSON.stringify(response.result, null, 2)
-      }, console.error.bind(console));
-
-    });
-
-  }
-
   getData = () =>{
     //DATE
     const fromDate = this.state.fromDate;
@@ -117,8 +81,6 @@ export default class Dashboard extends Component {
     });
     
   }
-
-  // /133587325
 
   render() {
     

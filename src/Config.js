@@ -5,6 +5,11 @@ const rest_api_creds = {
   consumer_secret: "cs_562201b3c09564fce2ad01c8b52c96d6e54b5851",  // CONSUMER SECRET
 }
 
+export const analytics = {
+  client_id : "462148689287-omlkrm6phhnahdkr4vdqam352t3sujpn.apps.googleusercontent.com",
+  view_id: "133587325"
+}
+
 export const currencySymbol = "€";
 
 

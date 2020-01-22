@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 import LineChart from "../../components/charts/LineChart";
 import PieChart from "../../components/charts/PieChart";
-import {topSellersEndPoint, salesEndPoint } from '../../Config';
+import {analytics} from '../../Config';
 import {formatDate} from "../../helpers/Utils";
 import DatePicker from "../../helpers/Date";
 
@@ -22,65 +22,106 @@ import {
 
 export default class Analytics extends Component {
 
-  state = {
-    sales : null,
-    customers : null,
-    total_sales: null,
-    total_orders : null,
-    total_items : null,
-    total_customers : null,
-    total_refunds: null,
-    topSellers : [],
-    fromDate : formatDate(new Date()),
-    toDate : formatDate(new Date()),
-    loading: true,
-  };
+  constructor() {
+    super();
+    this.state = {
+      users : null,
+      newUsers : null,
+      sessions: null,
+      avgSessionDuration : null,
+      bounceRate : null,
+      // roas : null,
+      // revenuePerItem: null,
+      // topSellers : [],
+      fromDate : formatDate(new Date()),
+      toDate : formatDate(new Date()),
+      // loading: true,
+    };
+  }
+ 
   
   componentDidMount() {
-    this.getData() 
+    // this.getData() 
   }
 
-  login(){
-
+  getData = () =>{
+    //DATE
+    const _this = this; 
+    const fromDate = this.state.fromDate;
+    const toDate = this.state.toDate;
+    
     window.gapi.auth2.init({
-      client_id: '462148689287-omlkrm6phhnahdkr4vdqam352t3sujpn.apps.googleusercontent.com'
+      client_id: analytics.client_id
     }).then(() => {
+      debugger;
       console.log('signed in', window.gapi.auth2.getAuthInstance().isSignedIn.get());
       window.gapi.client.request({
         path: '/v4/reports:batchGet',
         root: 'https://analyticsreporting.googleapis.com/',
         method: 'POST',
         body: {
-          reportRequests: [
-            {
-              viewId: '133587325',
-              dateRanges: [
-                {
-                  startDate: '7daysAgo',
-                  endDate: 'today'
-                }
-              ],
-              metrics: [
-                {
-                  expression: 'ga:sessions'
-                }
-              ]
-            }
-          ]
+          
+            "reportRequests": [
+              {
+                "viewId": analytics.view_id,
+                "dateRanges": [
+                  {
+                    "startDate": fromDate,
+                    "endDate": toDate
+                  }
+                ],
+                "metrics": [
+                  //users
+                  {
+                    "expression": "ga:users"
+                  },
+                  {
+                    "expression": "ga:newUsers"
+                  },
+                  //sessions
+                  {
+                    "expression": "ga:sessions"
+                  },
+                  {
+                    "expression": "ga:avgSessionDuration"
+                  },
+                  {
+                    "expression": "ga:bounceRate"
+                  },
+                  // {
+                  //   "expression": "ga:ROAS"
+                  // },
+                  // {
+                  //   "expression": "ga:revenuePerItem"
+                  // },
+                  // {
+                  //   "expression": "ga:avgPageLoadTime"
+                  // },
+                  // {
+                  //   "expression": "ga:serverResponseTime"
+                  // }
+                  
+                ]
+              }
+            ]
+          
         }
       }).then(function(response){ 
-        let formattedJson = JSON.stringify(response.result, null, 2)
+        debugger;
+        // let usersFinal = response.result.reports[0].data.totals[0].values[0]
+        _this.setState({users : response.result.reports[0].data.totals[0].values[0]})
+        //   users : users,
+          // newUsers : response.result.reports[0].data.totals[0].values[1],
+          // sessions: response.result.reports[0].data.totals[0].values[2],
+          // avgSessionDuration : response.result.reports[0].data.totals[0].values[3],
+          // bounceRate : response.result.reports[0].data.totals[0].values[4],
+        //})
+        
+        
+        //let formattedJson = JSON.stringify(response.result, null, 2)
       }, console.error.bind(console));
-
+      // debugger;
     });
-
-  }
-
-  getData = () =>{
-    //DATE
-    const fromDate = this.state.fromDate;
-    const toDate = this.state.toDate;
-    const endpointParams = "&date_min=" + fromDate + "&date_max=" + toDate ;
     
   }
 
@@ -99,27 +140,24 @@ export default class Analytics extends Component {
   // /133587325
 
   render() {
-    
+    //this.getData()
     const classes = makeStyles(theme => ({
       root: {
         padding: theme.spacing(4)
       }
     }));
   
-    const sales = this.state.sales;
-    const customers = this.state.customers;
-    const total_sales = this.state.total_sales;
-    const total_orders = this.state.total_orders;
-    const total_items = this.state.total_items;
-    const total_customers = this.state.total_customers;
-    const total_refunds = this.state.total_refunds;
-    const topSellers = this.state.topSellers;
-
+    const users = this.state.users;
+    const newUsers = this.state.newUsers;
+    const sessions = this.state.sessions;
+    const avgSessionDuration = this.state.avgSessionDuration;
+    const bounceRate = this.state.bounceRate;
+    debugger
   return (
     <div className={classes.root}>
-       <p class="test" onClick={this.login}>AAAA</p>
       <DatePicker parentCallback = {this.callbackFunction}/>
-      <Grid
+      {users}
+      {/* <Grid
         container
         spacing={4}
       >
@@ -130,8 +168,7 @@ export default class Analytics extends Component {
           xl={3}
           xs={12}
         >
-          
-          <Orders total_orders={total_orders}/>
+        <Orders total_orders={total_orders}/>
         </Grid>
         <Grid
           item
@@ -168,7 +205,7 @@ export default class Analytics extends Component {
           xs={12}
         >
           <LineChart sales={sales}/>
-          {/* <LatestSales /> */}
+
         </Grid>
        
         <Grid
@@ -179,7 +216,7 @@ export default class Analytics extends Component {
           xs={12}
         >
            <TopSellers topSellers={topSellers} />
-          {/* <LatestProducts /> */}
+       
         </Grid>
         <Grid
           item
@@ -191,7 +228,7 @@ export default class Analytics extends Component {
           <PieChart topSellers={topSellers}/>
          
         </Grid>
-      </Grid>
+      </Grid> */}
     </div>
   );
 };
@@ -233,43 +270,3 @@ export default class Analytics extends Component {
 // }
 
 
-// {
-//   "reportRequests": [
-//     {
-//       "viewId": "133587325",
-//       "dateRanges": [
-//         {
-//           "startDate": "2020-01-15",
-//           "endDate": "2020-01-22"
-//         }
-//       ],
-//       "metrics": [
-//         //users
-//         {
-//           "expression": "ga:users"
-//         },
-//         {
-//           "expression": "ga:newUsers"
-//         },
-//         //sessions
-//         {
-//           "expression": "ga:sessions"
-//         },
-//         {
-//           "expression": "ga:avgSessionDuration"
-//         },
-//         {
-//           "expression": "ga:bounceRate"
-//         },
-        
-        
-//         {
-//           "expression": "ga:ROAS"
-//         },
-//         {
-//           "expression": "ga:revenuePerItem"
-//         }
-//       ]
-//     }
-//   ]
-// }
