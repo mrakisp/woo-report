@@ -6,7 +6,6 @@ import PieChart from "../../components/charts/PieChart";
 import {topSellersEndPoint, salesEndPoint } from '../../Config';
 import {formatDate} from "../../helpers/Utils";
 import DatePicker from "../../helpers/Date";
-import axios from 'axios';
 
 
 import {
@@ -21,7 +20,7 @@ import {
 } from './components';
 
 
-export default class Dashboard extends Component {
+export default class Analytics extends Component {
 
   state = {
     sales : null,
@@ -83,27 +82,6 @@ export default class Dashboard extends Component {
     const toDate = this.state.toDate;
     const endpointParams = "&date_min=" + fromDate + "&date_max=" + toDate ;
     
-    // const urlTopSellers = topSellersEndPoint + endpointParams;
-    const urlSales = salesEndPoint + endpointParams;
-    axios.get(urlSales)
-          .then(res => {
-            this.setState({ 
-              sales : res.data[0],
-              customers : res.data[0],
-              total_sales: res.data[0].total_sales ,
-              total_orders : res.data[0].total_orders ,
-              total_items : res.data[0].total_items ,
-              total_customers : res.data[0].total_customers ,
-              total_refunds: res.data[0].total_refunds ,
-            })  
-    })
-    const urlTopSellers = topSellersEndPoint + endpointParams;
-    axios.get(urlTopSellers)
-    .then(res => {
-      this.setState({ 
-        topSellers : res.data
-      })  
-})
   }
 
    //GET DATA FROM CHILD COMPONENT
@@ -139,6 +117,7 @@ export default class Dashboard extends Component {
 
   return (
     <div className={classes.root}>
+       <p class="test" onClick={this.login}>AAAA</p>
       <DatePicker parentCallback = {this.callbackFunction}/>
       <Grid
         container
@@ -218,3 +197,79 @@ export default class Dashboard extends Component {
 };
 }
 
+
+
+//https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet?apix_params=%7B"resource"%3A%7B"reportRequests"%3A%5B%7B"viewId"%3A"133587325"%2C"dateRanges"%3A%5B%7B"startDate"%3A"2020-01-15"%2C"endDate"%3A"2020-01-22"%7D%5D%2C"metrics"%3A%5B%7B"expression"%3A"ga%3Ausers"%7D%2C%7B"expression"%3A"ga%3Asessions"%7D%5D%2C"dimensions"%3A%5B%7B"name"%3A"ga%3Amedium"%7D%5D%7D%5D%7D%7D 
+//https://developers.google.com/analytics/devguides/reporting/core/v4/samples
+//https://ga-dev-tools.appspot.com/dimensions-metrics-explorer/
+//{
+//   "reportRequests": [
+//     {
+//       "viewId": "133587325",
+//       "dateRanges": [
+//         {
+//           "startDate": "2020-01-15",
+//           "endDate": "2020-01-22"
+//         }
+//       ],
+//       "metrics": [
+//         {
+//           "expression": "ga:users"
+//         },
+//         {
+//           "expression": "ga:sessions"
+//         }
+//       ],
+//       "dimensions": [
+//         {
+//           "name": "ga:medium"
+//         },
+          // {
+          //   "name": "ga:userType"
+          // }
+//       ]
+//     }
+//   ]
+// }
+
+
+// {
+//   "reportRequests": [
+//     {
+//       "viewId": "133587325",
+//       "dateRanges": [
+//         {
+//           "startDate": "2020-01-15",
+//           "endDate": "2020-01-22"
+//         }
+//       ],
+//       "metrics": [
+//         //users
+//         {
+//           "expression": "ga:users"
+//         },
+//         {
+//           "expression": "ga:newUsers"
+//         },
+//         //sessions
+//         {
+//           "expression": "ga:sessions"
+//         },
+//         {
+//           "expression": "ga:avgSessionDuration"
+//         },
+//         {
+//           "expression": "ga:bounceRate"
+//         },
+        
+        
+//         {
+//           "expression": "ga:ROAS"
+//         },
+//         {
+//           "expression": "ga:revenuePerItem"
+//         }
+//       ]
+//     }
+//   ]
+// }
