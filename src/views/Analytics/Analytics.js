@@ -192,15 +192,7 @@ export default class Analytics extends Component {
     
   }
 
-  compare( a, b ) {
-    if ( a.metrics[0].values[0] < b.metrics[0].values[0] ){
-      return -1;
-    }
-    if ( a.metrics[0].values[0] > b.metrics[0].values[0] ){
-      return 1;
-    }
-    return 0;
-  }
+
 
   render() {
 
@@ -223,7 +215,21 @@ export default class Analytics extends Component {
     const avgDomInteractiveTime = Number(this.state.avgDomInteractiveTime).toFixed(3) +' sec';
     const avgDomContentLoadedTime = Number(this.state.avgDomContentLoadedTime).toFixed(3) +' sec';
 
-    const sourcesArray = this.state.analyticsData.sort((a, b) => (a.dimensions[0] > b.dimensions[0]) ? 1 : -1)
+    
+    const sourcesArray = this.state.analyticsData //.sort((a, b) => (a.dimensions[0] > b.dimensions[0]) ? 1 : -1)
+    let fbval = 0
+    let googleval = 0
+    let sources = [
+      {label: 'facebook', value: fbval},
+      {label: 'google', value: googleval},
+      {label: 'instagram', value: instaval}
+    ]
+    sourcesArray.forEach(elem,i => {
+      if(elem.dimensions[0].contains('facebook')){fbval+=elem.metrics[0].values[0]}
+      else if(elem.dimensions[0].contains('google')){googleval+=elem.metrics[0].values[0]}
+      else if(elem.dimensions[0].contains('instagram')){googleval+=elem.metrics[0].values[0]}
+      else {sources.push({label: elem.dimensions[0], value:elem.metrics[0].values[0]})}
+    })
     let sources = sourcesArray.map((elem, i) => { 
           return (
           <Grid key={i}
@@ -233,7 +239,7 @@ export default class Analytics extends Component {
               xl={3}
               xs={12}
             >
-            <Box title={elem.dimensions[0]} data={elem.metrics[0].values[0]}/>
+            <Box title={elem.label} data={elem.value}/>
             </Grid>
           )
     })
