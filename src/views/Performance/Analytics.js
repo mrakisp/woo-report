@@ -26,7 +26,6 @@ export default class Analytics extends Component {
   constructor() {
     super();
     this.state = {
-      analyticsData : [],
       users : 0,
       newUsers : 0,
       sessions: 0,
@@ -37,7 +36,9 @@ export default class Analytics extends Component {
       avgServerConnectionTime : 0,
       avgServerResponseTime : 0,
       avgDomInteractiveTime : 0,
-      avgDomContentLoadedTime : 0,
+      // roas : null,
+      // revenuePerItem: null,
+      // topSellers : [],
       fromDate : formatDate(new Date()),
       toDate : formatDate(new Date()),
       // loading: true,
@@ -62,7 +63,6 @@ export default class Analytics extends Component {
  
 
   getData = () =>{
-
     //DATE
     const self = this; 
     const fromDate = this.state.fromDate;
@@ -72,7 +72,7 @@ export default class Analytics extends Component {
     window.gapi.auth2.init({
       client_id: analytics.client_id
     }).then(() => {
-     
+ 
       //console.log('signed in', window.gapi.auth2.getAuthInstance().isSignedIn.get());
       window.gapi.client.request({
         path: '/v4/reports:batchGet',
@@ -103,18 +103,7 @@ export default class Analytics extends Component {
                   },
                   {
                     "expression": "ga:bounceRate"
-                  }
-                ]
-              },
-              {
-                "viewId": analytics.view_id,
-                "dateRanges": [
-                  {
-                    "startDate": fromDate,
-                    "endDate": toDate
-                  }
-                ],
-                "metrics": [
+                  },
                   {
                     "expression": "ga:avgPageLoadTime"
                   },
@@ -129,29 +118,8 @@ export default class Analytics extends Component {
                   },
                   {
                     "expression": "ga:avgDomInteractiveTime"
-                  },
-                  {
-                    "expression": "ga:avgDomContentLoadedTime"
                   }
                   
-                ]
-              },{
-                "viewId":  analytics.view_id,
-                "dateRanges": [
-                  {
-                    "startDate": fromDate,
-                    "endDate": toDate
-                  }
-                ],
-                "metrics": [
-                  {
-                    "expression": "ga:users"
-                  }
-                ],
-                "dimensions": [
-                  {
-                    "name": "ga:source"
-                  }
                 ]
               }
             ]
@@ -165,13 +133,11 @@ export default class Analytics extends Component {
           sessions: response.result.reports[0].data.totals[0].values[2],
           avgSessionDuration : response.result.reports[0].data.totals[0].values[3],
           bounceRate : response.result.reports[0].data.totals[0].values[4],
-          avgPageLoadTime : response.result.reports[1].data.totals[0].values[0],
-          avgDomainLookupTime : response.result.reports[1].data.totals[0].values[1],
-          avgServerConnectionTime : response.result.reports[1].data.totals[0].values[2],
-          avgServerResponseTime : response.result.reports[1].data.totals[0].values[3],
-          avgDomInteractiveTime : response.result.reports[1].data.totals[0].values[4],
-          avgDomContentLoadedTime : response.result.reports[1].data.totals[0].values[5],
-          analyticsData : response.result.reports[2].data.rows
+          avgPageLoadTime : response.result.reports[0].data.totals[0].values[5],
+          avgDomainLookupTime : response.result.reports[0].data.totals[0].values[6],
+          avgServerConnectionTime : response.result.reports[0].data.totals[0].values[7],
+          avgServerResponseTime : response.result.reports[0].data.totals[0].values[8],
+          avgDomInteractiveTime : response.result.reports[0].data.totals[0].values[9],
         })
         
         //let formattedJson = JSON.stringify(response.result, null, 2)
@@ -211,45 +177,11 @@ export default class Analytics extends Component {
     const avgServerConnectionTime = Number(this.state.avgServerConnectionTime).toFixed(3) +' sec' ;
     const avgServerResponseTime = Number(this.state.avgServerResponseTime).toFixed(3) +' sec';
     const avgDomInteractiveTime = Number(this.state.avgDomInteractiveTime).toFixed(3) +' sec';
-    const avgDomContentLoadedTime = Number(this.state.avgDomContentLoadedTime).toFixed(3) +' sec';
+    debugger
 
-    let sources = this.state.analyticsData.map((elem, i) => { 
-      debugger;
-          return (
-          <Grid key={i}
-              item
-              lg={2}
-              sm={6}
-              xl={3}
-              xs={12}
-            >
-            <Box title={elem.dimensions[0]} data={elem.metrics[0].values[0]}/>
-            </Grid>
-          )
-    })
-    
   return (
     <div className={classes.root}>
-
       <DatePicker parentCallback = {this.callbackFunction}/>
-      <Card 
-          className={classes.root}>
-          <CardHeader
-            title="Sources"
-          />
-          <Divider />
-          <CardContent>
-          <Grid
-          container
-          spacing={4}
-        >
-          {sources}
-
-        </Grid>
-          </CardContent>
-      </Card> 
-
-
       <Card 
           className={classes.root}>
               <CardHeader
@@ -376,16 +308,7 @@ export default class Analytics extends Component {
             >
             <Box title={'Avg Dom Interactive'} data={avgDomInteractiveTime}/>
             </Grid>
-            <Grid
-              item
-              lg={2}
-              sm={6}
-              xl={3}
-              xs={12}
-            >
-            <Box title={'Avg Dom Content Load'} data={avgDomContentLoadedTime}/>
-            </Grid>
-            
+          
         </Grid>
       </CardContent>
     </Card>
@@ -399,6 +322,34 @@ export default class Analytics extends Component {
 //https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet?apix_params=%7B"resource"%3A%7B"reportRequests"%3A%5B%7B"viewId"%3A"133587325"%2C"dateRanges"%3A%5B%7B"startDate"%3A"2020-01-15"%2C"endDate"%3A"2020-01-22"%7D%5D%2C"metrics"%3A%5B%7B"expression"%3A"ga%3Ausers"%7D%2C%7B"expression"%3A"ga%3Asessions"%7D%5D%2C"dimensions"%3A%5B%7B"name"%3A"ga%3Amedium"%7D%5D%7D%5D%7D%7D 
 //https://developers.google.com/analytics/devguides/reporting/core/v4/samples
 //https://ga-dev-tools.appspot.com/dimensions-metrics-explorer/
-
+//{
+//   "reportRequests": [
+//     {
+//       "viewId": "133587325",
+//       "dateRanges": [
+//         {
+//           "startDate": "2020-01-15",
+//           "endDate": "2020-01-22"
+//         }
+//       ],
+//       "metrics": [
+//         {
+//           "expression": "ga:users"
+//         },
+//         {
+//           "expression": "ga:sessions"
+//         }
+//       ],
+//       "dimensions": [
+//         {
+//           "name": "ga:medium"
+//         },
+          // {
+          //   "name": "ga:userType"
+          // }
+//       ]
+//     }
+//   ]
+// }
 
 

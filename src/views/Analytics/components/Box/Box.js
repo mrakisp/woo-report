@@ -3,8 +3,6 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import MoneyIcon from '@material-ui/icons/Money';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,10 +38,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Orders = props => {
+const Box = props => {
   
-  let total_orders = props.total_orders;
-
+  let data = props.data;
+  let title = props.title;
   const { className, ...rest } = props;
 
   const classes = useStyles();
@@ -65,38 +63,18 @@ const Orders = props => {
               gutterBottom
               variant="body2"
             >
-              ORDERS
+              {title}
             </Typography>
-            <Typography variant="h3">{total_orders}</Typography>
-          </Grid>
-          <Grid item>
-            <Avatar className={classes.avatar}>
-              <MoneyIcon className={classes.icon} />
-            </Avatar>
+            <Typography variant="h3">{data}</Typography>
           </Grid>
         </Grid>
-        {/* <div className={classes.difference}>
-          <ArrowDownwardIcon className={classes.differenceIcon} />
-          <Typography
-            className={classes.differenceValue}
-            variant="body2"
-          >
-            12%
-          </Typography>
-          <Typography
-            className={classes.caption}
-            variant="caption"
-          >
-            Since last month
-          </Typography>
-        </div> */}
       </CardContent>
     </Card>
   );
 };
 
-Orders.propTypes = {
+Box.propTypes = {
   className: PropTypes.string
 };
 
-export default Orders;
+export default Box;
