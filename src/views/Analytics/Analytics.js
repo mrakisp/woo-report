@@ -46,6 +46,7 @@ export default class Analytics extends Component {
  
   
   componentDidMount() {
+    this.googleSDK();
     //LOAD GA API SCRIPT
     const script = document.createElement("script");
     script.src = "https://apis.google.com/js/client:platform.js";
@@ -59,7 +60,46 @@ export default class Analytics extends Component {
     };
   }
 
+  googleSDK = () => {
  
+    window['googleSDKLoaded'] = () => {
+      window['gapi'].load('auth2', () => {
+        this.auth2 = window['gapi'].auth2.init({
+          client_id: '462148689287-omlkrm6phhnahdkr4vdqam352t3sujpn.apps.googleusercontent.com',
+          cookiepolicy: 'single_host_origin',
+          scope: 'profile email'
+        });
+        this.prepareLoginButton();
+      });
+    }
+ 
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'google-jssdk'));
+ 
+}
+prepareLoginButton = () => {
+this.auth2.attachClickHandler(this.refs.googleLoginBtn, {},
+  (googleUser) => {
+
+  let profile = googleUser.getBasicProfile();
+  console.log('Token || ' + googleUser.getAuthResponse().id_token);
+  console.log('ID: ' + profile.getId());
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail());
+  //YOUR CODE HERE
+
+
+  }, (error) => {
+      alert(JSON.stringify(error, undefined, 2));
+  });
+
+}
 
   getData = () =>{
 
@@ -67,12 +107,12 @@ export default class Analytics extends Component {
     const self = this; 
     const fromDate = this.state.fromDate;
     const toDate = this.state.toDate;
-
+debugger;
     //CALL API AUTH AND ON SUCCESS GET REPORTS
     window.gapi.auth2.init({
       client_id: analytics.client_id
     }).then(() => {
-     
+     debugger;
       //console.log('signed in', window.gapi.auth2.getAuthInstance().isSignedIn.get());
       window.gapi.client.request({
         path: '/v4/reports:batchGet',
@@ -158,7 +198,6 @@ export default class Analytics extends Component {
           
         }
       }).then(function(response){ 
-        debugger
         self.setState({
           users : response.result.reports[0].data.totals[0].values[0],
           newUsers : response.result.reports[0].data.totals[0].values[1],
@@ -215,22 +254,29 @@ export default class Analytics extends Component {
     const avgDomInteractiveTime = Number(this.state.avgDomInteractiveTime).toFixed(3) +' sec';
     const avgDomContentLoadedTime = Number(this.state.avgDomContentLoadedTime).toFixed(3) +' sec';
 
-    
+    debugger;
     const sourcesArray = this.state.analyticsData //.sort((a, b) => (a.dimensions[0] > b.dimensions[0]) ? 1 : -1)
     let fbval = 0
     let googleval = 0
+    let instaval = 0;
     let sources = [
       {label: 'facebook', value: fbval},
       {label: 'google', value: googleval},
       {label: 'instagram', value: instaval}
     ]
-    sourcesArray.forEach(elem,i => {
-      if(elem.dimensions[0].contains('facebook')){fbval+=elem.metrics[0].values[0]}
-      else if(elem.dimensions[0].contains('google')){googleval+=elem.metrics[0].values[0]}
-      else if(elem.dimensions[0].contains('instagram')){googleval+=elem.metrics[0].values[0]}
-      else {sources.push({label: elem.dimensions[0], value:elem.metrics[0].values[0]})}
+    if(sourcesArray.length > 0){
+      debugger
+    sourcesArray.forEach(element => {
+      debugger;
+      if(element.dimensions[0].includes('facebook')){  
+       // debugger
+        fbval+=element.metrics[0].values[0]}
+      else if(element.dimensions[0].includes('google')){ googleval+=element.metrics[0].values[0]}
+      else if(element.dimensions[0].includes('instagram')){ googleval+=element.metrics[0].values[0]}
+      else {sources.push({label: element.dimensions[0], value:element.metrics[0].values[0]})}
     })
-    let sources = sourcesArray.map((elem, i) => { 
+  }
+    let sourcesf = sources.map((elem, i) => { 
           return (
           <Grid key={i}
               item
@@ -248,6 +294,9 @@ export default class Analytics extends Component {
     <div className={classes.root}>
 
       <DatePicker parentCallback = {this.callbackFunction}/>
+      <button className="loginBtn loginBtn--google" ref="googleLoginBtn">
+                                        Login with Google
+                                    </button>
       <Card 
           className={classes.root}>
           <CardHeader
@@ -259,7 +308,7 @@ export default class Analytics extends Component {
           container
           spacing={4}
         >
-          {sources}
+          {sourcesf}
 
         </Grid>
           </CardContent>
