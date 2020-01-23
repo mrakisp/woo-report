@@ -192,6 +192,16 @@ export default class Analytics extends Component {
     
   }
 
+  compare( a, b ) {
+    if ( a.metrics[0].values[0] < b.metrics[0].values[0] ){
+      return -1;
+    }
+    if ( a.metrics[0].values[0] > b.metrics[0].values[0] ){
+      return 1;
+    }
+    return 0;
+  }
+
   render() {
 
     const classes = makeStyles(theme => ({
@@ -213,8 +223,8 @@ export default class Analytics extends Component {
     const avgDomInteractiveTime = Number(this.state.avgDomInteractiveTime).toFixed(3) +' sec';
     const avgDomContentLoadedTime = Number(this.state.avgDomContentLoadedTime).toFixed(3) +' sec';
 
-    let sources = this.state.analyticsData.map((elem, i) => { 
-      debugger;
+    const sourcesArray = this.state.analyticsData.sort((a, b) => (a.dimensions[0] > b.dimensions[0]) ? 1 : -1)
+    let sources = sourcesArray.map((elem, i) => { 
           return (
           <Grid key={i}
               item
