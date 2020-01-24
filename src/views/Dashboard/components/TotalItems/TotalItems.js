@@ -10,7 +10,7 @@ import {
   Avatar,
   LinearProgress
 } from '@material-ui/core';
-import InsertChartIcon from '@material-ui/icons/InsertChartOutlined';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,7 +69,7 @@ const TasksProgress = props => {
           </Grid>
           <Grid item>
             <Avatar className={classes.avatar}>
-              <InsertChartIcon className={classes.icon} />
+              <ShoppingCartIcon className={classes.icon} />
             </Avatar>
           </Grid>
         </Grid>

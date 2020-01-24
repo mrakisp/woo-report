@@ -40,7 +40,6 @@ const useStyles = makeStyles(theme => ({
 
 const UsersByDevice = props => {
   const { className, ...rest } = props;
-  debugger;
   const classes = useStyles();
   const theme = useTheme();
   let desktop = 0;

@@ -3,7 +3,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import EuroIcon from '@material-ui/icons/Euro';
+import {currencySymbol} from '../../../../Config'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,12 +60,12 @@ const TotalProfit = props => {
               color="inherit"
               variant="h3"
             >
-              {total_sales}€
+              {total_sales}{currencySymbol}
             </Typography>
           </Grid>
           <Grid item>
             <Avatar className={classes.avatar}>
-              <AttachMoneyIcon className={classes.icon} />
+              <EuroIcon className={classes.icon} />
             </Avatar>
           </Grid>
         </Grid>

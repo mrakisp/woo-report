@@ -1,3 +1,9 @@
+//DASHBOARD VIEWS CONFIGURATION
+export const showView = {
+  dashboard : true,
+  analytics: true
+}
+
 //ENABLE REST API TO YOUR WOOCOMMERCE STORE AND PROVIDE THE INFOS
 const rest_api_creds = {
   website : "https://lovefashionpoint.gr",  // WEBSITE URL
@@ -5,13 +11,21 @@ const rest_api_creds = {
   consumer_secret: "cs_562201b3c09564fce2ad01c8b52c96d6e54b5851",  // CONSUMER SECRET
 }
 
+//ANALYTICS CREDS AND CONFIGURATION
 export const analytics = {
   client_id : "462148689287-omlkrm6phhnahdkr4vdqam352t3sujpn.apps.googleusercontent.com",
   view_id: "133587325",
-  groupSources : true //show all sources from google as one source // facebok / instagram
+  groupSources : true //show all sources from facebok & instagram as one parent source ( e.x => i.facebook , m.facebook etc)
 }
 
+//PROVIDE CURRENCY
 export const currencySymbol = "€";
+
+//PROVIDE NAME 
+export const PoweredName = {
+  name : "MrAkisP",
+  subname : ""
+};
 
 
 //WP REST API TOKEN AND ENDPOINTS

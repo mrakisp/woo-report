@@ -1,4 +1,5 @@
 import React from 'react';
+import { showView } from '../../../../Config';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -42,17 +43,18 @@ const Sidebar = props => {
 
   const classes = useStyles();
 
-  const pages = [
-    {
-      title: 'Dashboard',
-      href: '/dashboard',
-      icon: <DashboardIcon />
-    },
-    {
-      title: 'Analytics',
-      href: '/analytics',
-      icon: <DashboardIcon />
-    },
+ 
+  let pages = [
+    // {
+    //   title: 'Dashboard',
+    //   href: '/dashboard',
+    //   icon: <DashboardIcon />
+    // },
+    // {
+    //   title: 'Analytics',
+    //   href: '/analytics',
+    //   icon: <DashboardIcon />
+    // },
     // {
     //   title: 'Users',
     //   href: '/users',
@@ -73,11 +75,11 @@ const Sidebar = props => {
     //   href: '/typography',
     //   icon: <TextFieldsIcon />
     // },
-    {
-      title: 'Icons',
-      href: '/icons',
-      icon: <ImageIcon />
-    },
+    // {
+    //   title: 'Icons',
+    //   href: '/icons',
+    //   icon: <ImageIcon />
+    // },
     // {
     //   title: 'Account',
     //   href: '/account',
@@ -89,6 +91,22 @@ const Sidebar = props => {
     //   icon: <SettingsIcon />
     // }
   ];
+
+  if (showView.dashboard){
+    pages.push({
+      title: 'Dashboard',
+      href: '/dashboard',
+      icon: <DashboardIcon />
+    })
+  }
+  if (showView.analytics){
+    pages.push({
+      title: 'Analytics',
+      href: '/analytics',
+      icon: <ShoppingBasketIcon />
+    })
+  }
+ 
 
   return (
     <Drawer

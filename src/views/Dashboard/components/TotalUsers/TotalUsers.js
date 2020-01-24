@@ -63,7 +63,7 @@ const TotalUsers = props => {
               gutterBottom
               variant="body2"
             >
-              TOTAL USERS
+              TOTAL VISITORS
             </Typography>
             <Typography variant="h3">{total_customers}</Typography>
           </Grid>
