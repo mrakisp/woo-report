@@ -1,6 +1,7 @@
 export { default as Account } from './Account';
 export { default as Dashboard } from './Dashboard';
 export { default as Analytics } from './Analytics';
+export { default as Adwords } from './Adwords';
 export { default as Icons } from './Icons';
 export { default as NotFound } from './NotFound';
 export { default as ProductList } from './ProductList';

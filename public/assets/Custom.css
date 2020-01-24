@@ -1,6 +1,6 @@
 #svg {
     position: fixed;
-    width: 17%;
+    width: 12%;
     height: 190px;
     left: 0;
     z-index: 99999;
@@ -41,7 +41,9 @@ padding: 0 10px;
 #root{
 overflow-x: hidden;
 }
-
+a.canvasjs-chart-credit {
+  display: none;
+}
 @media screen and (max-width:480px){
     #svg {
         width: 24%;

@@ -16,7 +16,7 @@ class ColumnChart extends Component {
 
 		if(data.length > 0){
 		
-			const firstage = data[0].metrics[0].values[0]
+				const firstage = data[0].metrics[0].values[0]
 				const secondage = data[1].metrics[0].values[0]
 				const thridage = data[2].metrics[0].values[0]
 				const fourthage = data[3].metrics[0].values[0]

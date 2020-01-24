@@ -108,6 +108,13 @@ const Sidebar = props => {
       icon: <TimelineIcon/>
     })
   }
+  if (showView.adwords){
+    pages.push({
+      title: 'Adwords',
+      href: '/adwords',
+      icon: <ShoppingBasketIcon/>
+    })
+  }
  
 
   return (

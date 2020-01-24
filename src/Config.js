@@ -1,7 +1,8 @@
 //DASHBOARD VIEWS CONFIGURATION
 export const showView = {
   dashboard : true,
-  analytics: true
+  analytics: true,
+  adwords: true
 }
 
 //ENABLE REST API TO YOUR WOOCOMMERCE STORE AND PROVIDE THE INFOS

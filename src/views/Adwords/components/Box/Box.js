@@ -3,8 +3,6 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import PeopleIcon from '@material-ui/icons/PeopleOutlined';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 700
   },
   avatar: {
-    backgroundColor: theme.palette.success.main,
+    backgroundColor: theme.palette.error.main,
     height: 56,
     width: 56
   },
@@ -32,18 +30,20 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center'
   },
   differenceIcon: {
-    color: theme.palette.success.dark
+    color: theme.palette.error.dark
   },
   differenceValue: {
-    color: theme.palette.success.dark,
+    color: theme.palette.error.dark,
     marginRight: theme.spacing(1)
   }
 }));
 
-const TotalUsers = props => {
+const Box = props => {
+  
+  let data = props.data;
+  let title = props.title;
   const { className, ...rest } = props;
 
-  let total_customers = props.total_customers;
   const classes = useStyles();
 
   return (
@@ -63,38 +63,18 @@ const TotalUsers = props => {
               gutterBottom
               variant="body2"
             >
-              TOTAL REGISTERED VISITORS
+              {title}
             </Typography>
-            <Typography variant="h3">{total_customers}</Typography>
-          </Grid>
-          <Grid item>
-            <Avatar className={classes.avatar}>
-              <PeopleIcon className={classes.icon} />
-            </Avatar>
+            <Typography variant="h3">{data}</Typography>
           </Grid>
         </Grid>
-        {/* <div className={classes.difference}>
-          <ArrowUpwardIcon className={classes.differenceIcon} />
-          <Typography
-            className={classes.differenceValue}
-            variant="body2"
-          >
-            16%
-          </Typography>
-          <Typography
-            className={classes.caption}
-            variant="caption"
-          >
-            Since last month
-          </Typography>
-        </div> */}
       </CardContent>
     </Card>
   );
 };
 
-TotalUsers.propTypes = {
+Box.propTypes = {
   className: PropTypes.string
 };
 
-export default TotalUsers;
+export default Box;

@@ -7,7 +7,7 @@ import DatePicker from "../../helpers/Date";
 import { Google as GoogleIcon } from 'icons';
 import { Box, GaSources, UsersByDevice, Tabs } from './components';
 
-export default class Analytics extends Component {
+export default class Adwords extends Component {
 
   constructor() {
     super();
@@ -273,6 +273,7 @@ export default class Analytics extends Component {
 
     return (
       <div className={classes.root}>
+      
         {/* TOP BAR */}
         <Grid container spacing={4} >
           <Grid item lg={6} sm={12} xl={6} xs={12}>
