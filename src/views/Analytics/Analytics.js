@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { Card, CardContent, Grid, Typography, CardHeader, Divider } from '@material-ui/core';
+import { Card, CardContent, Grid, Button, CardHeader, Divider } from '@material-ui/core';
 import { analytics } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
 import DatePicker from "../../helpers/Date";
-
-
-import {
-  Box,
-} from './components';
+import { Google as GoogleIcon } from 'icons';
+import { Box, GaSources, UsersByDevice } from './components';
 
 
 export default class Analytics extends Component {
@@ -16,7 +13,8 @@ export default class Analytics extends Component {
   constructor() {
     super();
     this.state = {
-      analyticsData: [],
+      sourcesData: [],
+      devicesData: [],
       users: 0,
       newUsers: 0,
       sessions: 0,
@@ -30,7 +28,6 @@ export default class Analytics extends Component {
       avgDomContentLoadedTime: 0,
       fromDate: formatDate(new Date()),
       toDate: formatDate(new Date()),
-      // loading: true,
     };
   }
 
@@ -38,7 +35,7 @@ export default class Analytics extends Component {
     window['googleSDKLoaded'] = () => {
       window['gapi'].load('auth2', () => {
         this.auth2 = window['gapi'].auth2.init({
-          client_id: '462148689287-omlkrm6phhnahdkr4vdqam352t3sujpn.apps.googleusercontent.com',
+          client_id:  analytics.client_id,
           cookiepolicy: 'single_host_origin',
           scope: 'profile email'
         });
@@ -154,7 +151,26 @@ export default class Analytics extends Component {
               ],
               "dimensions": [
                 {
-                  "name": "ga:source"
+                  "name": "ga:sourceMedium"
+                }
+              ]
+            },
+            {
+              "viewId": analytics.view_id,
+              "dateRanges": [
+                {
+                  "startDate": fromDate,
+                  "endDate": toDate
+                }
+              ],
+              "metrics": [
+                {
+                  "expression": "ga:users"
+                }
+              ],
+              "dimensions": [
+                {
+                  "name": "ga:deviceCategory"
                 }
               ]
             }
@@ -174,7 +190,8 @@ export default class Analytics extends Component {
           avgServerResponseTime: response.result.reports[1].data.totals[0].values[3],
           avgDomInteractiveTime: response.result.reports[1].data.totals[0].values[4],
           avgDomContentLoadedTime: response.result.reports[1].data.totals[0].values[5],
-          analyticsData: response.result.reports[2].data.rows
+          sourcesData: response.result.reports[2].data.rows,
+          devicesData: response.result.reports[3].data.rows
         })
 
         //let formattedJson = JSON.stringify(response.result, null, 2)
@@ -192,7 +209,6 @@ export default class Analytics extends Component {
     }, () => { //CALL FUNCTION AFTER STATE IS UPDATED
       this.getData()
     });
-
   }
 
   componentDidMount() {
@@ -221,7 +237,7 @@ export default class Analytics extends Component {
     const users = this.state.users;
     const newUsers = this.state.newUsers;
     const sessions = this.state.sessions;
-    const avgSessionDuration = Math.round(this.state.avgSessionDuration * 0.0166666667) + 'min';
+    const avgSessionDuration = Math.round(this.state.avgSessionDuration * 0.0166666667) + ' min';
     const bounceRate = Math.round(this.state.bounceRate) + '%';
 
     const avgPageLoadTime = Number(this.state.avgPageLoadTime).toFixed(3) + ' sec';
@@ -230,147 +246,77 @@ export default class Analytics extends Component {
     const avgServerResponseTime = Number(this.state.avgServerResponseTime).toFixed(3) + ' sec';
     const avgDomInteractiveTime = Number(this.state.avgDomInteractiveTime).toFixed(3) + ' sec';
     const avgDomContentLoadedTime = Number(this.state.avgDomContentLoadedTime).toFixed(3) + ' sec';
-
-    const sourcesArray = this.state.analyticsData
-    let fbvalue = 0
-    let googlevalue = 0
-    let instavalue = 0;
-    let sources = [
-      { label: 'facebook', value: this.state.fbval },
-      { label: 'google', value: this.state.googleval },
-      { label: 'instagram', value: this.state.instaval }
-    ]
-    if (sourcesArray.length > 0) {
-
-      sourcesArray.forEach(element => {
-        if (element.dimensions[0].includes('facebook') || element.dimensions[0].includes('Facebook')) {
-          // debugger
-          fbvalue += Number(element.metrics[0].values[0])
-          sources[0].value = fbvalue;
-        }
-        else if (element.dimensions[0].includes('google') || element.dimensions[0].includes('Google')) {
-          googlevalue += Number(element.metrics[0].values[0])
-          sources[1].value = googlevalue;
-        }
-        else if (element.dimensions[0].includes('instagram') || element.dimensions[0].includes('Instagram')) {
-          instavalue += Number(element.metrics[0].values[0])
-          sources[2].value = instavalue;
-        }
-        else {
-          sources.push({ label: element.dimensions[0], value: element.metrics[0].values[0] })
-        }
-      })
-    }
-
-    let sourcesf = sources.map((elem, i) => {
-      return (
-        <Grid key={i}
-          item
-          lg={2}
-          sm={6}
-          xl={3}
-          xs={12}
-        >
-          <Box title={elem.label} data={elem.value} />
-        </Grid>
-      )
-    })
+    const sourcesArray = this.state.sourcesData;
+    const devicesArray = this.state.devicesData;
 
     return (
       <div className={classes.root}>
-
-        <DatePicker parentCallback={this.callbackFunction} />
-        <button className="loginBtn loginBtn--google" ref="googleLoginBtn">
-          Login with Google
-        </button>
+        {/* TOP BAR */}
+        <Grid container spacing={4} >
+          <Grid item lg={6} sm={6} xl={3} xs={12}>
+              <Button size="large" variant="contained">
+                  <GoogleIcon className="loginBtn loginBtn--google" ref="googleLoginBtn" />
+                  Login with Google
+              </Button>
+          </Grid>
+          <Grid item lg={6} sm={6} xl={3} xs={12}>
+              <DatePicker parentCallback={this.callbackFunction} />
+          </Grid>
+        </Grid>
+        {/* END TOP BAR */}
+        
+        {/* USERS SECTION */}
         <Card
           className={classes.root}>
           <CardHeader
-            title="Sources"
+            title="Visitors Activity Section"
           />
           <Divider />
           <CardContent>
-            <Grid
-              container
-              spacing={4}
-            >
-              {sourcesf}
-
+            <Grid container spacing={4} >
+              <Grid item lg={9} sm={6} xl={9} xs={12}>
+                  <Grid container spacing={4} >
+                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                      <Box title={'All Visitors'} data={users} />
+                    </Grid>
+                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                      <Box title={'New Visitors'} data={newUsers} />
+                    </Grid>
+                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                      <Box title={'Returning Visitors'} data={users - newUsers} />
+                    </Grid>
+                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                      <Box title={'Sessions'} data={sessions} />
+                    </Grid>
+                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                      <Box title={'Avg Session Duration'} data={avgSessionDuration} />
+                    </Grid>
+                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                      <Box title={'Bounce Rate'} data={bounceRate} />
+                    </Grid>
+                  </Grid> 
+                  <Divider />
+                   {/* SOURCES SECTION */}
+                  <Card className={classes.root}>
+                    <CardHeader title="Traffic Sources"/>
+                    <Divider />
+                    <CardContent>
+                        <GaSources sourcesArray={sourcesArray}/>
+                    </CardContent>
+                  </Card>
+                  {/* END SOURCES SECTION */}
+              </Grid>
+              {/* DEVICES SECTION */}
+              <Grid item lg={3} sm={6} xl={3} xs={12}> 
+                  <UsersByDevice devicesArray={devicesArray}/>
+              </Grid> 
+               {/* END DEVICES SECTION */}
             </Grid>
           </CardContent>
         </Card>
+        {/* END USERS SECTION */}
 
-
-        <Card
-          className={classes.root}>
-          <CardHeader
-            title="Users Activity Section"
-          />
-          <Divider />
-          <CardContent>
-            <Grid
-              container
-              spacing={4}
-            >
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
-                <Box title={'All Visitors'} data={users} />
-              </Grid>
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
-                <Box title={'New Visitors'} data={newUsers} />
-              </Grid>
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
-                <Box title={'Returning Visitors'} data={users - newUsers} />
-              </Grid>
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
-                <Box title={'Sessions'} data={sessions} />
-              </Grid>
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
-                <Box title={'Avg Session Duration'} data={avgSessionDuration} />
-              </Grid>
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
-                <Box title={'Bounce Rate'} data={bounceRate} />
-              </Grid>
-
-            </Grid>
-          </CardContent>
-        </Card>
-
+        {/* PERFORMANCE SECTION */}
         <Card
           className={classes.root}>
           <CardHeader
@@ -378,68 +324,29 @@ export default class Analytics extends Component {
           />
           <Divider />
           <CardContent>
-            <Grid
-              container
-              spacing={4}
-            >
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
+            <Grid container spacing={4} >
+              <Grid item lg={2} sm={6} xl={3} xs={12} >
                 <Box title={'Avg Page Load'} data={avgPageLoadTime} />
               </Grid>
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
+              <Grid item lg={2} sm={6} xl={3} xs={12} >
                 <Box title={'Avg Domain LookUp'} data={avgDomainLookupTime} />
               </Grid>
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
+              <Grid item lg={2} sm={6} xl={3} xs={12} >
                 <Box title={'Avg Server Connection'} data={avgServerConnectionTime} />
               </Grid>
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
+              <Grid item lg={2} sm={6} xl={3} xs={12} >
                 <Box title={'Avg Server Response'} data={avgServerResponseTime} />
               </Grid>
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
+              <Grid item lg={2} sm={6} xl={3} xs={12} >
                 <Box title={'Avg Dom Interactive'} data={avgDomInteractiveTime} />
               </Grid>
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
+              <Grid item lg={2} sm={6} xl={3} xs={12} >
                 <Box title={'Avg Dom Content Load'} data={avgDomContentLoadedTime} />
               </Grid>
-
             </Grid>
           </CardContent>
         </Card>
+        {/* END PERFORMANCE SECTION */}
       </div>
     );
   };

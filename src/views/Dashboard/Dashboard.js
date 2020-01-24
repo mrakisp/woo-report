@@ -102,77 +102,29 @@ export default class Dashboard extends Component {
   return (
     <div className={classes.root}>
       <DatePicker parentCallback = {this.callbackFunction}/>
-      <Grid
-        container
-        spacing={4}
-      >
-        <Grid
-          item
-          lg={3}
-          sm={6}
-          xl={3}
-          xs={12}
-        >
-          
+      <Grid container spacing={4} >
+        <Grid item lg={3} sm={6} xl={3} xs={12} >  
           <Orders total_orders={total_orders}/>
         </Grid>
-        <Grid
-          item
-          lg={3}
-          sm={6}
-          xl={3}
-          xs={12}
-        >
+        <Grid item lg={3} sm={6} xl={3} xs={12} >
           <TotalUsers total_customers={total_customers}/>
         </Grid>
-        <Grid
-          item
-          lg={3}
-          sm={6}
-          xl={3}
-          xs={12}
-        >
+        <Grid item lg={3} sm={6} xl={3} xs={12} >
           <TotalItems total_items={total_items}/>
         </Grid>
-        <Grid
-          item
-          lg={3}
-          sm={6}
-          xl={3}
-          xs={12}
-        >
+        <Grid item lg={3} sm={6} xl={3} xs={12} >
           <TotalProfit total_sales={total_sales}/>
         </Grid>
-        <Grid
-          item
-          lg={12}
-          md={12}
-          xl={12}
-          xs={12}
-        >
+        <Grid item lg={12} sm={12} xl={12} xs={12} >
           <LineChart sales={sales}/>
           {/* <LatestSales /> */}
         </Grid>
-       
-        <Grid
-          item
-          lg={4}
-          md={6}
-          xl={3}
-          xs={12}
-        >
+        <Grid item lg={4} sm={6} xl={3} xs={12} >
            <TopSellers topSellers={topSellers} />
           {/* <LatestProducts /> */}
         </Grid>
-        <Grid
-          item
-          lg={8}
-          md={12}
-          xl={9}
-          xs={12}
-        >
+        <Grid item lg={8} sm={6} xl={3} xs={12} >
           <PieChart topSellers={topSellers}/>
-         
         </Grid>
       </Grid>
     </div>

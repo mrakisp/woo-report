@@ -1,0 +1,26 @@
+#svg {
+    position: fixed;
+    width: 17%;
+    height: 190px;
+    left: 0;
+    z-index: 99999;
+    margin-top: -65px;
+}
+
+.eye-outer {
+  fill: none;
+    stroke: #fff;
+    stroke-width: 5px;
+}
+
+.eye-inner {
+  fill: #fff;
+}
+
+@media screen and (max-width:480px){
+    #svg {
+        width: 24%;
+        height: 104px;
+        margin-top: -25px;
+    }
+}

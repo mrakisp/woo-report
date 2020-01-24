@@ -7,12 +7,14 @@ const rest_api_creds = {
 
 export const analytics = {
   client_id : "462148689287-omlkrm6phhnahdkr4vdqam352t3sujpn.apps.googleusercontent.com",
-  view_id: "133587325"
+  view_id: "133587325",
+  groupSources : true //show all sources from google as one source // facebok / instagram
 }
 
 export const currencySymbol = "€";
 
 
+//WP REST API TOKEN AND ENDPOINTS
 const token = "consumer_key="+rest_api_creds.consumer_key+"&consumer_secret="+rest_api_creds.consumer_secret;
 export const topSellersEndPoint = rest_api_creds.website+"/wp-json/wc/v3/reports/top_sellers?"+ token;
 export const salesEndPoint = rest_api_creds.website+"/wp-json/wc/v3/reports/sales?"+ token;

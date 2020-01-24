@@ -40,14 +40,31 @@ const useStyles = makeStyles(theme => ({
 
 const UsersByDevice = props => {
   const { className, ...rest } = props;
-
+  debugger;
   const classes = useStyles();
   const theme = useTheme();
+  let desktop = 0;
+  let mobile = 0;
+  let tablet = 0;
+  let desktopPercent = 0
+  let mobilePercent = 0
+  let tabletPercent = 0
 
+  if (props.devicesArray.length > 0){
+    desktop = props.devicesArray[0].metrics[0].values[0];
+    mobile = props.devicesArray[1].metrics[0].values[0];
+    tablet = props.devicesArray[2].metrics[0].values[0];
+
+    const totalUsers = Number(desktop) +  Number(mobile) +  Number(tablet)
+    desktopPercent = Math.round((desktop/totalUsers)*100)
+    mobilePercent = Math.round((mobile/totalUsers)*100)
+    tabletPercent = Math.round((tablet/totalUsers)*100)
+  }
+ 
   const data = {
     datasets: [
       {
-        data: [63, 15, 22],
+        data: [desktopPercent, mobilePercent, tabletPercent],
         backgroundColor: [
           theme.palette.primary.main,
           theme.palette.error.main,
@@ -58,7 +75,7 @@ const UsersByDevice = props => {
         hoverBorderColor: theme.palette.white
       }
     ],
-    labels: ['Desktop', 'Tablet', 'Mobile']
+    labels: ['Desktop', 'Mobile', 'Tablet']
   };
 
   const options = {
@@ -86,19 +103,19 @@ const UsersByDevice = props => {
   const devices = [
     {
       title: 'Desktop',
-      value: '63',
+      value: desktopPercent,
       icon: <LaptopMacIcon />,
       color: theme.palette.primary.main
     },
     {
-      title: 'Tablet',
-      value: '15',
+      title: 'Mobile',
+      value: mobilePercent,
       icon: <TabletMacIcon />,
       color: theme.palette.error.main
     },
     {
-      title: 'Mobile',
-      value: '23',
+      title: 'Tablet',
+      value: tabletPercent,
       icon: <PhoneIphoneIcon />,
       color: theme.palette.warning.main
     }
@@ -110,11 +127,6 @@ const UsersByDevice = props => {
       className={clsx(classes.root, className)}
     >
       <CardHeader
-        action={
-          <IconButton size="small">
-            <RefreshIcon />
-          </IconButton>
-        }
         title="Users By Device"
       />
       <Divider />

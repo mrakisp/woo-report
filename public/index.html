@@ -14,10 +14,26 @@
       href="https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto+Slab|Roboto:300,400,500,700"
       rel="stylesheet"
     />
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.4/TweenMax.min.js"></script>
+   <script src="./assets/Custom.js" defer async></script>
+   <link rel="stylesheet" href="./assets/Custom.css">
+
     <title>Total Reporting Dashboard</title>
   </head>
   <body>
-     
+      <!--FUNNY EYES PART-->
+      <svg id="svg" viewBox="0 0 1000 1000">
+          <g id="left-eye">
+            <circle class="eye-outer" cx="400" cy="500" r="100" />
+            <circle class="eye-inner" cx="480" cy="500" r="20" />
+          </g>
+          
+          <g id="right-eye">
+            <circle class="eye-outer" cx="600" cy="500" r="100" />
+            <circle class="eye-inner" cx="680" cy="500" r="20" />
+          </g>
+      </svg>
+      <!--END FUNNY EYES PART-->
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
    
@@ -25,7 +41,9 @@
       display: flex;
       align-items: center;
       padding: 10px 0;
-  }</style>
+  }
+  
+  </style>
 
   </body>
 </html>
