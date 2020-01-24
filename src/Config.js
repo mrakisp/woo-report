@@ -23,7 +23,7 @@ export const currencySymbol = "€";
 
 //PROVIDE NAME 
 export const PoweredName = {
-  name : "MrAkisP",
+  name : "Menu",
   subname : ""
 };
 

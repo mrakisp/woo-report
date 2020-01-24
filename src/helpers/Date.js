@@ -39,7 +39,11 @@ export default class SelectDate extends React.Component {
   sendTodayDate = () => {
     this.props.parentCallback(new Date(),new Date());
   }
-
+  sendYesterdayDate = () => {
+    let today = new Date();
+    let yesterday = new Date(today);
+    this.props.parentCallback( yesterday.setDate(today.getDate() - 1), yesterday.setDate(today.getDate() - 1));
+  }
 
   render() {
     const { from, to } = this.state;
@@ -59,8 +63,8 @@ export default class SelectDate extends React.Component {
             onDayClick: () => this.to.getInput().focus(),
           }}
           onDayChange={this.handleFromChange}
-        />{' '}
-        —{' '}
+        />{' '} <div className="spacing">-</div> 
+          {' '}
         <div className="InputFromTo-to">
           <DayPickerInput
             ref={el => (this.to = el)}
@@ -78,11 +82,17 @@ export default class SelectDate extends React.Component {
             onDayChange={this.handleToChange}
           />
         </div>
-        <Button onClick={this.sendTodayDate}
+        <Button className="btn-search" onClick={this.sendTodayDate}
 						size="small"
 						variant="text"
 					>
 						Today
+				</Button>
+        <Button className="btn-search" onClick={this.sendYesterdayDate}
+						size="small"
+						variant="text"
+					>
+						Yesterday
 				</Button>
         {/* <div className="btn" onClick={this.sendTodayDate}>Today</div> */}
       </div>

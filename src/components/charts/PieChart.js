@@ -13,21 +13,15 @@ class ColumnChart extends Component {
 	render() {
 
 		let dataPoints = [];
-		const data = this.props.topSellers;
-	
+		let data = this.props.topSellers;
+
 		if(data.length > 0){
-	
-			data.forEach((row) => {
-				dataPoints.push({ y: row.quantity, label: row.name + ' - ID: ' + row.product_id })
-			});
+				data.forEach((row) => {
+					dataPoints.push({ y: row.quantity, label: row.name + ' - ID: ' + row.product_id })
+				});
 		}
 
 		const options = {
-
-			// title: {
-			// 	text: "Top Sellers"
-			// },
-			//theme: "dark2",
 			theme: "light",
 			// exportEnabled: true,
 			animationEnabled: true,
@@ -38,8 +32,9 @@ class ColumnChart extends Component {
 				dataPoints: dataPoints
 			}
 			]
-
 		}
+
+		
 
 		return (
 

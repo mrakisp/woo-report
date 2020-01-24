@@ -12,8 +12,10 @@ import ImageIcon from '@material-ui/icons/Image';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import TimelineIcon from '@material-ui/icons/Timeline';
+import StoreIcon from '@material-ui/icons/Store';
 
-import { Profile, SidebarNav, UpgradePlan } from './components';
+import { Profile, SidebarNav } from './components';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -94,16 +96,16 @@ const Sidebar = props => {
 
   if (showView.dashboard){
     pages.push({
-      title: 'Dashboard',
+      title: 'WooCommerce',
       href: '/dashboard',
-      icon: <DashboardIcon />
+      icon: <StoreIcon />
     })
   }
   if (showView.analytics){
     pages.push({
       title: 'Analytics',
       href: '/analytics',
-      icon: <ShoppingBasketIcon />
+      icon: <TimelineIcon/>
     })
   }
  
@@ -126,7 +128,6 @@ const Sidebar = props => {
           className={classes.nav}
           pages={pages}
         />
-        <UpgradePlan />
       </div>
     </Drawer>
   );

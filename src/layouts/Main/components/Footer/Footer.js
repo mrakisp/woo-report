@@ -22,12 +22,12 @@ const Footer = props => {
     >
       <Typography variant="body1">
        
-        <Link
+        {/* <Link
          
           href="https://github.com/mrakisp"
           target="_blank"
         >
-        </Link>
+        </Link> */}
       </Typography>
       <Typography variant="caption">
         Powered By MrAkisp

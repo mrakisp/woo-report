@@ -45,8 +45,8 @@ const Topbar = props => {
         </RouterLink> */}
         <div className={classes.flexGrow} />
         <Hidden mdDown>
-        <IconButton size="small">
-            <RefreshIcon htmlColor="white" onClick={() => window.location.reload(false)}/>
+        <IconButton size="small"  onClick={() => window.location.reload(false)}>
+            <RefreshIcon htmlColor="white"/>
           </IconButton>
           {/* <IconButton color="inherit">
             <Badge

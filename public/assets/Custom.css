@@ -6,15 +6,40 @@
     z-index: 99999;
     margin-top: -65px;
 }
-
 .eye-outer {
   fill: none;
     stroke: #fff;
     stroke-width: 5px;
 }
-
 .eye-inner {
   fill: #fff;
+}
+
+
+.filter-criteria {
+  display: flex;
+  align-items: center;
+  padding: 16px 10px;
+}
+.no-pads > .MuiBox-root{
+padding: 0;
+}
+.btn-search {
+margin: 0 5px!important;
+border: 1px solid #a9a9a9!important;
+min-width: 100px;
+}
+.InputFromTo-to {
+margin-right: 20px;
+}
+.filter-criteria input {
+padding: 5px;
+}
+.spacing {
+padding: 0 10px;
+}
+#root{
+overflow-x: hidden;
 }
 
 @media screen and (max-width:480px){
@@ -23,4 +48,14 @@
         height: 104px;
         margin-top: -25px;
     }
+    .filter-criteria {
+      flex-direction: column;
+      }
+      .InputFromTo-to {
+      margin-right: 0;
+      margin-bottom: 15px;
+      }
+      .btn-search {
+        margin-bottom: 7px!important;
+      }
 }

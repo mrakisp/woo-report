@@ -49,10 +49,10 @@ const UsersByDevice = props => {
   let mobilePercent = 0
   let tabletPercent = 0
 
-  if (props.devicesArray.length > 0){
-    desktop = props.devicesArray[0].metrics[0].values[0];
-    mobile = props.devicesArray[1].metrics[0].values[0];
-    tablet = props.devicesArray[2].metrics[0].values[0];
+  if (props.devicesarray.length > 0){
+    desktop = props.devicesarray[0].metrics[0].values[0];
+    mobile = props.devicesarray[1].metrics[0].values[0];
+    tablet = props.devicesarray[2].metrics[0].values[0];
 
     const totalUsers = Number(desktop) +  Number(mobile) +  Number(tablet)
     desktopPercent = Math.round((desktop/totalUsers)*100)
@@ -63,7 +63,7 @@ const UsersByDevice = props => {
   const data = {
     datasets: [
       {
-        data: [desktopPercent, mobilePercent, tabletPercent],
+        data: [desktopPercent, tabletPercent, mobilePercent],
         backgroundColor: [
           theme.palette.primary.main,
           theme.palette.error.main,
@@ -74,7 +74,7 @@ const UsersByDevice = props => {
         hoverBorderColor: theme.palette.white
       }
     ],
-    labels: ['Desktop', 'Mobile', 'Tablet']
+    labels: ['Desktop', 'Tablet', 'Mobile']
   };
 
   const options = {
@@ -107,14 +107,14 @@ const UsersByDevice = props => {
       color: theme.palette.primary.main
     },
     {
-      title: 'Mobile',
-      value: mobilePercent,
+      title: 'Tablet',
+      value: tabletPercent,
       icon: <TabletMacIcon />,
       color: theme.palette.error.main
     },
     {
-      title: 'Tablet',
-      value: tabletPercent,
+      title: 'Mobile',
+      value: mobilePercent,
       icon: <PhoneIphoneIcon />,
       color: theme.palette.warning.main
     }
@@ -126,7 +126,7 @@ const UsersByDevice = props => {
       className={clsx(classes.root, className)}
     >
       <CardHeader
-        title="Users By Device"
+        title="Visitors By Device"
       />
       <Divider />
       <CardContent>

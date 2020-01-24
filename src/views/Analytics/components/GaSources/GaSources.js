@@ -6,17 +6,15 @@ import { analytics } from '../../../../Config';
 export default class GaSources extends Component {
   render() {
    
-    const sourcesArray = this.props.sourcesArray;
+    const sourcesArray = this.props.sourcesarray;
 
     const TableBody = () => {
 
       let fbvalue = 0
-      //let googlevalue = 0
       let instavalue = 0;
       let sources = analytics.groupSources 
       ? [
         { label: 'facebook referral', value: fbvalue },
-        //{ label: 'google', value: googlevalue },
         { label: 'instagram', value: instavalue }
       ] 
       : []
@@ -30,10 +28,6 @@ export default class GaSources extends Component {
               fbvalue += Number(element.metrics[0].values[0])
               sources[0].value = fbvalue;
             }
-            // else if (element.dimensions[0].includes('google') || element.dimensions[0].includes('Google')) {
-            //   googlevalue += Number(element.metrics[0].values[0])
-            //   sources[1].value = googlevalue;
-            // }
             else if (element.dimensions[0].includes('referral') && 
                   (element.dimensions[0].includes('instagram') || element.dimensions[0].includes('Instagram'))) 
             {
@@ -53,20 +47,16 @@ export default class GaSources extends Component {
       sources = sources.sort((a,b) => (a.value > b.value) ? -1 : ((b.value > a.value) ? 1 : 0)); //sort array
       sourcesFinal = sources.map((elem, i) => {
         return (
-          <Grid  key={i} item lg={2} sm={6} xl={2} xs={6} >
+          <Grid  key={i} item lg={3} sm={6} xl={2} xs={6} >
             <Box title={elem.label} data={elem.value} />
             </Grid>
         )
       })
 
       return (
-        <Grid
-          container
-          spacing={4}
-        >
+        <Grid container spacing={4} >
           {sourcesFinal}
-      </Grid>  
-
+        </Grid>  
       )
     };
 

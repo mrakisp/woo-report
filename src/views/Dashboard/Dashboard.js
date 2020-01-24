@@ -119,11 +119,11 @@ export default class Dashboard extends Component {
           <LineChart sales={sales}/>
           {/* <LatestSales /> */}
         </Grid>
-        <Grid item lg={4} sm={6} xl={3} xs={12} >
+        <Grid item lg={4} sm={6} xl={4} xs={12} >
            <TopSellers topSellers={topSellers} />
           {/* <LatestProducts /> */}
         </Grid>
-        <Grid item lg={8} sm={6} xl={3} xs={12} >
+        <Grid item lg={8} sm={6} xl={8} xs={12} >
           <PieChart topSellers={topSellers}/>
         </Grid>
       </Grid>

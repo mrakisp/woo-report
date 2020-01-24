@@ -5,8 +5,7 @@ import { analytics } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
 import DatePicker from "../../helpers/Date";
 import { Google as GoogleIcon } from 'icons';
-import { Box, GaSources, UsersByDevice } from './components';
-
+import { Box, GaSources, UsersByDevice, Tabs } from './components';
 
 export default class Analytics extends Component {
 
@@ -15,6 +14,7 @@ export default class Analytics extends Component {
     this.state = {
       sourcesData: [],
       devicesData: [],
+      ageData: [],
       users: 0,
       newUsers: 0,
       sessions: 0,
@@ -173,6 +173,25 @@ export default class Analytics extends Component {
                   "name": "ga:deviceCategory"
                 }
               ]
+            },
+            {
+              "viewId": analytics.view_id,
+              "dateRanges": [
+                {
+                  "startDate": fromDate,
+                  "endDate": toDate
+                }
+              ],
+              "metrics": [
+                {
+                  "expression": "ga:users"
+                }
+              ],
+              "dimensions": [
+                {
+                  "name": "ga:userAgeBracket"
+                }
+              ]
             }
           ]
 
@@ -191,7 +210,8 @@ export default class Analytics extends Component {
           avgDomInteractiveTime: response.result.reports[1].data.totals[0].values[4],
           avgDomContentLoadedTime: response.result.reports[1].data.totals[0].values[5],
           sourcesData: response.result.reports[2].data.rows,
-          devicesData: response.result.reports[3].data.rows
+          devicesData: response.result.reports[3].data.rows,
+          ageData: response.result.reports[4].data.rows
         })
 
         //let formattedJson = JSON.stringify(response.result, null, 2)
@@ -212,7 +232,7 @@ export default class Analytics extends Component {
   }
 
   componentDidMount() {
-    this.googleSDK();
+    //this.googleSDK();
     //LOAD GA API SCRIPT
     const script = document.createElement("script");
     script.src = "https://apis.google.com/js/client:platform.js";
@@ -222,6 +242,7 @@ export default class Analytics extends Component {
     script.onload = () => {
       window.gapi.load('client:auth2', _ => {
         this.getData()
+        this.googleSDK();
       });
     };
   }
@@ -246,21 +267,23 @@ export default class Analytics extends Component {
     const avgServerResponseTime = Number(this.state.avgServerResponseTime).toFixed(3) + ' sec';
     const avgDomInteractiveTime = Number(this.state.avgDomInteractiveTime).toFixed(3) + ' sec';
     const avgDomContentLoadedTime = Number(this.state.avgDomContentLoadedTime).toFixed(3) + ' sec';
-    const sourcesArray = this.state.sourcesData;
-    const devicesArray = this.state.devicesData;
+    const sourcesarray = this.state.sourcesData;
+    const devicesarray = this.state.devicesData;
+    const agearray = this.state.ageData
 
     return (
       <div className={classes.root}>
         {/* TOP BAR */}
         <Grid container spacing={4} >
-          <Grid item lg={6} sm={6} xl={3} xs={12}>
+          <Grid item lg={6} sm={12} xl={6} xs={12}>
+              <DatePicker parentCallback={this.callbackFunction} />
+          </Grid>
+          <Grid item lg={6} sm={12} xl={6} xs={12}>
               <Button size="large" variant="contained">
                   <GoogleIcon className="loginBtn loginBtn--google" ref="googleLoginBtn" />
+                  {/* <GoogleIcon className="loginBtn loginBtn--google" /> */}
                   Login with Google
               </Button>
-          </Grid>
-          <Grid item lg={6} sm={6} xl={3} xs={12}>
-              <DatePicker parentCallback={this.callbackFunction} />
           </Grid>
         </Grid>
         {/* END TOP BAR */}
@@ -274,26 +297,27 @@ export default class Analytics extends Component {
           <Divider />
           <CardContent>
             <Grid container spacing={4} >
-              <Grid item lg={9} sm={6} xl={9} xs={12}>
+              <Grid item lg={8} sm={6} xl={9} xs={12}>
                   <Grid container spacing={4} >
-                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                    <Grid item lg={3} sm={6} xl={2} xs={6} >
                       <Box title={'All Visitors'} data={users} />
                     </Grid>
-                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                    <Grid item lg={3} sm={6} xl={2} xs={6} >
                       <Box title={'New Visitors'} data={newUsers} />
                     </Grid>
-                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                    <Grid item lg={3} sm={6} xl={2} xs={6} >
                       <Box title={'Returning Visitors'} data={users - newUsers} />
                     </Grid>
-                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                    <Grid item lg={3} sm={6} xl={2} xs={6} >
                       <Box title={'Sessions'} data={sessions} />
                     </Grid>
-                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                    <Grid item lg={3} sm={6} xl={2} xs={6} >
                       <Box title={'Avg Session Duration'} data={avgSessionDuration} />
                     </Grid>
-                    <Grid item lg={2} sm={6} xl={2} xs={6} >
+                    <Grid item lg={3} sm={6} xl={2} xs={6} >
                       <Box title={'Bounce Rate'} data={bounceRate} />
                     </Grid>
+                    
                   </Grid> 
                   <Divider />
                    {/* SOURCES SECTION */}
@@ -301,20 +325,22 @@ export default class Analytics extends Component {
                     <CardHeader title="Traffic Sources"/>
                     <Divider />
                     <CardContent>
-                        <GaSources sourcesArray={sourcesArray}/>
+                        <GaSources sourcesarray={sourcesarray}/>
                     </CardContent>
                   </Card>
                   {/* END SOURCES SECTION */}
               </Grid>
               {/* DEVICES SECTION */}
-              <Grid item lg={3} sm={6} xl={3} xs={12}> 
-                  <UsersByDevice devicesArray={devicesArray}/>
+              <Grid item lg={4} sm={6} xl={3} xs={12}> 
+                <Tabs devicesarray={devicesarray} agearray={agearray}/>
+                {/* <UsersByDevice devicesarray={devicesarray}/> */}
               </Grid> 
                {/* END DEVICES SECTION */}
             </Grid>
           </CardContent>
         </Card>
         {/* END USERS SECTION */}
+        
 
         {/* PERFORMANCE SECTION */}
         <Card
