@@ -20,10 +20,10 @@ export const analytics = {
 }
 
 export const AdwordsCampatingsGoal = [
-  null,                  //'CLICKS'
-  null,                 //'IMPRESIONS'
+  45,                  //'CLICKS'
+  1000,                 //'IMPRESIONS'
   null,                 //'CTR'
-  5,                 //ROAS'
+  null,                 //ROAS'
   null,                 //'CPC'
   null,                 //'CPT'
   null,                 //'COST'

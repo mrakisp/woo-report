@@ -16,12 +16,12 @@ class ColumnChart extends Component {
 
 		if(data.length > 0){
 		
-				const firstage = data[0].metrics[0].values[0]
-				const secondage = data[1].metrics[0].values[0]
-				const thridage = data[2].metrics[0].values[0]
-				const fourthage = data[3].metrics[0].values[0]
-				const fifthage = data[4].metrics[0].values[0]
-				const sixthage = data[5].metrics[0].values[0]
+				const firstage = data[0] ? data[0].metrics[0].values[0] : 0
+				const secondage = data[1] ? data[1].metrics[0].values[0] : 0
+				const thridage = data[2] ? data[2].metrics[0].values[0] : 0
+				const fourthage = data[3] ? data[3].metrics[0].values[0] : 0
+				const fifthage = data[4] ? data[4].metrics[0].values[0] : 0
+				const sixthage = data[5] ? data[5].metrics[0].values[0] : 0
 				const totalUsers = Number(firstage) +  Number(secondage) +  Number(thridage) + Number(fourthage) +  Number(fifthage) +  Number(sixthage)
 				let firstagePercent = Math.round((firstage/totalUsers)*100)
 				let secondagePercent = Math.round((secondage/totalUsers)*100)
@@ -31,12 +31,12 @@ class ColumnChart extends Component {
 				let sixthagePercent = Math.round((sixthage/totalUsers)*100)
 
 				dataPoints = [
-					{y: firstagePercent, label: data[0].dimensions[0]},
-					{y: secondagePercent, label: data[1].dimensions[0]},
-					{y: thridagePercent, label: data[2].dimensions[0]},
-					{y: fourthagePercent, label: data[3].dimensions[0]},
-					{y: fifthagePercent, label: data[4].dimensions[0]},
-					{y: sixthagePercent, label: data[5].dimensions[0]}
+					{y: firstagePercent, label: data[0] ? data[0].dimensions[0] : '18-24'},
+					{y: secondagePercent, label: data[1] ? data[1].dimensions[0] : '25-34'},
+					{y: thridagePercent, label: data[2] ? data[2].dimensions[0] : '35-44'},
+					{y: fourthagePercent, label: data[3] ? data[3].dimensions[0] : '45-54'},
+					{y: fifthagePercent, label: data[4] ? data[4].dimensions[0] : '55-64'},
+					{y: sixthagePercent, label: data[5] ? data[5].dimensions[0] : '65+'}
 				]	
 
 		}
