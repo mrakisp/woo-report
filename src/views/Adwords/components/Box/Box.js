@@ -13,7 +13,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex'
   },
   title: {
-    fontWeight: 700
+    fontWeight: 700,
+    color: 'white'
   },
   avatar: {
     backgroundColor: theme.palette.error.main,
@@ -58,14 +59,14 @@ const Box = props => {
         >
           <Grid item>
             <Typography
-              className={classes.title}
-              color="textSecondary"
+              className={`metrics__title--background ` + classes.title}
+              color="white"
               gutterBottom
-              variant="body2"
+              variant="h5"
             >
               {title}
             </Typography>
-            <Typography variant="h3">{data}</Typography>
+            <Typography variant="body1">{data}</Typography>
           </Grid>
         </Grid>
       </CardContent>

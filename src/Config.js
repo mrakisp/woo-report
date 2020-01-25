@@ -19,6 +19,17 @@ export const analytics = {
   groupSources : true //show all sources from facebok & instagram as one parent source ( e.x => i.facebook , m.facebook etc)
 }
 
+export const AdwordsCampatingsGoal = [
+  null,                  //'CLICKS'
+  null,                 //'IMPRESIONS'
+  null,                 //'CTR'
+  5,                 //ROAS'
+  null,                 //'CPC'
+  null,                 //'CPT'
+  null,                 //'COST'
+  null                  //'RPC'
+]
+
 //PROVIDE CURRENCY
 export const currencySymbol = "€";
 

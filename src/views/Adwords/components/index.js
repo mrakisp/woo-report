@@ -1,6 +1,6 @@
 export { default as Box } from './Box';
 export { default as Tabs } from './Tabs';
-export { default as GaSources } from './GaSources';
+export { default as AdsCampaign } from './adsCampaign';
 export { default as UsersByDevice } from './UsersByDevice';
 
 // export { default as LatestOrders } from './LatestOrders';

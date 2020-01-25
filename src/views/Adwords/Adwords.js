@@ -5,27 +5,14 @@ import { analytics } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
 import DatePicker from "../../helpers/Date";
 import { Google as GoogleIcon } from 'icons';
-import { Box, GaSources, UsersByDevice, Tabs } from './components';
+import { Box, AdsCampaign, UsersByDevice, Tabs } from './components';
 
 export default class Adwords extends Component {
 
   constructor() {
     super();
     this.state = {
-      sourcesData: [],
-      devicesData: [],
-      ageData: [],
-      users: 0,
-      newUsers: 0,
-      sessions: 0,
-      avgSessionDuration: 0,
-      bounceRate: 0,
-      avgPageLoadTime: 0,
-      avgDomainLookupTime: 0,
-      avgServerConnectionTime: 0,
-      avgServerResponseTime: 0,
-      avgDomInteractiveTime: 0,
-      avgDomContentLoadedTime: 0,
+      adsData: [],
       fromDate: formatDate(new Date()),
       toDate: formatDate(new Date()),
     };
@@ -35,7 +22,7 @@ export default class Adwords extends Component {
     window['googleSDKLoaded'] = () => {
       window['gapi'].load('auth2', () => {
         this.auth2 = window['gapi'].auth2.init({
-          client_id:  analytics.client_id,
+          client_id: analytics.client_id,
           cookiepolicy: 'single_host_origin',
           scope: 'profile email'
         });
@@ -91,130 +78,45 @@ export default class Adwords extends Component {
               ],
               "metrics": [
                 {
-                  "expression": "ga:users"
+                  "expression": "ga:adClicks"
                 },
                 {
-                  "expression": "ga:newUsers"
+                  "expression": "ga:impressions"
                 },
                 {
-                  "expression": "ga:sessions"
+                  "expression": "ga:CTR"
                 },
                 {
-                  "expression": "ga:avgSessionDuration"
+                  "expression": "ga:ROAS"
                 },
                 {
-                  "expression": "ga:bounceRate"
-                }
-              ]
-            },
-            {
-              "viewId": analytics.view_id,
-              "dateRanges": [
-                {
-                  "startDate": fromDate,
-                  "endDate": toDate
-                }
-              ],
-              "metrics": [
-                {
-                  "expression": "ga:avgPageLoadTime"
+                  "expression": "ga:costPerConversion"
                 },
                 {
-                  "expression": "ga:avgDomainLookupTime"
+                  "expression": "ga:costPerTransaction"
                 },
                 {
-                  "expression": "ga:avgServerConnectionTime"
+                  "expression": "ga:adCost"
                 },
                 {
-                  "expression": "ga:avgServerResponseTime"
-                },
-                {
-                  "expression": "ga:avgDomInteractiveTime"
-                },
-                {
-                  "expression": "ga:avgDomContentLoadedTime"
-                }
-
-              ]
-            }, {
-              "viewId": analytics.view_id,
-              "dateRanges": [
-                {
-                  "startDate": fromDate,
-                  "endDate": toDate
-                }
-              ],
-              "metrics": [
-                {
-                  "expression": "ga:users"
+                  "expression": "ga:RPC"
                 }
               ],
               "dimensions": [
                 {
-                  "name": "ga:sourceMedium"
-                }
-              ]
-            },
-            {
-              "viewId": analytics.view_id,
-              "dateRanges": [
+                  "name": "ga:campaign"
+                },
                 {
-                  "startDate": fromDate,
-                  "endDate": toDate
-                }
-              ],
-              "metrics": [
-                {
-                  "expression": "ga:users"
-                }
-              ],
-              "dimensions": [
-                {
-                  "name": "ga:deviceCategory"
-                }
-              ]
-            },
-            {
-              "viewId": analytics.view_id,
-              "dateRanges": [
-                {
-                  "startDate": fromDate,
-                  "endDate": toDate
-                }
-              ],
-              "metrics": [
-                {
-                  "expression": "ga:users"
-                }
-              ],
-              "dimensions": [
-                {
-                  "name": "ga:userAgeBracket"
+                  "name": "ga:adDistributionNetwork"
                 }
               ]
             }
           ]
-
         }
       }).then(function (response) {
         self.setState({
-          users: response.result.reports[0].data.totals[0].values[0],
-          newUsers: response.result.reports[0].data.totals[0].values[1],
-          sessions: response.result.reports[0].data.totals[0].values[2],
-          avgSessionDuration: response.result.reports[0].data.totals[0].values[3],
-          bounceRate: response.result.reports[0].data.totals[0].values[4],
-          avgPageLoadTime: response.result.reports[1].data.totals[0].values[0],
-          avgDomainLookupTime: response.result.reports[1].data.totals[0].values[1],
-          avgServerConnectionTime: response.result.reports[1].data.totals[0].values[2],
-          avgServerResponseTime: response.result.reports[1].data.totals[0].values[3],
-          avgDomInteractiveTime: response.result.reports[1].data.totals[0].values[4],
-          avgDomContentLoadedTime: response.result.reports[1].data.totals[0].values[5],
-          sourcesData: response.result.reports[2].data.rows,
-          devicesData: response.result.reports[3].data.rows,
-          ageData: response.result.reports[4].data.rows
+          adsData: response.result.reports[0].data.rows
         })
-
-        //let formattedJson = JSON.stringify(response.result, null, 2)
       }, console.error.bind(console));
     });
 
@@ -255,93 +157,85 @@ export default class Adwords extends Component {
       }
     }));
 
-    const users = this.state.users;
-    const newUsers = this.state.newUsers;
-    const sessions = this.state.sessions;
-    const avgSessionDuration = Math.round(this.state.avgSessionDuration * 0.0166666667) + ' min';
-    const bounceRate = Math.round(this.state.bounceRate) + '%';
+    // const users = this.state.users;
+    // const newUsers = this.state.newUsers;
+    // const sessions = this.state.sessions;
+    // const avgSessionDuration = Math.round(this.state.avgSessionDuration * 0.0166666667) + ' min';
+    // const bounceRate = Math.round(this.state.bounceRate) + '%';
 
-    const avgPageLoadTime = Number(this.state.avgPageLoadTime).toFixed(3) + ' sec';
-    const avgDomainLookupTime = Number(this.state.avgDomainLookupTime).toFixed(3) + ' sec';
-    const avgServerConnectionTime = Number(this.state.avgServerConnectionTime).toFixed(3) + ' sec';
-    const avgServerResponseTime = Number(this.state.avgServerResponseTime).toFixed(3) + ' sec';
-    const avgDomInteractiveTime = Number(this.state.avgDomInteractiveTime).toFixed(3) + ' sec';
-    const avgDomContentLoadedTime = Number(this.state.avgDomContentLoadedTime).toFixed(3) + ' sec';
-    const sourcesarray = this.state.sourcesData;
-    const devicesarray = this.state.devicesData;
-    const agearray = this.state.ageData
+    // const avgPageLoadTime = Number(this.state.avgPageLoadTime).toFixed(3) + ' sec';
+    // const avgDomainLookupTime = Number(this.state.avgDomainLookupTime).toFixed(3) + ' sec';
+    // const avgServerConnectionTime = Number(this.state.avgServerConnectionTime).toFixed(3) + ' sec';
+    // const avgServerResponseTime = Number(this.state.avgServerResponseTime).toFixed(3) + ' sec';
+    // const avgDomInteractiveTime = Number(this.state.avgDomInteractiveTime).toFixed(3) + ' sec';
+    // const avgDomContentLoadedTime = Number(this.state.avgDomContentLoadedTime).toFixed(3) + ' sec';
+    const campaignData = this.state.adsData;
+    // const devicesarray = this.state.devicesData;
+    // const agearray = this.state.ageData
 
     return (
       <div className={classes.root}>
-      
+
         {/* TOP BAR */}
         <Grid container spacing={4} >
           <Grid item lg={6} sm={12} xl={6} xs={12}>
-              <DatePicker parentCallback={this.callbackFunction} />
+            <DatePicker parentCallback={this.callbackFunction} />
           </Grid>
           <Grid item lg={6} sm={12} xl={6} xs={12}>
-              <Button size="large" variant="contained">
-                  <GoogleIcon className="loginBtn loginBtn--google" ref="googleLoginBtn" />
-                  {/* <GoogleIcon className="loginBtn loginBtn--google" /> */}
-                  Login with Google
+            <Button size="large" variant="contained">
+              <GoogleIcon className="loginBtn loginBtn--google" ref="googleLoginBtn" />
+              {/* <GoogleIcon className="loginBtn loginBtn--google" /> */}
+              Login with Google
               </Button>
           </Grid>
         </Grid>
         {/* END TOP BAR */}
-        
-        {/* USERS SECTION */}
-        <Card
+
+        {/* <Card
           className={classes.root}>
-          <CardHeader
-            title="Visitors Activity Section"
-          />
+          <CardHeader title="Active Campaigns Metrics Section" />
           <Divider />
           <CardContent>
             <Grid container spacing={4} >
-              <Grid item lg={8} sm={6} xl={9} xs={12}>
-                  <Grid container spacing={4} >
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'All Visitors'} data={users} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'New Visitors'} data={newUsers} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'Returning Visitors'} data={users - newUsers} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'Sessions'} data={sessions} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'Avg Session Duration'} data={avgSessionDuration} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'Bounce Rate'} data={bounceRate} />
-                    </Grid>
-                    
-                  </Grid> 
-                  <Divider />
-                   {/* SOURCES SECTION */}
-                  <Card className={classes.root}>
-                    <CardHeader title="Traffic Sources"/>
-                    <Divider />
-                    <CardContent>
-                        <GaSources sourcesarray={sourcesarray}/>
-                    </CardContent>
-                  </Card>
-                  {/* END SOURCES SECTION */}
+              <Grid container spacing={4} >
+                <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Box title={'All Visitors'} data={users} />
+                </Grid>
+                <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Box title={'New Visitors'} data={newUsers} />
+                </Grid>
+                <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Box title={'Returning Visitors'} data={users - newUsers} />
+                </Grid>
+                <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Box title={'Sessions'} data={sessions} />
+                </Grid>
+                <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Box title={'Avg Session Duration'} data={avgSessionDuration} />
+                </Grid>
+                <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Box title={'Bounce Rate'} data={bounceRate} />
+                </Grid>
               </Grid>
-              {/* DEVICES SECTION */}
-              <Grid item lg={4} sm={6} xl={3} xs={12}> 
-                <Tabs devicesarray={devicesarray} agearray={agearray} />
-                {/* <UsersByDevice devicesarray={devicesarray}/> */}
-              </Grid> 
-               {/* END DEVICES SECTION */}
+            </Grid>
+          </CardContent>
+        </Card> */}
+
+        {/* CAMPAIGN SECTION */}
+        <Card
+          className={classes.root}>
+          <CardHeader title="Active Campaigns Metrics Section" />
+          <Divider />
+          <CardContent>
+            <Grid container spacing={4} >
+              <Grid item lg={12} sm={12} xl={12} xs={12}>
+                <AdsCampaign campaigndata={campaignData} />
+              </Grid>
             </Grid>
           </CardContent>
         </Card>
-        {/* END USERS SECTION */}
-        
+        {/* END CAMPAIGN SECTION */}
+
 
         {/* PERFORMANCE SECTION */}
         <Card
@@ -353,22 +247,22 @@ export default class Adwords extends Component {
           <CardContent>
             <Grid container spacing={4} >
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Page Load'} data={avgPageLoadTime} />
+                {/* <Box title={'Avg Page Load'} data={avgPageLoadTime} /> */}
               </Grid>
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Domain LookUp'} data={avgDomainLookupTime} />
+                {/* <Box title={'Avg Domain LookUp'} data={avgDomainLookupTime} /> */}
               </Grid>
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Server Connection'} data={avgServerConnectionTime} />
+                {/* <Box title={'Avg Server Connection'} data={avgServerConnectionTime} /> */}
               </Grid>
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Server Response'} data={avgServerResponseTime} />
+                {/* <Box title={'Avg Server Response'} data={avgServerResponseTime} /> */}
               </Grid>
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Dom Interactive'} data={avgDomInteractiveTime} />
+                {/* <Box title={'Avg Dom Interactive'} data={avgDomInteractiveTime} /> */}
               </Grid>
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Dom Content Load'} data={avgDomContentLoadedTime} />
+                {/* <Box title={'Avg Dom Content Load'} data={avgDomContentLoadedTime} /> */}
               </Grid>
             </Grid>
           </CardContent>
