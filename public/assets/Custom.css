@@ -61,7 +61,7 @@ a.canvasjs-chart-credit {
   color: #fff;
 }
 .metrics--notachieved{
-  background-color: red;
+  background-color: rgba(230, 39, 39, 0.75);
   color: #fff;
 }
 

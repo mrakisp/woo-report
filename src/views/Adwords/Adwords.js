@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Button, CardHeader, Divider } from '@material-ui/core';
-import { analytics } from '../../Config';
+import { analytics, currencySymbol } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
 import DatePicker from "../../helpers/Date";
 import { Google as GoogleIcon } from 'icons';
-import { Box, AdsCampaign, UsersByDevice, Tabs } from './components';
+import { AdsCampaign, UsersByDevice, Tabs } from './components';
+import { Box } from '../Analytics/components';
 
 export default class Adwords extends Component {
 
@@ -13,6 +14,7 @@ export default class Adwords extends Component {
     super();
     this.state = {
       adsData: [],
+      adsDataTotals: [],
       fromDate: formatDate(new Date()),
       toDate: formatDate(new Date()),
     };
@@ -114,8 +116,10 @@ export default class Adwords extends Component {
           ]
         }
       }).then(function (response) {
+        debugger;
         self.setState({
-          adsData: response.result.reports[0].data.rows
+          adsData: response.result.reports[0].data.rows,
+          adsDataTotals: response.result.reports[0].data.totals[0].values
         })
       }, console.error.bind(console));
     });
@@ -156,11 +160,12 @@ export default class Adwords extends Component {
         padding: theme.spacing(4)
       }
     }));
-
-    // const users = this.state.users;
-    // const newUsers = this.state.newUsers;
-    // const sessions = this.state.sessions;
-    // const avgSessionDuration = Math.round(this.state.avgSessionDuration * 0.0166666667) + ' min';
+    debugger;
+    const campaignData = this.state.adsData;
+    const clicks = this.state.adsDataTotals[0];
+    const impressions = this.state.adsDataTotals[1];
+    const roas = Number(this.state.adsDataTotals[3]).toFixed(2) +'%';
+    const cost = Math.round(Number(this.state.adsDataTotals[6])) + currencySymbol;
     // const bounceRate = Math.round(this.state.bounceRate) + '%';
 
     // const avgPageLoadTime = Number(this.state.avgPageLoadTime).toFixed(3) + ' sec';
@@ -169,7 +174,7 @@ export default class Adwords extends Component {
     // const avgServerResponseTime = Number(this.state.avgServerResponseTime).toFixed(3) + ' sec';
     // const avgDomInteractiveTime = Number(this.state.avgDomInteractiveTime).toFixed(3) + ' sec';
     // const avgDomContentLoadedTime = Number(this.state.avgDomContentLoadedTime).toFixed(3) + ' sec';
-    const campaignData = this.state.adsData;
+    
     // const devicesarray = this.state.devicesData;
     // const agearray = this.state.ageData
 
@@ -191,35 +196,29 @@ export default class Adwords extends Component {
         </Grid>
         {/* END TOP BAR */}
 
-        {/* <Card
+        <Card
           className={classes.root}>
-          <CardHeader title="Active Campaigns Metrics Section" />
+          <CardHeader title="Total Metrics" />
           <Divider />
           <CardContent>
             <Grid container spacing={4} >
               <Grid container spacing={4} >
                 <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'All Visitors'} data={users} />
+                  <Box title={'Cost'} data={clicks} />
                 </Grid>
                 <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'New Visitors'} data={newUsers} />
+                  <Box title={'Imporessions'} data={impressions} />
                 </Grid>
                 <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'Returning Visitors'} data={users - newUsers} />
+                  <Box title={'Roas'} data={roas} />
                 </Grid>
                 <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'Sessions'} data={sessions} />
-                </Grid>
-                <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'Avg Session Duration'} data={avgSessionDuration} />
-                </Grid>
-                <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'Bounce Rate'} data={bounceRate} />
+                  <Box title={'Cost'} data={cost} />
                 </Grid>
               </Grid>
             </Grid>
           </CardContent>
-        </Card> */}
+        </Card>
 
         {/* CAMPAIGN SECTION */}
         <Card
