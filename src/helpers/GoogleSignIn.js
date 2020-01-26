@@ -18,9 +18,7 @@ export default class GoogleSignIn extends Component {
   }
 
   getContent() {
-    if (this.state.isLogedIn) {
-      //return <p>hello user, you're signed in </p>
-    } else {
+    if (!this.state.isLogedIn) {
       return (
         <Dialog open={true} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" >
           <DialogTitle id="alert-dialog-title">{"Login to your Google Account"}</DialogTitle>
@@ -35,30 +33,32 @@ export default class GoogleSignIn extends Component {
   componentDidMount() {
     const self = this;
     setTimeout(function () {
-      window.gapi.load('client:auth2', _ => {
-        this.auth2 = window.gapi.auth2.init({
+      window.gapi.load('client:auth2', _ => { // load auth2
+        this.auth2 = window.gapi.auth2.init({  //init auth2
           client_id: analytics.client_id,
         }).then(() => {
 
-          if (window.gapi.auth2.getAuthInstance().isSignedIn.get()) { // IF ITS LOGGED IN
+          if (window.gapi.auth2.getAuthInstance().isSignedIn.get()) { // IF ITS LOGGED IN 
             self.setState({
               isLogedIn: true
             })
+            self.onSuccess()
           } else {
             window.gapi.load('signin2', function () {
               window.gapi.signin2.render('loginButton')
             });
+
+            window.gapi.auth2.getAuthInstance().signIn().then(() => { 
+              if (window.gapi.auth2.getAuthInstance().isSignedIn.get()) {
+                self.onSuccess()
+              }
+            })
           }
-          window.gapi.auth2.getAuthInstance().signIn().then(() => {
-            if (window.gapi.auth2.getAuthInstance().isSignedIn.get()) {
-              self.onSuccess()
-            }
-          })
 
         })
 
       });
-    }, 100);
+    }, 200);
 
   }
 

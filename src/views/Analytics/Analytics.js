@@ -211,7 +211,7 @@ export default class Analytics extends Component {
   }
 
   componentDidMount() {
-    if(this.state.isSignedIn){
+    if(this.state.isSignedIn){ 
       window.gapi.load('client:auth2', _ => {
         this.getData()
       });
@@ -220,7 +220,6 @@ export default class Analytics extends Component {
 
 
   render() {
-
     const classes = makeStyles(theme => ({
       root: {
         padding: theme.spacing(4)
@@ -245,7 +244,7 @@ export default class Analytics extends Component {
 
     return (
       <div className={classes.root}>
-        {<Google logedIn={this.googleLogedIn} />}
+        {this.state.isSignedIn ? '' : <Google logedIn={this.googleLogedIn} isloged={this.state.isSignedIn} />}
         {/* TOP BAR */}
         <Grid container spacing={4} >
           <Grid item lg={6} sm={12} xl={6} xs={12}>

@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
 import { Grid } from '@material-ui/core';
 import {Box} from '..';
-import { analytics, currencySymbol, AdwordsCampatingsGoal } from '../../../../Config';
+import {  currencySymbol, AdwordsCampatingsGoal } from '../../../../Config';
 
 export default class AdsCampaign extends Component {
   render() {
@@ -28,7 +28,7 @@ export default class AdsCampaign extends Component {
             element = element + currencySymbol
           }
           return (
-          <div className={`metrics ${Number(value) >= goal[i] && goal[i] !==null ? 'metrics--achieved' : Number(value) <  goal[i] ? 'metrics--notachieved' : ''}`}> 
+          <div key={i} className={`metrics ${Number(value) >= goal[i] && goal[i] !==null ? 'metrics--achieved' : Number(value) <  goal[i] ? 'metrics--notachieved' : ''}`}> 
             <div className="metrics__title">
               {metricsTitle[i]}{':'}
             </div> 

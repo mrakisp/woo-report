@@ -60,13 +60,13 @@ const Box = props => {
           <Grid item>
             <Typography
               className={`metrics__title--background ` + classes.title}
-              color="white"
+              color="inherit"
               gutterBottom
               variant="h5"
             >
               {title}
             </Typography>
-            <Typography variant="body1">{data}</Typography>
+            <Typography variant="inherit">{data}</Typography>
           </Grid>
         </Grid>
       </CardContent>

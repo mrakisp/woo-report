@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Button, CardHeader, Divider } from '@material-ui/core';
-import { analytics, currencySymbol } from '../../Config';
+import { analytics, currencySymbol  } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
 import { DatePicker, Google } from "../../helpers";
 import { AdsCampaign, UsersByDevice, Tabs } from './components';
@@ -26,7 +26,8 @@ export default class Adwords extends Component {
     const self = this;
     const fromDate = this.state.fromDate;
     const toDate = this.state.toDate;
-
+    
+    
     //CALL API AUTH AND ON SUCCESS GET REPORTS
     window.gapi.auth2.init({
       client_id: analytics.client_id
@@ -166,7 +167,7 @@ export default class Adwords extends Component {
             <Grid container spacing={4} >
               <Grid container spacing={4} >
                 <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'Cost'} data={clicks} />
+                  <Box title={'Clicks'} data={clicks} />
                 </Grid>
                 <Grid item lg={3} sm={6} xl={2} xs={6} >
                   <Box title={'Imporessions'} data={impressions} />
@@ -199,11 +200,8 @@ export default class Adwords extends Component {
 
 
         {/* PERFORMANCE SECTION */}
-        <Card
-          className={classes.root}>
-          <CardHeader
-            title="Store Performance Section"
-          />
+        <Card className={classes.root}>
+          <CardHeader  title="Store Performance Section" />
           <Divider />
           <CardContent>
             <Grid container spacing={4} >
