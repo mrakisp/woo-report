@@ -3,8 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Button, CardHeader, Divider } from '@material-ui/core';
 import { analytics } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
-import DatePicker from "../../helpers/Date";
-import { Google as GoogleIcon } from 'icons';
+import { DatePicker , Google } from "../../helpers";
 import { Box, GaSources, UsersByDevice, Tabs } from './components';
 
 export default class Analytics extends Component {
@@ -12,6 +11,7 @@ export default class Analytics extends Component {
   constructor() {
     super();
     this.state = {
+      isSignedIn: false,
       sourcesData: [],
       devicesData: [],
       ageData: [],
@@ -31,37 +31,6 @@ export default class Analytics extends Component {
     };
   }
 
-  googleSDK = () => {
-    window['googleSDKLoaded'] = () => {
-      window['gapi'].load('auth2', () => {
-        this.auth2 = window['gapi'].auth2.init({
-          client_id:  analytics.client_id,
-          cookiepolicy: 'single_host_origin',
-          scope: 'profile email'
-        });
-        this.prepareLoginButton();
-      });
-    }
-
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { return; }
-      js = d.createElement(s); js.id = id;
-      js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'google-jssdk'));
-
-  }
-
-  prepareLoginButton = () => {
-    this.auth2.attachClickHandler(this.refs.googleLoginBtn, {},
-      (googleUser) => {
-        let profile = googleUser.getBasicProfile();
-      }, (error) => {
-        alert(JSON.stringify(error, undefined, 2));
-      });
-  }
-
   getData = () => {
 
     //DATE
@@ -74,7 +43,6 @@ export default class Analytics extends Component {
       client_id: analytics.client_id
     }).then(() => {
 
-      //console.log('signed in', window.gapi.auth2.getAuthInstance().isSignedIn.get());
       window.gapi.client.request({
         path: '/v4/reports:batchGet',
         root: 'https://analyticsreporting.googleapis.com/',
@@ -216,9 +184,10 @@ export default class Analytics extends Component {
 
         //let formattedJson = JSON.stringify(response.result, null, 2)
       }, console.error.bind(console));
-    });
 
+    });
   }
+
 
   //GET DATA FROM CHILD COMPONENT
   callbackFunction = (from, to) => {
@@ -231,21 +200,24 @@ export default class Analytics extends Component {
     });
   }
 
+
+  googleLogedIn = (login) => {
+    if (login) {
+      this.setState({
+        isSignedIn: true
+      })
+      this.getData()
+    }
+  }
+
   componentDidMount() {
-    //this.googleSDK();
-    //LOAD GA API SCRIPT
-    const script = document.createElement("script");
-    script.src = "https://apis.google.com/js/client:platform.js";
-    script.async = true;
-    document.body.appendChild(script);
-    //ONLOAD GA API SCRIPT AND AUTH CALL INIT
-    script.onload = () => {
+    if(this.state.isSignedIn){
       window.gapi.load('client:auth2', _ => {
         this.getData()
-        this.googleSDK();
       });
-    };
+    }
   }
+
 
   render() {
 
@@ -273,21 +245,15 @@ export default class Analytics extends Component {
 
     return (
       <div className={classes.root}>
+        {<Google logedIn={this.googleLogedIn} />}
         {/* TOP BAR */}
         <Grid container spacing={4} >
           <Grid item lg={6} sm={12} xl={6} xs={12}>
-              <DatePicker parentCallback={this.callbackFunction} />
-          </Grid>
-          <Grid item lg={6} sm={12} xl={6} xs={12}>
-              <Button size="large" variant="contained">
-                  <GoogleIcon className="loginBtn loginBtn--google" ref="googleLoginBtn" />
-                  {/* <GoogleIcon className="loginBtn loginBtn--google" /> */}
-                  Login with Google
-              </Button>
+            <DatePicker parentCallback={this.callbackFunction} />
           </Grid>
         </Grid>
         {/* END TOP BAR */}
-        
+
         {/* USERS SECTION */}
         <Card
           className={classes.root}>
@@ -298,49 +264,49 @@ export default class Analytics extends Component {
           <CardContent>
             <Grid container spacing={4} >
               <Grid item lg={8} sm={6} xl={9} xs={12}>
-                  <Grid container spacing={4} >
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'All Visitors'} data={users} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'New Visitors'} data={newUsers} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'Returning Visitors'} data={users - newUsers} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'Sessions'} data={sessions} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'Avg Session Duration'} data={avgSessionDuration} />
-                    </Grid>
-                    <Grid item lg={3} sm={6} xl={2} xs={6} >
-                      <Box title={'Bounce Rate'} data={bounceRate} />
-                    </Grid>
-                    
-                  </Grid> 
+                <Grid container spacing={4} >
+                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                    <Box title={'All Visitors'} data={users} />
+                  </Grid>
+                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                    <Box title={'New Visitors'} data={newUsers} />
+                  </Grid>
+                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                    <Box title={'Returning Visitors'} data={users - newUsers} />
+                  </Grid>
+                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                    <Box title={'Sessions'} data={sessions} />
+                  </Grid>
+                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                    <Box title={'Avg Session Duration'} data={avgSessionDuration} />
+                  </Grid>
+                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                    <Box title={'Bounce Rate'} data={bounceRate} />
+                  </Grid>
+
+                </Grid>
+                <Divider />
+                {/* SOURCES SECTION */}
+                <Card className={classes.root}>
+                  <CardHeader title="Traffic Sources" />
                   <Divider />
-                   {/* SOURCES SECTION */}
-                  <Card className={classes.root}>
-                    <CardHeader title="Traffic Sources"/>
-                    <Divider />
-                    <CardContent>
-                        <GaSources sourcesarray={sourcesarray}/>
-                    </CardContent>
-                  </Card>
-                  {/* END SOURCES SECTION */}
+                  <CardContent>
+                    <GaSources sourcesarray={sourcesarray} />
+                  </CardContent>
+                </Card>
+                {/* END SOURCES SECTION */}
               </Grid>
               {/* DEVICES SECTION */}
-              <Grid item lg={4} sm={6} xl={3} xs={12}> 
+              <Grid item lg={4} sm={6} xl={3} xs={12}>
                 <Tabs devicesarray={devicesarray} agearray={agearray} />
                 {/* <UsersByDevice devicesarray={devicesarray}/> */}
-              </Grid> 
-               {/* END DEVICES SECTION */}
+              </Grid>
+              {/* END DEVICES SECTION */}
             </Grid>
           </CardContent>
         </Card>
         {/* END USERS SECTION */}
-        
+
 
         {/* PERFORMANCE SECTION */}
         <Card

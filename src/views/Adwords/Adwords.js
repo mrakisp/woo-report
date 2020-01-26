@@ -3,8 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Button, CardHeader, Divider } from '@material-ui/core';
 import { analytics, currencySymbol } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
-import DatePicker from "../../helpers/Date";
-import { Google as GoogleIcon } from 'icons';
+import { DatePicker, Google } from "../../helpers";
 import { AdsCampaign, UsersByDevice, Tabs } from './components';
 import { Box } from '../Analytics/components';
 
@@ -13,42 +12,12 @@ export default class Adwords extends Component {
   constructor() {
     super();
     this.state = {
+      isSignedIn: false,
       adsData: [],
       adsDataTotals: [],
       fromDate: formatDate(new Date()),
       toDate: formatDate(new Date()),
     };
-  }
-
-  googleSDK = () => {
-    window['googleSDKLoaded'] = () => {
-      window['gapi'].load('auth2', () => {
-        this.auth2 = window['gapi'].auth2.init({
-          client_id: analytics.client_id,
-          cookiepolicy: 'single_host_origin',
-          scope: 'profile email'
-        });
-        this.prepareLoginButton();
-      });
-    }
-
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { return; }
-      js = d.createElement(s); js.id = id;
-      js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'google-jssdk'));
-
-  }
-
-  prepareLoginButton = () => {
-    this.auth2.attachClickHandler(this.refs.googleLoginBtn, {},
-      (googleUser) => {
-        let profile = googleUser.getBasicProfile();
-      }, (error) => {
-        alert(JSON.stringify(error, undefined, 2));
-      });
   }
 
   getData = () => {
@@ -116,7 +85,6 @@ export default class Adwords extends Component {
           ]
         }
       }).then(function (response) {
-        debugger;
         self.setState({
           adsData: response.result.reports[0].data.rows,
           adsDataTotals: response.result.reports[0].data.totals[0].values
@@ -137,20 +105,21 @@ export default class Adwords extends Component {
     });
   }
 
+  googleLogedIn = (login) => {
+    if (login) {
+      this.setState({
+        isSignedIn: true
+      })
+      this.getData()
+    }
+  }
+
   componentDidMount() {
-    //this.googleSDK();
-    //LOAD GA API SCRIPT
-    const script = document.createElement("script");
-    script.src = "https://apis.google.com/js/client:platform.js";
-    script.async = true;
-    document.body.appendChild(script);
-    //ONLOAD GA API SCRIPT AND AUTH CALL INIT
-    script.onload = () => {
+    if(this.state.isSignedIn){
       window.gapi.load('client:auth2', _ => {
         this.getData()
-        this.googleSDK();
       });
-    };
+    }
   }
 
   render() {
@@ -160,7 +129,7 @@ export default class Adwords extends Component {
         padding: theme.spacing(4)
       }
     }));
-    debugger;
+   
     const campaignData = this.state.adsData;
     const clicks = this.state.adsDataTotals[0];
     const impressions = this.state.adsDataTotals[1];
@@ -180,18 +149,11 @@ export default class Adwords extends Component {
 
     return (
       <div className={classes.root}>
-
+         {this.state.isSignedIn ? '' : <Google logedIn={this.googleLogedIn} isloged={this.state.isSignedIn} />}
         {/* TOP BAR */}
         <Grid container spacing={4} >
           <Grid item lg={6} sm={12} xl={6} xs={12}>
             <DatePicker parentCallback={this.callbackFunction} />
-          </Grid>
-          <Grid item lg={6} sm={12} xl={6} xs={12}>
-            <Button size="large" variant="contained">
-              <GoogleIcon className="loginBtn loginBtn--google" ref="googleLoginBtn" />
-              {/* <GoogleIcon className="loginBtn loginBtn--google" /> */}
-              Login with Google
-              </Button>
           </Grid>
         </Grid>
         {/* END TOP BAR */}
