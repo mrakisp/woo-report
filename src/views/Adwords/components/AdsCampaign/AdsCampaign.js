@@ -1,9 +1,23 @@
 import React, { Component }  from 'react';
 import { Grid } from '@material-ui/core';
+import Switch from '@material-ui/core/Switch';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
 import {Box} from '..';
 import {  currencySymbol, AdwordsCampatingsGoal } from '../../../../Config';
 
 export default class AdsCampaign extends Component {
+  constructor() {
+    super();
+    this.state = {
+      searchPartners : true,
+      googleSearch : true,
+      content : true,
+      cross : true,
+      visibleTypes: ['Searchpartners','GoogleSearch','Content','Cross-network']
+    };
+  }
   render() {
 
     const data = this.props.campaigndata
@@ -11,12 +25,72 @@ export default class AdsCampaign extends Component {
     const goal = AdwordsCampatingsGoal;
 
     const TableBody = () => {
-      
-      // sources = data.sort((a,b) => (a.value > b.value) ? -1 : ((b.value > a.value) ? 1 : 0));
+
+      const handleChange = name => event => {
+        this.setState({ 
+          searchPartners : !this.state.searchPartners
+        })
+        let list = this.state.visibleTypes
+        if(!this.state.searchPartners){
+          list.push(event.currentTarget.value)
+        }else{
+          list.splice( this.state.visibleTypes.indexOf(event.currentTarget.value), 1 );
+        }
+        this.setState({ 
+          visibleTypes : list
+        })
+      };
+
+      const handleChange1 = name => event => {
+        this.setState({ 
+          googleSearch : !this.state.googleSearch
+        })
+        let list = this.state.visibleTypes
+        if(!this.state.googleSearch){
+          list.push(event.currentTarget.value)
+        }else{
+          list.splice( this.state.visibleTypes.indexOf(event.currentTarget.value), 1 );
+        }
+        this.setState({ 
+          visibleTypes : list
+        })
+      };
+
+      const handleChange2 = name => event => {
+        this.setState({ 
+          content : !this.state.content
+        })
+        let list = this.state.visibleTypes
+        if(!this.state.content){
+          list.push(event.currentTarget.value)
+        }else{
+          list.splice( this.state.visibleTypes.indexOf(event.currentTarget.value), 1 );
+        }
+        this.setState({ 
+          visibleTypes : list
+        })
+      };
+
+      const handleChange3 = name => event => {
+        this.setState({ 
+          cross : !this.state.cross
+        })
+        let list = this.state.visibleTypes
+        if(!this.state.cross){
+          list.push(event.currentTarget.value)
+        }else{
+          list.splice( this.state.visibleTypes.indexOf(event.currentTarget.value), 1 );
+        }
+        this.setState({ 
+          visibleTypes : list
+        })
+      };
+
+      let dataSorted = data.sort((a,b) => (a.dimensions[1] > b.dimensions[1]) ? -1 : ((b.dimensions[1] > a.dimensions[1]) ? 1 : 0));
       //LOOP THROUGH DIMENSIONS
-      let CampaignAds = data.map((elem, i) => {
+      let CampaignAds = dataSorted.map((elem, i) => {
         //LOOP THROUGH METRICS
-        let CampaignAdsMetrics = data[i].metrics[0].values.map((element, i) => {
+        let CampaignAdsMetrics = dataSorted[i].metrics[0].values.map((element, i) => {
           const value = element
           if(element.length > 10 && element.includes('.')){
             element = Number(element).toFixed(2)
@@ -39,17 +113,49 @@ export default class AdsCampaign extends Component {
           )
         })
 
-        return (
-          <Grid  key={i} item lg={3} sm={4} xl={2} xs={12} >
-            <Box title={elem.dimensions[0]} data={CampaignAdsMetrics} className={`adtype ` + elem.dimensions[1].replace(/\s/g, '')}/>
-          </Grid>
-        )
+        if (this.state.visibleTypes.includes(elem.dimensions[1].replace(/\s/g, ''))){
+            return (
+              <Grid  key={i} item lg={3} sm={4} xl={2} xs={12} >
+                <Box title={elem.dimensions[0]} data={CampaignAdsMetrics} className={`adtype ` + elem.dimensions[1].replace(/\s/g, '')}/> 
+              </Grid> 
+            )
+        }
       })
 
       return (
-        <Grid container spacing={4} >
-          {CampaignAds}
-        </Grid>  
+        <div>
+          <FormControl component="fieldset" className="visible-filters">
+            <FormGroup aria-label="position" row>
+              <FormControlLabel
+                value="top"
+                control={<Switch checked={this.state.searchPartners} onChange={handleChange('Searchpartners')} value="Searchpartners" inputProps={{ 'aria-label': 'secondary checkbox' }} />}
+                label="Search Partners"
+                labelPlacement="top"
+              />
+              <FormControlLabel
+                value="top"
+                control={ <Switch checked={this.state.googleSearch} onChange={handleChange1('GoogleSearch')} value="GoogleSearch" inputProps={{ 'aria-label': 'secondary checkbox' }} />}
+                label="Search"
+                labelPlacement="top"
+              />
+                <FormControlLabel
+                value="top"
+                control={ <Switch checked={this.state.content} onChange={handleChange2('Content')} value="Content" inputProps={{ 'aria-label': 'secondary checkbox' }} />}
+                label="Google Display Network"
+                labelPlacement="top"
+              />
+              <FormControlLabel
+                value="top"
+                control={ <Switch checked={this.state.cross} onChange={handleChange3('Cross-network')} value="Cross-network" inputProps={{ 'aria-label': 'secondary checkbox' }} />}
+                label="Cross Network"
+                labelPlacement="top"
+              />
+              </FormGroup>
+            </FormControl>
+            <Grid container spacing={4} >
+              {CampaignAds}
+            </Grid>  
+        </div>
       )
     };
 
