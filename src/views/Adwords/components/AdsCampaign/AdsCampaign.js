@@ -115,7 +115,7 @@ export default class AdsCampaign extends Component {
 
         if (this.state.visibleTypes.includes(elem.dimensions[1].replace(/\s/g, ''))){
             return (
-              <Grid  key={i} item lg={3} sm={4} xl={2} xs={12} >
+              <Grid  key={i} item lg={2} sm={4} xl={2} xs={12} >
                 <Box title={elem.dimensions[0]} data={CampaignAdsMetrics} className={`adtype ` + elem.dimensions[1].replace(/\s/g, '')}/> 
               </Grid> 
             )

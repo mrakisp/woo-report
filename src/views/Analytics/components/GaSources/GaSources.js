@@ -49,7 +49,7 @@ export default class GaSources extends Component {
         return (
           <Grid  key={i} item lg={3} sm={6} xl={2} xs={6} >
             <Box title={elem.label} data={elem.value} />
-            </Grid>
+          </Grid>
         )
       })
 
