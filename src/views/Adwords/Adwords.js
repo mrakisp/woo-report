@@ -126,6 +126,7 @@ export default class Adwords extends Component {
           ]
         }
       }).then(function (response) {
+        debugger;
         self.setState({
           adsData: response.result.reports[0].data.rows,
           adsDataTotals: response.result.reports[0].data.totals[0].values,
