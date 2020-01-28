@@ -262,24 +262,24 @@ export default class Analytics extends Component {
           <Divider />
           <CardContent>
             <Grid container spacing={4} >
-              <Grid item lg={8} sm={6} xl={9} xs={12}>
+              <Grid item lg={9} sm={6} xl={10} xs={12}>
                 <Grid container spacing={4} >
-                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Grid item lg={2} sm={6} xl={2} xs={6} >
                     <Box title={'All Visitors'} data={users} />
                   </Grid>
-                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Grid item lg={2} sm={6} xl={2} xs={6} >
                     <Box title={'New Visitors'} data={newUsers} />
                   </Grid>
-                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Grid item lg={2} sm={6} xl={2} xs={6} >
                     <Box title={'Returning Visitors'} data={users - newUsers} />
                   </Grid>
-                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Grid item lg={2} sm={6} xl={2} xs={6} >
                     <Box title={'Sessions'} data={sessions} />
                   </Grid>
-                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Grid item lg={2} sm={6} xl={2} xs={6} >
                     <Box title={'Avg Session Duration'} data={avgSessionDuration} />
                   </Grid>
-                  <Grid item lg={3} sm={6} xl={2} xs={6} >
+                  <Grid item lg={2} sm={6} xl={2} xs={6} >
                     <Box title={'Bounce Rate'} data={bounceRate} />
                   </Grid>
 
@@ -296,7 +296,7 @@ export default class Analytics extends Component {
                 {/* END SOURCES SECTION */}
               </Grid>
               {/* DEVICES SECTION */}
-              <Grid item lg={4} sm={6} xl={3} xs={12}>
+              <Grid item lg={3} sm={6} xl={2} xs={12}>
                 <Tabs devicesarray={devicesarray} agearray={agearray} />
                 {/* <UsersByDevice devicesarray={devicesarray}/> */}
               </Grid>

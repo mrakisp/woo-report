@@ -106,7 +106,9 @@ a.canvasjs-chart-credit {
   content: 'CROSS NETWORK';
 }
 
-
+.hidden{
+  display:none;
+}
 .visible-filters {
   padding-bottom: 20px!important;
 }
@@ -117,6 +119,9 @@ a.canvasjs-chart-credit {
     width: 155px!important;
     max-width: 155px!important;
     min-width: 155px!important;
+}
+.btn--more{
+  margin-top: 20px!important;
 }
 @media screen and (max-width:480px){
     #svg {
