@@ -26,20 +26,20 @@ export default class AdsCampaign extends Component {
 
     const TableBody = () => {
 
-      const handleChange = name => event => {
-        this.setState({ 
-          searchPartners : !this.state.searchPartners
-        })
-        let list = this.state.visibleTypes
-        if(!this.state.searchPartners){
-          list.push(event.currentTarget.value)
-        }else{
-          list.splice( this.state.visibleTypes.indexOf(event.currentTarget.value), 1 );
-        }
-        this.setState({ 
-          visibleTypes : list
-        })
-      };
+      // const handleChange = name => event => {
+      //   this.setState({ 
+      //     searchPartners : !this.state.searchPartners
+      //   })
+      //   let list = this.state.visibleTypes
+      //   if(!this.state.searchPartners){
+      //     list.push(event.currentTarget.value)
+      //   }else{
+      //     list.splice( this.state.visibleTypes.indexOf(event.currentTarget.value), 1 );
+      //   }
+      //   this.setState({ 
+      //     visibleTypes : list
+      //   })
+      // };
 
       const handleChange1 = name => event => {
         this.setState({ 
@@ -112,8 +112,8 @@ export default class AdsCampaign extends Component {
           </div>
           )
         })
-
-        if (this.state.visibleTypes.includes(elem.dimensions[1].replace(/\s/g, ''))){
+  
+        if (elem.dimensions[1] !== 'Search partners' && this.state.visibleTypes.includes(elem.dimensions[1].replace(/\s/g, ''))){
             return (
               <Grid  key={i} item lg={2} sm={4} xl={2} xs={12} >
                 <Box title={elem.dimensions[0]} data={CampaignAdsMetrics} className={`adtype ` + elem.dimensions[1].replace(/\s/g, '')}/> 
@@ -126,12 +126,12 @@ export default class AdsCampaign extends Component {
         <div>
           <FormControl component="fieldset" className="visible-filters">
             <FormGroup aria-label="position" row>
-              <FormControlLabel
+              {/* <FormControlLabel
                 value="top"
                 control={<Switch checked={this.state.searchPartners} onChange={handleChange('Searchpartners')} value="Searchpartners" inputProps={{ 'aria-label': 'secondary checkbox' }} />}
                 label="Search Partners"
                 labelPlacement="top"
-              />
+              /> */}
               <FormControlLabel
                 value="top"
                 control={ <Switch checked={this.state.googleSearch} onChange={handleChange1('GoogleSearch')} value="GoogleSearch" inputProps={{ 'aria-label': 'secondary checkbox' }} />}

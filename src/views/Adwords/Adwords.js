@@ -4,7 +4,7 @@ import { Card, CardContent, Grid, Button, CardHeader, Divider } from '@material-
 import { analytics, currencySymbol  } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
 import { DatePicker, Google } from "../../helpers";
-import { AdsCampaign, UsersByDevice, Tabs } from './components';
+import { AdsCampaign, UsersByDevice, Tabs, Table } from './components';
 import { Box } from '../Analytics/components';
 
 export default class Adwords extends Component {
@@ -15,6 +15,7 @@ export default class Adwords extends Component {
       isSignedIn: false,
       adsData: [],
       adsDataTotals: [],
+      adsEcommerce: [],
       fromDate: formatDate(new Date()),
       toDate: formatDate(new Date()),
     };
@@ -82,13 +83,53 @@ export default class Adwords extends Component {
                   "name": "ga:adDistributionNetwork"
                 }
               ]
+            },{
+              "viewId": analytics.view_id,
+              "dateRanges": [
+                {
+                  "startDate": fromDate,
+                  "endDate": toDate
+                }
+              ],
+              "metrics": [
+                {
+                  "expression": "ga:productDetailViews"
+                },
+                {
+                  "expression": "ga:productAddsToCart"
+                },
+                {
+                  "expression": "ga:productRemovesFromCart"
+                },
+                {
+                  "expression": "ga:productCheckouts"
+                },
+                {
+                  "expression": "ga:itemRevenue"
+                },
+                {
+                  "expression": "ga:itemQuantity"
+                },
+                {
+                  "expression": "ga:cartToDetailRate"
+                },
+                {
+                  "expression": "ga:buyToDetailRate"
+                }
+              ],
+              "dimensions": [
+                {
+                  "name": "ga:campaign"
+                }
+              ]
             }
           ]
         }
       }).then(function (response) {
         self.setState({
           adsData: response.result.reports[0].data.rows,
-          adsDataTotals: response.result.reports[0].data.totals[0].values
+          adsDataTotals: response.result.reports[0].data.totals[0].values,
+          adsEcommerce : response.result.reports[1].data.rows
         })
       }, console.error.bind(console));
     });
@@ -136,17 +177,7 @@ export default class Adwords extends Component {
     const impressions = this.state.adsDataTotals[1];
     const roas = Number(this.state.adsDataTotals[3]).toFixed(2) +'%';
     const cost = Math.round(Number(this.state.adsDataTotals[6])) + currencySymbol;
-    // const bounceRate = Math.round(this.state.bounceRate) + '%';
-
-    // const avgPageLoadTime = Number(this.state.avgPageLoadTime).toFixed(3) + ' sec';
-    // const avgDomainLookupTime = Number(this.state.avgDomainLookupTime).toFixed(3) + ' sec';
-    // const avgServerConnectionTime = Number(this.state.avgServerConnectionTime).toFixed(3) + ' sec';
-    // const avgServerResponseTime = Number(this.state.avgServerResponseTime).toFixed(3) + ' sec';
-    // const avgDomInteractiveTime = Number(this.state.avgDomInteractiveTime).toFixed(3) + ' sec';
-    // const avgDomContentLoadedTime = Number(this.state.avgDomContentLoadedTime).toFixed(3) + ' sec';
-    
-    // const devicesarray = this.state.devicesData;
-    // const agearray = this.state.ageData
+    const adsEcommerceData = this.state.adsEcommerce;
 
     return (
       <div className={classes.root}>
@@ -159,8 +190,7 @@ export default class Adwords extends Component {
         </Grid>
         {/* END TOP BAR */}
 
-        <Card
-          className={classes.root}>
+        <Card className={classes.root}>
           <CardHeader title="Total Metrics" />
           <Divider />
           <CardContent>
@@ -198,35 +228,21 @@ export default class Adwords extends Component {
         </Card>
         {/* END CAMPAIGN SECTION */}
 
-
-        {/* PERFORMANCE SECTION */}
-        <Card className={classes.root}>
-          <CardHeader  title="Store Performance Section" />
+        {/* CAMPAIGN SECTION */}
+        <Card
+          className={classes.root}>
+          <CardHeader title="Active Campaigns Ecommerce Data" />
           <Divider />
           <CardContent>
             <Grid container spacing={4} >
-              <Grid item lg={2} sm={6} xl={3} xs={12} >
-                {/* <Box title={'Avg Page Load'} data={avgPageLoadTime} /> */}
-              </Grid>
-              <Grid item lg={2} sm={6} xl={3} xs={12} >
-                {/* <Box title={'Avg Domain LookUp'} data={avgDomainLookupTime} /> */}
-              </Grid>
-              <Grid item lg={2} sm={6} xl={3} xs={12} >
-                {/* <Box title={'Avg Server Connection'} data={avgServerConnectionTime} /> */}
-              </Grid>
-              <Grid item lg={2} sm={6} xl={3} xs={12} >
-                {/* <Box title={'Avg Server Response'} data={avgServerResponseTime} /> */}
-              </Grid>
-              <Grid item lg={2} sm={6} xl={3} xs={12} >
-                {/* <Box title={'Avg Dom Interactive'} data={avgDomInteractiveTime} /> */}
-              </Grid>
-              <Grid item lg={2} sm={6} xl={3} xs={12} >
-                {/* <Box title={'Avg Dom Content Load'} data={avgDomContentLoadedTime} /> */}
+              <Grid item lg={12} sm={12} xl={12} xs={12}>
+                <Table tabledata={adsEcommerceData} />
               </Grid>
             </Grid>
           </CardContent>
         </Card>
-        {/* END PERFORMANCE SECTION */}
+        {/* END CAMPAIGN SECTION */}
+
       </div>
     );
   };
