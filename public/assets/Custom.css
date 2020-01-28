@@ -110,7 +110,14 @@ a.canvasjs-chart-credit {
 .visible-filters {
   padding-bottom: 20px!important;
 }
-
+.first-column{
+    white-space: nowrap;
+    overflow: hidden!important;
+    text-overflow: ellipsis!important;
+    width: 155px!important;
+    max-width: 155px!important;
+    min-width: 155px!important;
+}
 @media screen and (max-width:480px){
     #svg {
         width: 24%;

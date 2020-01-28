@@ -44,7 +44,7 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Campaign' , toolTips: 'The value of the utm_campaign campaign or Adwords Campaign name' },
+  { id: 'name', numeric: false, disablePadding: false, label: 'Campaign' , toolTips: 'The value of the utm_campaign campaign or Adwords Campaign name' },
   { id: 'productDetailViews', numeric: true, disablePadding: false, label: 'View Product'  , toolTips: 'Number of times users viewed the product-detail page (Enhanced Ecommerce).' },
   { id: 'productAddsToCart', numeric: true, disablePadding: false, label: 'Add To Cart', toolTips:"Number of times the product was added to the shopping cart (Enhanced Ecommerce)." },
   { id: 'productRemovesFromCart', numeric: true, disablePadding: false, label: 'Remove From Cart', toolTips: "Number of times the product was removed from the shopping cart (Enhanced Ecommerce)." },
@@ -129,6 +129,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EnhancedTable(props) {
+
+  //GET DATA AND PASS IT TO ARRAY
   let rows = [];
   if (props.tabledata.length > 0){
     props.tabledata.forEach(element => {
@@ -202,9 +204,11 @@ export default function EnhancedTable(props) {
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.name}
-                      </TableCell>
+                      <Tooltip title={row.name} placement="left-start">
+                        <TableCell className="first-column" component="th" id={labelId} scope="row" >
+                          {row.name}
+                        </TableCell>
+                      </Tooltip>
                       <TableCell align="left">{row.productDetailViews}</TableCell>
                       <TableCell align="left">{row.productAddsToCart}</TableCell>
                       <TableCell align="left">{row.productRemovesFromCart}</TableCell>
@@ -216,11 +220,6 @@ export default function EnhancedTable(props) {
                     </TableRow>
                   );
                 })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </TableContainer>
