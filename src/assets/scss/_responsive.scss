@@ -1,0 +1,23 @@
+
+@import './_vars.scss';
+
+@media screen and (max-width: $smallScreens) {
+  #svg {
+    width: 24%;
+    height: 104px;
+    margin-top: -25px;
+  }
+
+  
+  .filter-criteria {
+    flex-direction: column;
+  
+    & .InputFromTo-to {
+        margin-right: 0;
+        margin-bottom: 15px;
+      }
+    & .btn-search {
+        margin-bottom: 7px !important;
+      }
+  }
+}

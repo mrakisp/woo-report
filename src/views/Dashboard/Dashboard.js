@@ -14,9 +14,6 @@ import {
   TotalUsers,
   TotalItems,
   TotalProfit,
-  UsersByDevice,
-  LatestProducts,
-  LatestOrders,
   TopSellers
 } from './components';
 
@@ -91,12 +88,10 @@ export default class Dashboard extends Component {
     }));
   
     const sales = this.state.sales;
-    const customers = this.state.customers;
     const total_sales = this.state.total_sales;
     const total_orders = this.state.total_orders;
     const total_items = this.state.total_items;
     const total_customers = this.state.total_customers;
-    const total_refunds = this.state.total_refunds;
     const topSellers = this.state.topSellers;
 
   return (

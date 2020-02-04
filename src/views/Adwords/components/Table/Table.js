@@ -65,7 +65,7 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         {headCells.map(headCell => (
-          <Tooltip title={headCell.toolTips} placement="top-end">
+          <Tooltip key={headCell.id} title={headCell.toolTips} placement="top-end">
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? 'left' : 'left'}
@@ -98,7 +98,6 @@ EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
@@ -177,8 +176,6 @@ export default function EnhancedTable(props) {
     setDense(event.target.checked);
   };
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -203,7 +200,7 @@ export default function EnhancedTable(props) {
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
-                    <TableRow>
+                    <TableRow key={index}>
                       <Tooltip title={row.name} placement="left-start">
                         <TableCell className="first-column" component="th" id={labelId} scope="row" >
                           {row.name}

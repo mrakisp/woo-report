@@ -1,0 +1,33 @@
+
+@import './_vars.scss';
+
+.metrics {
+    display: flex;
+    padding: 5px 10px;
+    border-bottom: 1px solid #c7c7c7;
+  
+    & > div {
+      min-width: 90px;
+    }
+  
+    &__title--background {
+      background-color: $dark-blue;
+      color: $white;
+      padding: 4px;
+      text-transform: capitalize;
+      text-align: center;
+      overflow: hidden !important;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  
+    &--achieved {
+      background-color: $success-color;
+      color: $white;
+    }
+  
+    &--notachieved {
+      background-color: $notsuccess-color;
+      color: $white;
+    }
+  }

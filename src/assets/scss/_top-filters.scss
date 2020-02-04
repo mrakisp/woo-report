@@ -1,0 +1,20 @@
+
+.filter-criteria {
+  display: flex;
+  align-items: center;
+  padding: 16px 10px;
+
+  & input {
+    padding: 5px;
+  }
+
+  & .btn-search {
+    margin: 0 5px !important;
+    border: 1px solid #a9a9a9 !important;
+    min-width: 100px;
+  }
+
+  & .InputFromTo-to {
+    margin-right: 20px;
+  }
+}

@@ -1,0 +1,38 @@
+
+@import './_vars.scss';
+
+.adtype {
+  box-shadow: 0px 0px 3px 0px !important;
+
+  &:after {
+    content: '';
+    background-color: $dark-blue;
+    position: relative;
+    width: 100%;
+    color: $white;
+    display: flex;
+    justify-content: center;
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  & .MuiGrid-item {
+    width: 100%;
+  }
+
+  &.GoogleSearch:after {
+    content: 'SEARCH';
+  }
+
+  &.Searchpartners:after {
+    content: 'SEARCH PARTNERS';
+  }
+
+  &.Content:after {
+    content: 'DISPLAY';
+  }
+
+  &.Cross-network:after {
+    content: 'CROSS NETWORK';
+  }
+}

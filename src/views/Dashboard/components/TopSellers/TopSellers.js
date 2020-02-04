@@ -44,8 +44,6 @@ const useStyles = makeStyles(theme => ({
 
 
 const TopSellers = props => {
-  // const { className, ...rest } = props;
-  //const topSellers = this.props.topSellers;
   const classes = useStyles();
   let data = props.topSellers;
 

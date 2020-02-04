@@ -20,6 +20,7 @@ export default class GaSources extends Component {
     
     const sourcesArray = this.props.sourcesarray;
     let finalArrayLength = analytics.groupSources ? 0 : 9 ;
+    let loading = this.props.loading 
 
     if ( analytics.groupSources ){
       sourcesArray.forEach(element => {
@@ -71,7 +72,7 @@ export default class GaSources extends Component {
       sourcesFinal = sources.map((elem, i) => {
         return (
           <Grid className={i > 11 ? this.state.visible ? '' : 'hidden' : '' } key={i} item lg={2} sm={6} xl={2} xs={6} >
-            <Box title={elem.label} data={elem.value} />
+            <Box title={elem.label} data={elem.value} loading={loading}/>
           </Grid>
         )
       })

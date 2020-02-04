@@ -13,6 +13,7 @@ export default class Adwords extends Component {
     super();
     this.state = {
       isSignedIn: false,
+      loading: true,
       adsData: [],
       adsDataTotals: [],
       adsEcommerce: [],
@@ -126,11 +127,12 @@ export default class Adwords extends Component {
           ]
         }
       }).then(function (response) {
-        debugger;
         self.setState({
           adsData: response.result.reports[0].data.rows,
+          revenue: response.result.reports[1].data.totals[0].values[5],
           adsDataTotals: response.result.reports[0].data.totals[0].values,
-          adsEcommerce : response.result.reports[1].data.rows
+          adsEcommerce : response.result.reports[1].data.rows,
+          loading : false
         })
       }, console.error.bind(console));
     });
@@ -142,7 +144,7 @@ export default class Adwords extends Component {
     this.setState({
       fromDate: formatDate(from),
       toDate: formatDate(to),
-      loading: true
+      // loading: true
     }, () => { //CALL FUNCTION AFTER STATE IS UPDATED
       this.getData()
     });
@@ -176,7 +178,7 @@ export default class Adwords extends Component {
     const campaignData = this.state.adsData;
     const clicks = this.state.adsDataTotals[0];
     const impressions = this.state.adsDataTotals[1];
-    const roas = Number(this.state.adsDataTotals[3]).toFixed(2) +'%';
+    const revenue = Number(this.state.revenue).toFixed(2) + currencySymbol;
     const cost = Math.round(Number(this.state.adsDataTotals[6])) + currencySymbol;
     const adsEcommerceData = this.state.adsEcommerce;
 
@@ -198,16 +200,16 @@ export default class Adwords extends Component {
             <Grid container spacing={4} >
               <Grid container spacing={4} >
                 <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'Clicks'} data={clicks} />
+                  <Box title={'Clicks'} data={clicks} loading={this.state.loading}/>
                 </Grid>
                 <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'Imporessions'} data={impressions} />
+                  <Box title={'Imporessions'} data={impressions} loading={this.state.loading} />
                 </Grid>
                 <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'Roas'} data={roas} />
+                  <Box title={'Revenue'} data={revenue} loading={this.state.loading} />
                 </Grid>
                 <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'Cost'} data={cost} />
+                  <Box title={'Cost'} data={cost} loading={this.state.loading}/>
                 </Grid>
               </Grid>
             </Grid>
@@ -222,7 +224,7 @@ export default class Adwords extends Component {
           <CardContent>
             <Grid container spacing={4} >
               <Grid item lg={12} sm={12} xl={12} xs={12}>
-                <AdsCampaign campaigndata={campaignData} />
+                <AdsCampaign campaigndata={campaignData} loading={this.state.loading}/>
               </Grid>
             </Grid>
           </CardContent>
@@ -237,7 +239,7 @@ export default class Adwords extends Component {
           <CardContent>
             <Grid container spacing={4} >
               <Grid item lg={12} sm={12} xl={12} xs={12}>
-                <Table tabledata={adsEcommerceData} />
+                <Table tabledata={adsEcommerceData} loading={this.state.loading}/>
               </Grid>
             </Grid>
           </CardContent>

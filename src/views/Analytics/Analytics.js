@@ -12,6 +12,7 @@ export default class Analytics extends Component {
     super();
     this.state = {
       isSignedIn: false,
+      loading: true,
       sourcesData: [],
       devicesData: [],
       ageData: [],
@@ -179,7 +180,8 @@ export default class Analytics extends Component {
           avgDomContentLoadedTime: response.result.reports[1].data.totals[0].values[5],
           sourcesData: response.result.reports[2].data.rows,
           devicesData: response.result.reports[3].data.rows,
-          ageData: response.result.reports[4].data.rows
+          ageData: response.result.reports[4].data.rows,
+          loading : false
         })
 
         //let formattedJson = JSON.stringify(response.result, null, 2)
@@ -194,7 +196,7 @@ export default class Analytics extends Component {
     this.setState({
       fromDate: formatDate(from),
       toDate: formatDate(to),
-      loading: true
+      // loading: true
     }, () => { //CALL FUNCTION AFTER STATE IS UPDATED
       this.getData()
     });
@@ -265,22 +267,22 @@ export default class Analytics extends Component {
               <Grid item lg={9} sm={6} xl={10} xs={12}>
                 <Grid container spacing={4} >
                   <Grid item lg={2} sm={6} xl={2} xs={6} >
-                    <Box title={'All Visitors'} data={users} />
+                    <Box title={'All Visitors'} data={users} loading={this.state.loading}/>
                   </Grid>
                   <Grid item lg={2} sm={6} xl={2} xs={6} >
-                    <Box title={'New Visitors'} data={newUsers} />
+                    <Box title={'New Visitors'} data={newUsers} loading={this.state.loading}/>
                   </Grid>
                   <Grid item lg={2} sm={6} xl={2} xs={6} >
-                    <Box title={'Returning Visitors'} data={users - newUsers} />
+                    <Box title={'Returning Visitors'} data={users - newUsers} loading={this.state.loading}/>
                   </Grid>
                   <Grid item lg={2} sm={6} xl={2} xs={6} >
-                    <Box title={'Sessions'} data={sessions} />
+                    <Box title={'Sessions'} data={sessions} loading={this.state.loading}/>
                   </Grid>
                   <Grid item lg={2} sm={6} xl={2} xs={6} >
-                    <Box title={'Avg Session Duration'} data={avgSessionDuration} />
+                    <Box title={'Avg Session Duration'} data={avgSessionDuration} loading={this.state.loading}/>
                   </Grid>
                   <Grid item lg={2} sm={6} xl={2} xs={6} >
-                    <Box title={'Bounce Rate'} data={bounceRate} />
+                    <Box title={'Bounce Rate'} data={bounceRate} loading={this.state.loading}/>
                   </Grid>
 
                 </Grid>
@@ -290,7 +292,7 @@ export default class Analytics extends Component {
                   <CardHeader title="Traffic Sources" />
                   <Divider />
                   <CardContent>
-                    <GaSources sourcesarray={sourcesarray} />
+                    <GaSources sourcesarray={sourcesarray} loading={this.state.loading}/>
                   </CardContent>
                 </Card>
                 {/* END SOURCES SECTION */}
@@ -317,22 +319,22 @@ export default class Analytics extends Component {
           <CardContent>
             <Grid container spacing={4} >
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Page Load'} data={avgPageLoadTime} />
+                <Box title={'Avg Page Load'} data={avgPageLoadTime} loading={this.state.loading}/>
               </Grid>
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Domain LookUp'} data={avgDomainLookupTime} />
+                <Box title={'Avg Domain LookUp'} data={avgDomainLookupTime} loading={this.state.loading}/>
               </Grid>
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Server Connection'} data={avgServerConnectionTime} />
+                <Box title={'Avg Server Connection'} data={avgServerConnectionTime} loading={this.state.loading}/>
               </Grid>
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Server Response'} data={avgServerResponseTime} />
+                <Box title={'Avg Server Response'} data={avgServerResponseTime} loading={this.state.loading}/>
               </Grid>
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Dom Interactive'} data={avgDomInteractiveTime} />
+                <Box title={'Avg Dom Interactive'} data={avgDomInteractiveTime} loading={this.state.loading}/>
               </Grid>
               <Grid item lg={2} sm={6} xl={3} xs={12} >
-                <Box title={'Avg Dom Content Load'} data={avgDomContentLoadedTime} />
+                <Box title={'Avg Dom Content Load'} data={avgDomContentLoadedTime} loading={this.state.loading}/>
               </Grid>
             </Grid>
           </CardContent>

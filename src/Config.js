@@ -19,6 +19,7 @@ export const analytics = {
   groupSources : true //show all sources from facebok & instagram as one parent source ( e.x => i.facebook , m.facebook etc)
 }
 
+
 export const AdwordsCampatingsGoal = [
   null,                  //'CLICKS'
   null,                 //'IMPRESIONS'

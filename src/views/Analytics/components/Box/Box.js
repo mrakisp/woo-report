@@ -2,7 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
+import { Card, CardContent, Grid, Typography } from '@material-ui/core';
+import Loading from '../../../../helpers/Loading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,11 +15,6 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     fontWeight: 700
-  },
-  avatar: {
-    backgroundColor: theme.palette.error.main,
-    height: 56,
-    width: 56
   },
   icon: {
     height: 32,
@@ -42,6 +38,7 @@ const Box = props => {
   
   let data = props.data;
   let title = props.title;
+  let loading = props.loading;
   const { className, ...rest } = props;
 
   const classes = useStyles();
@@ -51,6 +48,7 @@ const Box = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
+      {loading ? <Loading loading={loading}/> : ''}
       <CardContent>
         <Grid
           container

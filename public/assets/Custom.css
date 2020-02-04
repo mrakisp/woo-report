@@ -123,6 +123,19 @@ a.canvasjs-chart-credit {
 .btn--more{
   margin-top: 20px!important;
 }
+
+.loading {
+  width: 100%;
+  position: relative;
+  background: aqua;
+  height: 100%;
+  background: url(../images/loading.gif) hsla(0, 0%, 100%, 0.50);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+
 @media screen and (max-width:480px){
     #svg {
         width: 24%;

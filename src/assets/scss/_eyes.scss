@@ -1,0 +1,22 @@
+
+@import './_vars.scss';
+
+#svg {
+  position: fixed;
+  width: 12%;
+  height: 190px;
+  left: 0;
+  z-index: 99999;
+  margin-top: -65px;
+}
+
+.eye {
+  &-outer {
+    fill: none;
+    stroke: $white;
+    stroke-width: 5px;
+  }
+  &-inner {
+    fill: $white;
+  }
+}
