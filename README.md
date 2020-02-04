@@ -11,9 +11,9 @@ React Analytics & Woocommerce Reporting Dashboard based on Material Ui -> https:
 - Views are on: `localhost:3000`
 
 - App configuration file: `Config.js`
+	- `ENABLE/DISABLE DASHBOARD VIEW`
+	- `ENABLE REST API TO YOUR WOOCOMMERCE STORE AND SET THE CREDS -> https://docs.woocommerce.com/document/woocommerce-rest-api/`
+	- `SET ANALYTICS CREDS -> https://developers.google.com/analytics/devguides/reporting/core/v4`
+	- `SET ADWORDS CAMPAIGNS GOALS`
+	- `SET CURRENCY `
 
-## ENABLE/DISABLE DASHBOARD VIEWS 
-## ENABLE REST API TO YOUR WOOCOMMERCE STORE AND SET THE CREDS -> https://docs.woocommerce.com/document/woocommerce-rest-api/
-## SET ANALYTICS CREDS -> https://developers.google.com/analytics/devguides/reporting/core/v4
-## SET ADWORDS CAMPAIGNS GOALS
-## SET CURRENCY 
