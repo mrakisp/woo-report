@@ -8,6 +8,7 @@ import {
   Dashboard as DashboardView,
   Analytics as AnalyticsView,
   Adwords as AdwordsView,
+  Facebook as FacebookView,
   NotFound as NotFoundView
 } from './views';
 
@@ -36,6 +37,12 @@ const Routes = () => {
         exact
         layout={MainLayout}
         path="/adwords"
+      />
+      <RouteWithLayout
+        component={FacebookView}
+        exact
+        layout={MainLayout}
+        path="/facebook"
       />
       <RouteWithLayout
         component={NotFoundView}

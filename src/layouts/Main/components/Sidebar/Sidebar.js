@@ -115,6 +115,13 @@ const Sidebar = props => {
       icon: <ShoppingBasketIcon/>
     })
   }
+  if (showView.facebook){
+    pages.push({
+      title: 'Facebook',
+      href: '/facebook',
+      icon: <ShoppingBasketIcon/>
+    })
+  }
  
 
   return (

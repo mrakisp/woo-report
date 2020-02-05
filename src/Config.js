@@ -2,7 +2,8 @@
 export const showView = {
   dashboard : true,
   analytics: true,
-  adwords: true
+  adwords: true,
+  facebook: true
 }
 
 //ENABLE REST API TO YOUR WOOCOMMERCE STORE AND PROVIDE THE INFOS
