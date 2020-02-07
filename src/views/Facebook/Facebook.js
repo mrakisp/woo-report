@@ -5,12 +5,14 @@ import { currencySymbol  } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
 import { DatePicker } from "../../helpers";
 // import { AdsCampaign, UsersByDevice, Tabs, Table } from './components';
-// import { Box } from '../Analytics/components';
+import { Box } from '../Analytics/components';
 
 export default class Facebook extends Component {
 
   state = {
+    fbTotals : [],
     fbCampaigns : [],
+    allActiveCampaigns : [],
     fromDate : formatDate(new Date()),
     toDate : formatDate(new Date()),
     loading: true,
@@ -31,14 +33,16 @@ export default class Facebook extends Component {
         });
         // FB.AppEvents.logPageView();
 
-
         //GET ACCOUNT DATA
         window.FB.api(
           '/act_108444649307331/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
           'GET',
-           {"fields":"social_spend,clicks,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,reach,frequency","level":"account","time_range":{"since":"2020-02-04","until":"2020-02-05"}},
+           {"fields":"action_values,clicks,impressions,purchase_roas,cpc,ctr,cpm,spend,reach,frequency","level":"account","time_range":{"since":fromDate,"until":toDate}},
           function(response) {
-              // Insert your code here
+            self.setState({
+              fbTotals: response.data[0],
+              loading : false
+            })
           }
         );
         
@@ -46,27 +50,45 @@ export default class Facebook extends Component {
         window.FB.api(
           '/act_108444649307331/campaigns?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
           'GET',
-          {"summary":"insights","fields":"effective_status,name,objective","time_range":{"since":"2020-02-05","until":"2020-02-05"}},
+          {"summary":"insights","fields":"effective_status,name,objective"},
           function(response) {
-            debugger;
             self.setState({
-              fbCampaigns : response.data
-            }, () => { 
+              fbCampaigns : response.data,
+            } , () => { 
+
               debugger;//GET ADS DATA
-                window.FB.api(
-                '/6151162695307/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
-                'GET',
-                {"fields":"quality_ranking,purchase_roas,cpc,ctr,cpm,spend,reach,objective,frequency"},
-                function(response) {
-                    // Insert your code here
-                     debugger;
-                }
-              );
+              const activeCampaigns = self.state.fbCampaigns.filter(function(active) {
+                return active.effective_status == "ACTIVE";
+              });
+              let allActiveCampaigns = [];
+              
+              activeCampaigns.forEach( function (element, index) {
+                  window.FB.api(
+                    '/'+element.id+'/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
+                    'GET',
+                    {"fields":"action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,reach,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
+                    function(response) {
+                        // Insert your code here
+                        allActiveCampaigns.push(response.data[0])
+                        debugger;
+                        if(index == activeCampaigns.length-1){
+                          self.setState({
+                            allActiveCampaigns : allActiveCampaigns
+                          }); 
+                        }
+                    }
+                  );
+              })
+
+              
+                
             });
           }
         );
 
-        
+       
+
+
         // window.FB.api(
         //   '/6151162695307/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
         //   'GET',
@@ -132,16 +154,30 @@ export default class Facebook extends Component {
       }
     }));
    
-    // const campaignData = this.state.adsData;
-    // const clicks = this.state.adsDataTotals[0];
-    // const impressions = this.state.adsDataTotals[1];
-    // const revenue = Number(this.state.revenue).toFixed(2) + currencySymbol;
-    // const cost = Math.round(Number(this.state.adsDataTotals[6])) + currencySymbol;
-    // const adsEcommerceData = this.state.adsEcommerce;
+    const fbData = this.state.fbTotals;
+    const clicks = this.state.fbTotals.clicks;
+    const impressions = this.state.fbTotals.impressions;
+    const revenue = fbData.action_values ? Number( this.state.fbTotals.action_values[5].value).toFixed(2) + currencySymbol : '';
+    const cost = Math.round(Number(this.state.fbTotals.spend)) + currencySymbol;
+    const roas = fbData.purchase_roas ? Number(this.state.fbTotals.purchase_roas[0].value).toFixed(2) + '%' : '';
+    const addToCart = fbData.action_values ? Number( this.state.fbTotals.action_values[3].value).toFixed(2) + currencySymbol : '';
+    const initiated_checkout = fbData.action_values ? Number( this.state.fbTotals.action_values[2].value).toFixed(2) + currencySymbol : '';
+    const cpc = this.state.fbTotals.cpc + currencySymbol;
+    const ctr = this.state.fbTotals.ctr + '%';
+    const cpm = this.state.fbTotals.cpm ;
+    const reach = this.state.fbTotals.reach;
+    const frequency = this.state.fbTotals.frequency;
+    const allCampaigns = this.state.fbCampaigns;
+    const activeCampaigns = allCampaigns.filter(function(active) {
+      return active.effective_status == "ACTIVE";
+    });
+    let allActiveCampaigns = this.state.allActiveCampaigns;
+    debugger;
+    
 
     return (
       <div className={classes.root}>
-        
+        {/* {allActiveCampaigns} */}
         {/* TOP BAR */}
         <Grid container spacing={4} >
           <Grid item lg={6} sm={12} xl={6} xs={12}>
@@ -150,28 +186,52 @@ export default class Facebook extends Component {
         </Grid>
         {/* END TOP BAR */}
 
-        {/* <Card className={classes.root}>
-          <CardHeader title="Total Metrics" />
+        <Card className={classes.root}>
+          <CardHeader title="Total Facebook Campatings Metrics" />
           <Divider />
           <CardContent>
             <Grid container spacing={4} >
               <Grid container spacing={4} >
-                <Grid item lg={3} sm={6} xl={2} xs={6} >
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
                   <Box title={'Clicks'} data={clicks} loading={this.state.loading}/>
                 </Grid>
-                <Grid item lg={3} sm={6} xl={2} xs={6} >
-                  <Box title={'Imporessions'} data={impressions} loading={this.state.loading} />
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
+                  <Box title={'Reach'} data={reach} loading={this.state.loading} />
                 </Grid>
-                <Grid item lg={3} sm={6} xl={2} xs={6} >
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
+                  <Box title={'Impressions'} data={impressions} loading={this.state.loading} />
+                </Grid>
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
+                  <Box title={'CPM'} data={cpm} loading={this.state.loading} />
+                </Grid>
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
+                  <Box title={'Frequency'} data={frequency} loading={this.state.loading} />
+                </Grid>
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
+                  <Box title={'CPC'} data={cpc} loading={this.state.loading} />
+                </Grid>
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
+                  <Box title={'CTR'} data={ctr} loading={this.state.loading} />
+                </Grid>
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
+                  <Box title={'Add To Cart'} data={addToCart} loading={this.state.loading}/>
+                </Grid>
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
+                  <Box title={'Checkout Process'} data={initiated_checkout} loading={this.state.loading}/>
+                </Grid>
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
                   <Box title={'Revenue'} data={revenue} loading={this.state.loading} />
                 </Grid>
-                <Grid item lg={3} sm={6} xl={2} xs={6} >
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
                   <Box title={'Cost'} data={cost} loading={this.state.loading}/>
+                </Grid>
+                <Grid item lg={2} sm={6} xl={2} xs={6} >
+                  <Box title={'Roas'} data={roas} loading={this.state.loading}/>
                 </Grid>
               </Grid>
             </Grid>
           </CardContent>
-        </Card> */}
+        </Card>
 
         {/* CAMPAIGN SECTION */}
         {/* <Card
@@ -181,7 +241,7 @@ export default class Facebook extends Component {
           <CardContent>
             <Grid container spacing={4} >
               <Grid item lg={12} sm={12} xl={12} xs={12}>
-                <AdsCampaign campaigndata={campaignData} loading={this.state.loading}/>
+                <AdsCampaign campaigndata={activeCampaigns}/>
               </Grid>
             </Grid>
           </CardContent>
@@ -196,7 +256,7 @@ export default class Facebook extends Component {
           <CardContent>
             <Grid container spacing={4} >
               <Grid item lg={12} sm={12} xl={12} xs={12}>
-                <Table tabledata={adsEcommerceData} loading={this.state.loading}/>
+                <Table tabledata={allCampaigns} loading={this.state.loading}/>
               </Grid>
             </Grid>
           </CardContent>
@@ -210,9 +270,8 @@ export default class Facebook extends Component {
 
 
 
-//https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet?apix_params=%7B"resource"%3A%7B"reportRequests"%3A%5B%7B"viewId"%3A"133587325"%2C"dateRanges"%3A%5B%7B"startDate"%3A"2020-01-15"%2C"endDate"%3A"2020-01-22"%7D%5D%2C"metrics"%3A%5B%7B"expression"%3A"ga%3Ausers"%7D%2C%7B"expression"%3A"ga%3Asessions"%7D%5D%2C"dimensions"%3A%5B%7B"name"%3A"ga%3Amedium"%7D%5D%7D%5D%7D%7D 
-//https://developers.google.com/analytics/devguides/reporting/core/v4/samples
-//https://ga-dev-tools.appspot.com/dimensions-metrics-explorer/
-
-
-
+//https://developers.facebook.com/docs/marketing-api/reference/ad-account/insights/
+//https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=act_108444649307331%2Finsights%3Ffields%3Daction_values%2Cimpressions%2Cclicks%2Cpurchase_roas%2Ccpc%2Cctr%2Ccpm%2Cspend%2Creach%2Cfrequency%26level%3Daccount%26time_range[since]%3D2020-02-04%26time_range[until]%3D2020-02-05&version=v6.0
+//https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=act_108444649307331%2Fcampaigns%3Fsummary%3Dinsights%26fields%3Deffective_status%2Cname%2Cobjective&version=v6.0
+//https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=6151162695307%2Finsights%3Ffields%3Daction_values%2Cquality_ranking%2Cpurchase_roas%2Ccpc%2Cctr%2Ccpm%2Cspend%2Creach%2Cobjective%2Cfrequency&version=v6.0
+//https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=6151162695307%2Finsights%3Ffields%3Dcampaign_name&version=v6.0
