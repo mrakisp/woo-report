@@ -4,7 +4,7 @@ import { Card, CardContent, Grid, Button, CardHeader, Divider } from '@material-
 import { currencySymbol  } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
 import { DatePicker } from "../../helpers";
-// import { AdsCampaign, UsersByDevice, Tabs, Table } from './components';
+import { AdsCampaign, UsersByDevice, Tabs, Table } from './components';
 import { Box } from '../Analytics/components';
 
 export default class Facebook extends Component {
@@ -66,7 +66,7 @@ export default class Facebook extends Component {
                   window.FB.api(
                     '/'+element.id+'/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
                     'GET',
-                    {"fields":"action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,reach,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
+                    {"fields":"campaign_name,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,reach,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
                     function(response) {
                         // Insert your code here
                         allActiveCampaigns.push(response.data[0])
@@ -249,18 +249,18 @@ export default class Facebook extends Component {
         {/* END CAMPAIGN SECTION */}
 
         {/* CAMPAIGN SECTION */}
-        {/* <Card
+        <Card
           className={classes.root}>
           <CardHeader title="Active Campaigns Ecommerce Data" />
           <Divider />
           <CardContent>
             <Grid container spacing={4} >
               <Grid item lg={12} sm={12} xl={12} xs={12}>
-                <Table tabledata={allCampaigns} loading={this.state.loading}/>
+                <Table tabledata={allActiveCampaigns} loading={this.state.loading}/>
               </Grid>
             </Grid>
           </CardContent>
-        </Card> */}
+        </Card>
         {/* END CAMPAIGN SECTION */}
 
       </div>

@@ -132,21 +132,22 @@ export default function EnhancedTable(props) {
   //GET DATA AND PASS IT TO ARRAY
   let rows = [];
   if (props.tabledata.length > 0){
-    props.tabledata.forEach(element => {
-      if(element.dimensions[0] !== '(not set)'){
-        rows.push(createData(
-          element.dimensions[0], 
-          Number(element.metrics[0].values[0]),
-          Number(element.metrics[0].values[1]),
-          Number(element.metrics[0].values[2]),
-          Number(element.metrics[0].values[3]),
-          Number(element.metrics[0].values[4]),
-          Number(element.metrics[0].values[5]),
-          Number(element.metrics[0].values[6]),
-          Number(element.metrics[0].values[7])
-          ));   
-        }
-    });
+    rows = props.tabledata;
+//     props.tabledata.forEach(element => {
+// debugger;
+//         rows.push(createData(
+//           element.dimensions[0], 
+//           Number(element.metrics[0].values[0]),
+//           Number(element.metrics[0].values[1]),
+//           Number(element.metrics[0].values[2]),
+//           Number(element.metrics[0].values[3]),
+//           Number(element.metrics[0].values[4]),
+//           Number(element.metrics[0].values[5]),
+//           Number(element.metrics[0].values[6]),
+//           Number(element.metrics[0].values[7])
+//           ));   
+        
+//     });
   }
 
   const classes = useStyles();
@@ -201,19 +202,19 @@ export default function EnhancedTable(props) {
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow key={index}>
-                      <Tooltip title={row.name} placement="left-start">
+                      <Tooltip title={row.campaign_name} placement="left-start">
                         <TableCell className="first-column" component="th" id={labelId} scope="row" >
-                          {row.name}
+                          {row.campaign_name}
                         </TableCell>
                       </Tooltip>
-                      <TableCell align="left">{row.productDetailViews}</TableCell>
-                      <TableCell align="left">{row.productAddsToCart}</TableCell>
-                      <TableCell align="left">{row.productRemovesFromCart}</TableCell>
-                      <TableCell align="left">{row.productCheckouts}</TableCell>
-                      <TableCell align="left">{row.itemRevenue}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.itemQuantity}</TableCell>
-                      <TableCell align="left">{Number(row.cartToDetailRate).toFixed(2) +'%'}</TableCell>
-                      <TableCell align="left">{Number(row.buyToDetailRate).toFixed(2) +'%'}</TableCell>
+                      {/* <TableCell align="left">{row.campaign_name}</TableCell>
+                      <TableCell align="left">{row.campaign_name}</TableCell>
+                      <TableCell align="left">{row.campaign_name}</TableCell>
+                      <TableCell align="left">{row.campaign_name}</TableCell>
+                      <TableCell align="left">{row.campaign_name}{currencySymbol}</TableCell>
+                      <TableCell align="left">{row.campaign_name}</TableCell>
+                      <TableCell align="left">{Number(row.campaign_name).toFixed(2) +'%'}</TableCell>
+                      <TableCell align="left">{Number(row.campaign_name).toFixed(2) +'%'}</TableCell> */}
                     </TableRow>
                   );
                 })}
