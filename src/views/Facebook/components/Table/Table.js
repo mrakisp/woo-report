@@ -15,9 +15,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import {  currencySymbol } from '../../../../Config';
 
-function createData(name, productDetailViews, productAddsToCart, productRemovesFromCart, productCheckouts, itemRevenue, itemQuantity, cartToDetailRate, buyToDetailRate) {
-  return { name, productDetailViews, productAddsToCart, productRemovesFromCart, productCheckouts, itemRevenue, itemQuantity , cartToDetailRate , buyToDetailRate};
-}
+// function createData(name, productDetailViews, productAddsToCart, productRemovesFromCart, productCheckouts, itemRevenue, itemQuantity, cartToDetailRate, buyToDetailRate) {
+//   return { name, productDetailViews, productAddsToCart, productRemovesFromCart, productCheckouts, itemRevenue, itemQuantity , cartToDetailRate , buyToDetailRate};
+// }
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -45,14 +45,19 @@ function getSorting(order, orderBy) {
 
 const headCells = [
   { id: 'name', numeric: false, disablePadding: false, label: 'Campaign' , toolTips: 'The value of the utm_campaign campaign or Adwords Campaign name' },
-  { id: 'productDetailViews', numeric: true, disablePadding: false, label: 'View Product'  , toolTips: 'Number of times users viewed the product-detail page (Enhanced Ecommerce).' },
-  { id: 'productAddsToCart', numeric: true, disablePadding: false, label: 'Add To Cart', toolTips:"Number of times the product was added to the shopping cart (Enhanced Ecommerce)." },
-  { id: 'productRemovesFromCart', numeric: true, disablePadding: false, label: 'Remove From Cart', toolTips: "Number of times the product was removed from the shopping cart (Enhanced Ecommerce)." },
-  { id: 'productCheckouts', numeric: true, disablePadding: false, label: 'Check Out Proccess', toolTips: "Number of times the product was included in the check-out process (Enhanced Ecommerce). " },
-  { id: 'itemRevenue', numeric: true, disablePadding: false, label: 'Revenue', toolTips:"The total revenue from purchased product items." },
-  { id: 'itemQuantity', numeric: true, disablePadding: false, label: 'Items Purchased', toolTips:"Total number of items purchased. For example, if users purchase 2 frisbees and 5 tennis balls, this will be 7." },
-  { id: 'cartToDetailRate', numeric: true, disablePadding: false, label: 'Cart Detail Rate', toolTips:"Product adds divided by views of product details (Enhanced Ecommerce)." },
-  { id: 'buyToDetailRate', numeric: true, disablePadding: false, label: 'Buy Detail Rate', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
+  { id: 'productDetailViews', numeric: true, disablePadding: false, label: 'Objective'  , toolTips: 'Number of times users viewed the product-detail page (Enhanced Ecommerce).' },
+  { id: 'productAddsToCart', numeric: true, disablePadding: false, label: 'Clicks', toolTips:"Number of times the product was added to the shopping cart (Enhanced Ecommerce)." },
+  { id: 'productRemovesFromCart', numeric: true, disablePadding: false, label: 'Reach', toolTips: "Number of times the product was removed from the shopping cart (Enhanced Ecommerce)." },
+  { id: 'productCheckouts', numeric: true, disablePadding: false, label: 'Impressions', toolTips: "Number of times the product was included in the check-out process (Enhanced Ecommerce). " },
+  { id: 'itemRevenue', numeric: true, disablePadding: false, label: 'CPM', toolTips:"The total revenue from purchased product items." },
+  { id: 'itemQuantity', numeric: true, disablePadding: false, label: 'Frequency', toolTips:"Total number of items purchased. For example, if users purchase 2 frisbees and 5 tennis balls, this will be 7." },
+  { id: 'cartToDetailRate', numeric: true, disablePadding: false, label: 'CPC', toolTips:"Product adds divided by views of product details (Enhanced Ecommerce)." },
+  { id: 'buyToDetailRate', numeric: true, disablePadding: false, label: 'CTR', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
+  { id: 'addToCart', numeric: true, disablePadding: false, label: 'Add to Cart', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
+  { id: 'checkoutProcess', numeric: true, disablePadding: false, label: 'Checkout Process', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
+  { id: 'revenue', numeric: true, disablePadding: false, label: 'Revenue', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
+  { id: 'cost', numeric: true, disablePadding: false, label: 'Cost', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
+  { id: 'roas', numeric: true, disablePadding: false, label: 'ROAS', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
 ];
 
 function EnhancedTableHead(props) {
@@ -133,21 +138,6 @@ export default function EnhancedTable(props) {
   let rows = [];
   if (props.tabledata.length > 0){
     rows = props.tabledata;
-//     props.tabledata.forEach(element => {
-// debugger;
-//         rows.push(createData(
-//           element.dimensions[0], 
-//           Number(element.metrics[0].values[0]),
-//           Number(element.metrics[0].values[1]),
-//           Number(element.metrics[0].values[2]),
-//           Number(element.metrics[0].values[3]),
-//           Number(element.metrics[0].values[4]),
-//           Number(element.metrics[0].values[5]),
-//           Number(element.metrics[0].values[6]),
-//           Number(element.metrics[0].values[7])
-//           ));   
-        
-//     });
   }
 
   const classes = useStyles();
@@ -199,6 +189,7 @@ export default function EnhancedTable(props) {
               {stableSort(rows, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
+                  debugger;
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow key={index}>
@@ -207,14 +198,19 @@ export default function EnhancedTable(props) {
                           {row.campaign_name}
                         </TableCell>
                       </Tooltip>
-                      {/* <TableCell align="left">{row.campaign_name}</TableCell>
-                      <TableCell align="left">{row.campaign_name}</TableCell>
-                      <TableCell align="left">{row.campaign_name}</TableCell>
-                      <TableCell align="left">{row.campaign_name}</TableCell>
-                      <TableCell align="left">{row.campaign_name}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.campaign_name}</TableCell>
-                      <TableCell align="left">{Number(row.campaign_name).toFixed(2) +'%'}</TableCell>
-                      <TableCell align="left">{Number(row.campaign_name).toFixed(2) +'%'}</TableCell> */}
+                      <TableCell align="left">{row.objective}</TableCell>
+                      <TableCell align="left">{row.clicks}</TableCell>
+                      <TableCell align="left">{row.reach}</TableCell>
+                      <TableCell align="left">{row.impressions}</TableCell>
+                      <TableCell align="left">{row.cpm}</TableCell>
+                      <TableCell align="left">{row.frequency}</TableCell>
+                      <TableCell align="left">{row.cpc}{currencySymbol}</TableCell>
+                      <TableCell align="left">{row.ctr}%</TableCell>
+                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[3] ? row.action_values[3].value : ''}{currencySymbol}</TableCell>
+                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[4] ? row.action_values[4].value : ''}{currencySymbol}</TableCell>
+                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[5] ? row.action_values[5].value : ''}{currencySymbol}</TableCell>
+                      <TableCell align="left">{row.spend}{currencySymbol}</TableCell>
+                      <TableCell align="left">{row.purchase_roas && row.purchase_roas.length > 0 && row.purchase_roas[0] ? row.purchase_roas[0].value : ''}%</TableCell>
                     </TableRow>
                   );
                 })}

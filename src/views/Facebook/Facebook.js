@@ -56,7 +56,7 @@ export default class Facebook extends Component {
               fbCampaigns : response.data,
             } , () => { 
 
-              debugger;//GET ADS DATA
+              // debugger;//GET ADS DATA
               const activeCampaigns = self.state.fbCampaigns.filter(function(active) {
                 return active.effective_status == "ACTIVE";
               });
@@ -66,11 +66,11 @@ export default class Facebook extends Component {
                   window.FB.api(
                     '/'+element.id+'/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
                     'GET',
-                    {"fields":"campaign_name,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,reach,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
+                    {"fields":"campaign_name,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,reach,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
                     function(response) {
                         // Insert your code here
                         allActiveCampaigns.push(response.data[0])
-                        debugger;
+                        // debugger;
                         if(index == activeCampaigns.length-1){
                           self.setState({
                             allActiveCampaigns : allActiveCampaigns
@@ -173,8 +173,6 @@ export default class Facebook extends Component {
     });
     let allActiveCampaigns = this.state.allActiveCampaigns;
     debugger;
-    
-
     return (
       <div className={classes.root}>
         {/* {allActiveCampaigns} */}
