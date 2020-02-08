@@ -26,21 +26,6 @@ export default class AdsCampaign extends Component {
 
     const TableBody = () => {
 
-      // const handleChange = name => event => {
-      //   this.setState({ 
-      //     searchPartners : !this.state.searchPartners
-      //   })
-      //   let list = this.state.visibleTypes
-      //   if(!this.state.searchPartners){
-      //     list.push(event.currentTarget.value)
-      //   }else{
-      //     list.splice( this.state.visibleTypes.indexOf(event.currentTarget.value), 1 );
-      //   }
-      //   this.setState({ 
-      //     visibleTypes : list
-      //   })
-      // };
-
       const handleChange1 = name => event => {
         this.setState({ 
           googleSearch : !this.state.googleSearch
@@ -85,10 +70,12 @@ export default class AdsCampaign extends Component {
           visibleTypes : list
         })
       };
-
+      
+      let CampaignAds = []
+      if(data && data.length > 0){
       let dataSorted = data.sort((a,b) => (a.dimensions[1] > b.dimensions[1]) ? -1 : ((b.dimensions[1] > a.dimensions[1]) ? 1 : 0));
       //LOOP THROUGH DIMENSIONS
-      let CampaignAds = dataSorted.map((elem, i) => {
+       CampaignAds = dataSorted.map((elem, i) => {
         //LOOP THROUGH METRICS
         let CampaignAdsMetrics = dataSorted[i].metrics[0].values.map((element, i) => {
           const value = element
@@ -120,7 +107,7 @@ export default class AdsCampaign extends Component {
               </Grid> 
             )
         }
-      })
+      }) }
 
       return (
         <div>

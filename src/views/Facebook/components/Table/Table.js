@@ -15,8 +15,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import {  currencySymbol } from '../../../../Config';
 
-function createData(name, Objective, Clicks, Reach, Impressions, CPM, Frequency, CPC, CTR, addToCart ,checkoutProcess,revenue,cost,roas) {
-  return { name, Objective, Clicks, Reach, Impressions, CPM, Frequency , CPC , CTR, addToCart ,checkoutProcess,revenue,cost,roas};
+function createData(campaign_name, objective, clicks, reach, impressions, cpm, frequency, cpc, ctr, addToCart ,checkoutProcess,revenue,spend,roas) {
+  return { campaign_name, objective, clicks, reach, impressions, cpm, frequency , cpc , ctr, addToCart ,checkoutProcess,revenue,spend,roas};
 }
 
 function desc(a, b, orderBy) {
@@ -44,19 +44,19 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: 'name', numeric: false, disablePadding: false, label: 'Campaign' , toolTips: 'The Campaign name' },
-  { id: 'Objective', numeric: true, disablePadding: false, label: 'Objective'  , toolTips: 'The objective reflecting the goal you want to achieve with your advertising. It may be different from the selected objective of the campaign in some cases' },
-  { id: 'Clicks', numeric: true, disablePadding: false, label: 'Clicks', toolTips:"The number of clicks on your ads" },
-  { id: 'Reach', numeric: true, disablePadding: false, label: 'Reach', toolTips: "The number of people who saw your ads at least once. Reach is different from impressions, which may include multiple views of your ads by the same people." },
-  { id: 'Impressions', numeric: true, disablePadding: false, label: 'Impressions', toolTips: "The number of times your ads were on screen" },
-  { id: 'CPM', numeric: true, disablePadding: false, label: 'CPM', toolTips:"The average cost for 1,000 impressions." },
-  { id: 'Frequency', numeric: true, disablePadding: false, label: 'Frequency', toolTips:"The average number of times each person saw your ad" },
-  { id: 'CPC', numeric: true, disablePadding: false, label: 'CPC', toolTips:"The average cost for each click (all)." },
-  { id: 'CTR', numeric: true, disablePadding: false, label: 'CTR', toolTips:"The percentage of times people saw your ad and performed a click (all)." },
+  { id: 'campaign_name', numeric: false, disablePadding: false, label: 'Campaign' , toolTips: 'The Campaign name' },
+  { id: 'objective', numeric: false, disablePadding: false, label: 'Objective'  , toolTips: 'The objective reflecting the goal you want to achieve with your advertising. It may be different from the selected objective of the campaign in some cases' },
+  { id: 'clicks', numeric: true, disablePadding: false, label: 'Clicks', toolTips:"The number of clicks on your ads" },
+  { id: 'reach', numeric: true, disablePadding: false, label: 'Reach', toolTips: "The number of people who saw your ads at least once. Reach is different from impressions, which may include multiple views of your ads by the same people." },
+  { id: 'impressions', numeric: true, disablePadding: false, label: 'Impressions', toolTips: "The number of times your ads were on screen" },
+  { id: 'cpm', numeric: true, disablePadding: false, label: 'CPM', toolTips:"The average cost for 1,000 impressions." },
+  { id: 'frequency', numeric: true, disablePadding: false, label: 'Frequency', toolTips:"The average number of times each person saw your ad" },
+  { id: 'cpc', numeric: true, disablePadding: false, label: 'CPC', toolTips:"The average cost for each click (all)." },
+  { id: 'ctr', numeric: true, disablePadding: false, label: 'CTR', toolTips:"The percentage of times people saw your ad and performed a click (all)." },
   { id: 'addToCart', numeric: true, disablePadding: false, label: 'Add to Cart', toolTips:"Add to cart value" },
   { id: 'checkoutProcess', numeric: true, disablePadding: false, label: 'Checkout Process', toolTips:"Checkout Process Value" },
   { id: 'revenue', numeric: true, disablePadding: false, label: 'Revenue', toolTips:"Total Purchases" },
-  { id: 'cost', numeric: true, disablePadding: false, label: 'Cost', toolTips:"The estimated total amount of money you've spent on your campaign" },
+  { id: 'spend', numeric: true, disablePadding: false, label: 'Cost', toolTips:"The estimated total amount of money you've spent on your campaign" },
   { id: 'roas', numeric: true, disablePadding: false, label: 'ROAS', toolTips:"The total return on ad spend (ROAS) from purchases" },
 ];
 
@@ -138,7 +138,24 @@ export default function EnhancedTable(props) {
   let rows = [];
   if (props.tabledata.length > 0){
     props.tabledata.forEach( function (element, index) {
-      createData(rows.push(element))
+      
+      rows.push(createData(
+        element.campaign_name,
+        element.objective,
+        Number(element.clicks),
+        Number(element.reach),
+        Number(element.impressions),
+        Number(element.cpm),
+        Number(element.frequency),
+        Number(element.cpc),
+        Number(element.ctr),
+        element.action_values && element.action_values.length > 0 && element.action_values[0] ? Number(element.action_values[0].value) : '0',
+        element.action_values && element.action_values.length > 0 && element.action_values[1] ? Number(element.action_values[1].value) : '0',
+        element.action_values && element.action_values.length > 0 && element.action_values[2] ? Number(element.action_values[2].value) : '0',
+        Number(element.spend),
+        element.purchase_roas && element.purchase_roas.length > 0 && element.purchase_roas[0] ? Number(element.purchase_roas[0].value) : '0'
+        ))
+      // createData(rows.push( element ))
     })
   }
 
@@ -207,11 +224,11 @@ export default function EnhancedTable(props) {
                       <TableCell align="left">{row.frequency}</TableCell>
                       <TableCell align="left">{row.cpc}{currencySymbol}</TableCell>
                       <TableCell align="left">{row.ctr}%</TableCell>
-                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[0] ? row.action_values[0].value+currencySymbol : '-'}</TableCell>
-                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[1] ? row.action_values[1].value+currencySymbol : '-'}</TableCell>
-                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[2] ? row.action_values[2].value+currencySymbol : '-'}</TableCell>
+                      <TableCell align="left">{row.addToCart}{currencySymbol}</TableCell>
+                      <TableCell align="left">{row.checkoutProcess}{currencySymbol}</TableCell>
+                      <TableCell align="left">{row.revenue}{currencySymbol}</TableCell>
                       <TableCell align="left">{row.spend}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.purchase_roas && row.purchase_roas.length > 0 && row.purchase_roas[0] ? row.purchase_roas[0].value+'%' : '-'}</TableCell>
+                      <TableCell align="left">{row.roas}%</TableCell>
                     </TableRow>
                   );
                 })}

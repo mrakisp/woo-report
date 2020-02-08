@@ -14,6 +14,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import StoreIcon from '@material-ui/icons/Store';
+import FacebookIcon from '@material-ui/icons/Facebook';
 
 import { Profile, SidebarNav } from './components';
 
@@ -119,7 +120,7 @@ const Sidebar = props => {
     pages.push({
       title: 'Facebook',
       href: '/facebook',
-      icon: <ShoppingBasketIcon/>
+      icon: <FacebookIcon/>
     })
   }
  

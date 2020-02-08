@@ -4,7 +4,7 @@ import { Card, CardContent, Grid, Button, CardHeader, Divider } from '@material-
 import { currencySymbol  } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
 import { DatePicker } from "../../helpers";
-import { AdsCampaign, UsersByDevice, Tabs, Table } from './components';
+import { Table } from './components';
 import { Box } from '../Analytics/components';
 
 export default class Facebook extends Component {
@@ -18,6 +18,8 @@ export default class Facebook extends Component {
     loading: true,
   };
 
+  
+
   getData = () => {
 
     //DATE
@@ -25,133 +27,31 @@ export default class Facebook extends Component {
     const fromDate = this.state.fromDate;
     const toDate = this.state.toDate;
 
-     window.fbAsyncInit = function() {
-        window.FB.init({
-          appId      : '519580525465323',
-          xfbml      : true,
-          version    : 'v6.0'
-        });
-        // FB.AppEvents.logPageView();
-
-        //GET ACCOUNT DATA
-        window.FB.api(
-          '/act_108444649307331/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
-          'GET',
-           {"fields":"action_values,clicks,impressions,purchase_roas,cpc,ctr,cpm,spend,reach,frequency","level":"account","time_range":{"since":fromDate,"until":toDate}},
-          function(response) {
-            self.setState({
-              fbTotals: response.data[0],
-              loading : false
-            })
-          }
-        );
+    //GET ACCOUNT DATA
+    window.FB.api(
+       '/act_108444649307331/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
+       'GET',
+       {"fields":"action_values,clicks,impressions,purchase_roas,cpc,ctr,cpm,spend,reach,frequency","level":"account","time_range":{"since":fromDate,"until":toDate}},
+       function(response) {
+          self.setState({
+            fbTotals: response.data.length > 0 ? response.data[0] : [],
+            loading : false
+          })
+        }
+    );
         
-        //GET CAMPAIGN DATA
-        window.FB.api(
-          '/act_108444649307331/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
-          'GET',
-          {"level":"campaign","fields":"campaign_name,reach,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
+    //GET CAMPAIGN DATA
+    window.FB.api(
+       '/act_108444649307331/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
+       'GET',
+       {"level":"campaign","fields":"campaign_name,reach,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
           function(response) {
-              // Insert your code here
-              self.setState({
+            // Insert your code here
+            self.setState({
                 fbCampaigns : response.data
-              })
-          }
-        );
-
-        // FB.api(
-        //   '/act_108444649307331/insights',
-        //   'GET',
-        //   {"level":"campaign","fields":"campaign_name,reach,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,objective,frequency","time_range":{"since":"2020-02-08","until":"2020-02-08"}},
-        //   function(response) {
-        //       // Insert your code here
-        //   }
-        // );
-        // window.FB.api(
-        //   '/act_108444649307331/campaigns?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
-        //   'GET',
-        //   {"summary":"insights","fields":"effective_status,name,objective,insights{reach,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,objective,frequency}"},
-        //   function(response) {
-        //     debugger;
-        //     self.setState({
-        //       fbCampaigns : response.data,
-        //      })
-        //     , () => { 
-        //       debugger
-        //       // debugger;//GET ADS DATA
-        //       const activeCampaigns = self.state.fbCampaigns.filter(function(active) {
-        //         return active.effective_status == "ACTIVE";
-        //       });
-        //       let allActiveCampaigns = [];
-        //       debugger;
-        //       activeCampaigns.forEach( function (element, index) {
-        //           window.FB.api(
-        //             '/'+element.id+'/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
-        //             'GET',
-        //             {"fields":"campaign_name,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,reach,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
-        //             function(response) {
-        //                 // Insert your code here
-        //                 allActiveCampaigns.push(response.data[0])
-        //                 // debugger;
-        //                 if(index == activeCampaigns.length-1){
-        //                   self.setState({
-        //                     allActiveCampaigns : allActiveCampaigns
-        //                   }); 
-        //                 }
-        //             }
-        //           );
-        //       }
-        //      )
-
-              
-                
-        //     });
-        //   }
-        // );
-
-       
-
-
-        // window.FB.api(
-        //   '/6151162695307/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
-        //   'GET',
-        //   {"fields":"campaign_name"},
-        //   function(response) {
-        //       // Insert your code here
-        //       debugger;
-        //   }
-        // );
-
-        // 
-        // FB.api(
-        //   '/6151162695307/insights',
-        //   'GET',
-        //   {"fields":"quality_ranking,purchase_roas,cpc,ctr,cpm,spend,reach,objective,frequency"},
-        //   function(response) {
-        //       // Insert your code here
-        //   }
-        // );
-        // FB.api(
-        //   '/act_108444649307331/campaigns',
-        //   'GET',
-        //   {"summary":"insights","fields":"campaign_name"},
-        //   function(response) {
-        //       // Insert your code here
-        //   }
-        // );
-        //   FB.api(
-        //   '/act_108444649307331/insights',
-        //   'GET',
-        //   {"fields":"spend,reach","level":"account","date_preset":"yesterday"},
-        //   function(response) {
-        //       // Insert your code here
-        //   }
-        // );
-
-       
-
-      };
-
+            })
+        }
+    );
   }
 
   //GET DATA FROM CHILD COMPONENT
@@ -165,8 +65,31 @@ export default class Facebook extends Component {
     });
   }
 
+  loadFbLoginApi() {
+
+    const self = this;
+    window.fbAsyncInit = function() {
+      
+      window.FB.init({
+        appId      : '519580525465323',
+        xfbml      : true,
+        version    : 'v6.0'
+      });
+      self.getData()
+    }
+
+    // Load the SDK asynchronously
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+}
+
   componentDidMount() {
-   this.getData()
+    this.loadFbLoginApi();
   }
 
   render() {
@@ -198,7 +121,6 @@ export default class Facebook extends Component {
    
     return (
       <div className={classes.root}>
-        {/* {allActiveCampaigns} */}
         {/* TOP BAR */}
         <Grid container spacing={4} >
           <Grid item lg={6} sm={12} xl={6} xs={12}>
@@ -272,7 +194,7 @@ export default class Facebook extends Component {
         {/* CAMPAIGN SECTION */}
         <Card
           className={classes.root}>
-          <CardHeader title="Active Campaigns Ecommerce Data" />
+          <CardHeader title="Active Campaigns" />
           <Divider />
           <CardContent>
             <Grid container spacing={4} >
