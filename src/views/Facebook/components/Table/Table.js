@@ -15,9 +15,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import {  currencySymbol } from '../../../../Config';
 
-// function createData(name, productDetailViews, productAddsToCart, productRemovesFromCart, productCheckouts, itemRevenue, itemQuantity, cartToDetailRate, buyToDetailRate) {
-//   return { name, productDetailViews, productAddsToCart, productRemovesFromCart, productCheckouts, itemRevenue, itemQuantity , cartToDetailRate , buyToDetailRate};
-// }
+function createData(name, Objective, Clicks, Reach, Impressions, CPM, Frequency, CPC, CTR, addToCart ,checkoutProcess,revenue,cost,roas) {
+  return { name, Objective, Clicks, Reach, Impressions, CPM, Frequency , CPC , CTR, addToCart ,checkoutProcess,revenue,cost,roas};
+}
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -44,20 +44,20 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: 'name', numeric: false, disablePadding: false, label: 'Campaign' , toolTips: 'The value of the utm_campaign campaign or Adwords Campaign name' },
-  { id: 'productDetailViews', numeric: true, disablePadding: false, label: 'Objective'  , toolTips: 'Number of times users viewed the product-detail page (Enhanced Ecommerce).' },
-  { id: 'productAddsToCart', numeric: true, disablePadding: false, label: 'Clicks', toolTips:"Number of times the product was added to the shopping cart (Enhanced Ecommerce)." },
-  { id: 'productRemovesFromCart', numeric: true, disablePadding: false, label: 'Reach', toolTips: "Number of times the product was removed from the shopping cart (Enhanced Ecommerce)." },
-  { id: 'productCheckouts', numeric: true, disablePadding: false, label: 'Impressions', toolTips: "Number of times the product was included in the check-out process (Enhanced Ecommerce). " },
-  { id: 'itemRevenue', numeric: true, disablePadding: false, label: 'CPM', toolTips:"The total revenue from purchased product items." },
-  { id: 'itemQuantity', numeric: true, disablePadding: false, label: 'Frequency', toolTips:"Total number of items purchased. For example, if users purchase 2 frisbees and 5 tennis balls, this will be 7." },
-  { id: 'cartToDetailRate', numeric: true, disablePadding: false, label: 'CPC', toolTips:"Product adds divided by views of product details (Enhanced Ecommerce)." },
-  { id: 'buyToDetailRate', numeric: true, disablePadding: false, label: 'CTR', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
-  { id: 'addToCart', numeric: true, disablePadding: false, label: 'Add to Cart', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
-  { id: 'checkoutProcess', numeric: true, disablePadding: false, label: 'Checkout Process', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
-  { id: 'revenue', numeric: true, disablePadding: false, label: 'Revenue', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
-  { id: 'cost', numeric: true, disablePadding: false, label: 'Cost', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
-  { id: 'roas', numeric: true, disablePadding: false, label: 'ROAS', toolTips:"Unique purchases divided by views of product detail pages (Enhanced Ecommerce)." },
+  { id: 'name', numeric: false, disablePadding: false, label: 'Campaign' , toolTips: 'The Campaign name' },
+  { id: 'Objective', numeric: true, disablePadding: false, label: 'Objective'  , toolTips: 'The objective reflecting the goal you want to achieve with your advertising. It may be different from the selected objective of the campaign in some cases' },
+  { id: 'Clicks', numeric: true, disablePadding: false, label: 'Clicks', toolTips:"The number of clicks on your ads" },
+  { id: 'Reach', numeric: true, disablePadding: false, label: 'Reach', toolTips: "The number of people who saw your ads at least once. Reach is different from impressions, which may include multiple views of your ads by the same people." },
+  { id: 'Impressions', numeric: true, disablePadding: false, label: 'Impressions', toolTips: "The number of times your ads were on screen" },
+  { id: 'CPM', numeric: true, disablePadding: false, label: 'CPM', toolTips:"The average cost for 1,000 impressions." },
+  { id: 'Frequency', numeric: true, disablePadding: false, label: 'Frequency', toolTips:"The average number of times each person saw your ad" },
+  { id: 'CPC', numeric: true, disablePadding: false, label: 'CPC', toolTips:"The average cost for each click (all)." },
+  { id: 'CTR', numeric: true, disablePadding: false, label: 'CTR', toolTips:"The percentage of times people saw your ad and performed a click (all)." },
+  { id: 'addToCart', numeric: true, disablePadding: false, label: 'Add to Cart', toolTips:"Add to cart value" },
+  { id: 'checkoutProcess', numeric: true, disablePadding: false, label: 'Checkout Process', toolTips:"Checkout Process Value" },
+  { id: 'revenue', numeric: true, disablePadding: false, label: 'Revenue', toolTips:"Total Purchases" },
+  { id: 'cost', numeric: true, disablePadding: false, label: 'Cost', toolTips:"The estimated total amount of money you've spent on your campaign" },
+  { id: 'roas', numeric: true, disablePadding: false, label: 'ROAS', toolTips:"The total return on ad spend (ROAS) from purchases" },
 ];
 
 function EnhancedTableHead(props) {
@@ -137,16 +137,18 @@ export default function EnhancedTable(props) {
   //GET DATA AND PASS IT TO ARRAY
   let rows = [];
   if (props.tabledata.length > 0){
-    rows = props.tabledata;
+    props.tabledata.forEach( function (element, index) {
+      createData(rows.push(element))
+    })
   }
 
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('itemRevenue');
+  const [orderBy, setOrderBy] = React.useState('revenue');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -189,7 +191,6 @@ export default function EnhancedTable(props) {
               {stableSort(rows, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  debugger;
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow key={index}>
@@ -206,11 +207,11 @@ export default function EnhancedTable(props) {
                       <TableCell align="left">{row.frequency}</TableCell>
                       <TableCell align="left">{row.cpc}{currencySymbol}</TableCell>
                       <TableCell align="left">{row.ctr}%</TableCell>
-                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[3] ? row.action_values[3].value : ''}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[4] ? row.action_values[4].value : ''}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[5] ? row.action_values[5].value : ''}{currencySymbol}</TableCell>
+                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[0] ? row.action_values[0].value+currencySymbol : '-'}</TableCell>
+                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[1] ? row.action_values[1].value+currencySymbol : '-'}</TableCell>
+                      <TableCell align="left">{row.action_values && row.action_values.length > 0 && row.action_values[2] ? row.action_values[2].value+currencySymbol : '-'}</TableCell>
                       <TableCell align="left">{row.spend}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.purchase_roas && row.purchase_roas.length > 0 && row.purchase_roas[0] ? row.purchase_roas[0].value : ''}%</TableCell>
+                      <TableCell align="left">{row.purchase_roas && row.purchase_roas.length > 0 && row.purchase_roas[0] ? row.purchase_roas[0].value+'%' : '-'}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -218,7 +219,7 @@ export default function EnhancedTable(props) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 20, 30]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
@@ -234,3 +235,5 @@ export default function EnhancedTable(props) {
     </div>
   );
 }
+
+//https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=act_108444649307331%2Finsights%3Flevel%3Dcampaign%26fields%3Dcampaign_name%2Creach%2Cclicks%2Cimpressions%2Caction_values%2Cquality_ranking%2Cpurchase_roas%2Ccpc%2Cctr%2Ccpm%2Cspend%2Cobjective%2Cfrequency%26time_range[since]%3D2020-02-08%26time_range[until]%3D2020-02-08&version=v6.0

@@ -48,43 +48,66 @@ export default class Facebook extends Component {
         
         //GET CAMPAIGN DATA
         window.FB.api(
-          '/act_108444649307331/campaigns?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
+          '/act_108444649307331/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
           'GET',
-          {"summary":"insights","fields":"effective_status,name,objective"},
+          {"level":"campaign","fields":"campaign_name,reach,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
           function(response) {
-            self.setState({
-              fbCampaigns : response.data,
-            } , () => { 
-
-              // debugger;//GET ADS DATA
-              const activeCampaigns = self.state.fbCampaigns.filter(function(active) {
-                return active.effective_status == "ACTIVE";
-              });
-              let allActiveCampaigns = [];
-              
-              activeCampaigns.forEach( function (element, index) {
-                  window.FB.api(
-                    '/'+element.id+'/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
-                    'GET',
-                    {"fields":"campaign_name,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,reach,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
-                    function(response) {
-                        // Insert your code here
-                        allActiveCampaigns.push(response.data[0])
-                        // debugger;
-                        if(index == activeCampaigns.length-1){
-                          self.setState({
-                            allActiveCampaigns : allActiveCampaigns
-                          }); 
-                        }
-                    }
-                  );
+              // Insert your code here
+              self.setState({
+                fbCampaigns : response.data
               })
+          }
+        );
+
+        // FB.api(
+        //   '/act_108444649307331/insights',
+        //   'GET',
+        //   {"level":"campaign","fields":"campaign_name,reach,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,objective,frequency","time_range":{"since":"2020-02-08","until":"2020-02-08"}},
+        //   function(response) {
+        //       // Insert your code here
+        //   }
+        // );
+        // window.FB.api(
+        //   '/act_108444649307331/campaigns?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
+        //   'GET',
+        //   {"summary":"insights","fields":"effective_status,name,objective,insights{reach,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,objective,frequency}"},
+        //   function(response) {
+        //     debugger;
+        //     self.setState({
+        //       fbCampaigns : response.data,
+        //      })
+        //     , () => { 
+        //       debugger
+        //       // debugger;//GET ADS DATA
+        //       const activeCampaigns = self.state.fbCampaigns.filter(function(active) {
+        //         return active.effective_status == "ACTIVE";
+        //       });
+        //       let allActiveCampaigns = [];
+        //       debugger;
+        //       activeCampaigns.forEach( function (element, index) {
+        //           window.FB.api(
+        //             '/'+element.id+'/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
+        //             'GET',
+        //             {"fields":"campaign_name,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,reach,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
+        //             function(response) {
+        //                 // Insert your code here
+        //                 allActiveCampaigns.push(response.data[0])
+        //                 // debugger;
+        //                 if(index == activeCampaigns.length-1){
+        //                   self.setState({
+        //                     allActiveCampaigns : allActiveCampaigns
+        //                   }); 
+        //                 }
+        //             }
+        //           );
+        //       }
+        //      )
 
               
                 
-            });
-          }
-        );
+        //     });
+        //   }
+        // );
 
        
 
@@ -168,11 +191,11 @@ export default class Facebook extends Component {
     const reach = this.state.fbTotals.reach;
     const frequency = this.state.fbTotals.frequency;
     const allCampaigns = this.state.fbCampaigns;
-    const activeCampaigns = allCampaigns.filter(function(active) {
-      return active.effective_status == "ACTIVE";
-    });
-    let allActiveCampaigns = this.state.allActiveCampaigns;
-    debugger;
+    // let activeCampaigns = allCampaigns.filter(function(active) {
+    //   return active.effective_status == "ACTIVE";
+    // });
+    // let allActiveCampaigns = this.state.allActiveCampaigns;
+   
     return (
       <div className={classes.root}>
         {/* {allActiveCampaigns} */}
@@ -254,7 +277,7 @@ export default class Facebook extends Component {
           <CardContent>
             <Grid container spacing={4} >
               <Grid item lg={12} sm={12} xl={12} xs={12}>
-                <Table tabledata={allActiveCampaigns} loading={this.state.loading}/>
+                <Table tabledata={allCampaigns} loading={this.state.loading}/>
               </Grid>
             </Grid>
           </CardContent>
