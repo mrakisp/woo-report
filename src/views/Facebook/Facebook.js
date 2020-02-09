@@ -218,3 +218,5 @@ export default class Facebook extends Component {
 //https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=act_108444649307331%2Fcampaigns%3Fsummary%3Dinsights%26fields%3Deffective_status%2Cname%2Cobjective&version=v6.0
 //https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=6151162695307%2Finsights%3Ffields%3Daction_values%2Cquality_ranking%2Cpurchase_roas%2Ccpc%2Cctr%2Ccpm%2Cspend%2Creach%2Cobjective%2Cfrequency&version=v6.0
 //https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=6151162695307%2Finsights%3Ffields%3Dcampaign_name&version=v6.0
+
+// https://developers.facebook.com/tools/explorer/?method=GET&path=loveshoesgreece%2F%3Ffields%3Dinsights.metric(page_fans_online)&version=v6.0
