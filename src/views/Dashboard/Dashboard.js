@@ -3,9 +3,10 @@ import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 import LineChart from "../../components/charts/LineChart";
 import PieChart from "../../components/charts/PieChart";
-import {topSellersEndPoint, salesEndPoint } from '../../Config';
+import {topSellersEndPoint, salesEndPoint ,ordersEndPoint } from '../../Config';
 import {formatDate} from "../../helpers/Utils";
 import DatePicker from "../../helpers/Date";
+import { LatestOrders } from './components';
 import axios from 'axios';
 
 
@@ -28,6 +29,7 @@ export default class Dashboard extends Component {
     total_items : null,
     total_customers : null,
     total_refunds: null,
+    orders: [],
     topSellers : [],
     fromDate : formatDate(new Date()),
     toDate : formatDate(new Date()),
@@ -43,8 +45,7 @@ export default class Dashboard extends Component {
     const fromDate = this.state.fromDate;
     const toDate = this.state.toDate;
     const endpointParams = "&date_min=" + fromDate + "&date_max=" + toDate ;
-    
-    // const urlTopSellers = topSellersEndPoint + endpointParams;
+  
     const urlSales = salesEndPoint + endpointParams;
     axios.get(urlSales)
           .then(res => {
@@ -56,15 +57,39 @@ export default class Dashboard extends Component {
               total_items : res.data[0].total_items ,
               total_customers : res.data[0].total_customers ,
               total_refunds: res.data[0].total_refunds ,
-            })  
+            }, () => { //CALL FUNCTION AFTER STATE IS UPDATED
+                let per_page = 100;
+                const pages = Math.ceil(this.state.total_orders/per_page);
+                let urlOrders = ordersEndPoint + '&after=2020-02-10T00:00:01' + '&per_page='+per_page;
+                axios.get(urlOrders).then(res => {
+                    this.setState({ 
+                      orders : res.data
+                    })  
+                })
+                if(pages >1){
+                  for (let i = 0; i < pages; i++) {
+                    urlOrders = urlOrders+'&page='+i
+                    axios.get(urlOrders).then(res => {
+                      const existingOrders = this.state.orders;
+                      const newOrders = res.data;
+                      const allOrders = existingOrders.concat(newOrders);
+                      this.setState({
+                        orders: allOrders
+                      }); 
+                    })
+                  }
+                }
+            }); 
     })
     const urlTopSellers = topSellersEndPoint + endpointParams;
     axios.get(urlTopSellers)
-    .then(res => {
-      this.setState({ 
-        topSellers : res.data
-      })  
-})
+      .then(res => {
+        this.setState({ 
+          topSellers : res.data
+        })  
+    })
+
+
   }
 
    //GET DATA FROM CHILD COMPONENT
@@ -93,6 +118,7 @@ export default class Dashboard extends Component {
     const total_items = this.state.total_items;
     const total_customers = this.state.total_customers;
     const topSellers = this.state.topSellers;
+    const allOrders = this.state.orders;
 
   return (
     <div className={classes.root}>
@@ -120,6 +146,9 @@ export default class Dashboard extends Component {
         </Grid>
         <Grid item lg={8} sm={6} xl={8} xs={12} >
           <PieChart topSellers={topSellers}/>
+        </Grid>
+        <Grid item lg={12} sm={12} xl={12} xs={12} >
+          <LatestOrders allOrders={allOrders}/>
         </Grid>
       </Grid>
     </div>

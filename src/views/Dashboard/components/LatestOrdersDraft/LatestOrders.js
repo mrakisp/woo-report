@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-// import moment from 'moment';
+import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -16,12 +16,12 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  // Tooltip,
-  // TableSortLabel
+  Tooltip,
+  TableSortLabel
 } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
-// import { StatusBullet } from 'components';
+import { StatusBullet } from 'components';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -43,11 +43,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// const statusColors = {
-//   delivered: 'success',
-//   pending: 'info',
-//   refunded: 'danger'
-// };
+const statusColors = {
+  delivered: 'success',
+  pending: 'info',
+  refunded: 'danger'
+};
 
 const LatestOrders = props => {
   const { className, ...rest } = props;
@@ -55,20 +55,6 @@ const LatestOrders = props => {
   const classes = useStyles();
 
   const orders = props.allOrders;
-  // const uniqueAvailableMethods = [...(new Set(orders.map(({ payment_method }) => payment_method)))];
-  // debugger;
-  // let paymentMethods = [];
-  // paymentMethods = orders.forEach( function (element, index) {
-  //   if (element.status === 'completed'){
-  //     // if(element.payment_method === uniqueAvailableMethods[0])
-  //     uniqueAvailableMethods.forEach( function (item, index) {
-  //         if(element.payment_method === item){
-
-  //         }
-  //     })
-  //     paymentMethods.push({name:element.payment_method_title,value:total})
-  //   }
-  // })
 
   return (
     <Card
@@ -76,15 +62,15 @@ const LatestOrders = props => {
       className={clsx(classes.root, className)}
     >
       <CardHeader
-        // action={
-        //   <Button
-        //     color="primary"
-        //     size="small"
-        //     variant="outlined"
-        //   >
-        //     New entry
-        //   </Button>
-        // }
+        action={
+          <Button
+            color="primary"
+            size="small"
+            variant="outlined"
+          >
+            New entry
+          </Button>
+        }
         title="Latest Orders"
       />
       <Divider />
@@ -94,9 +80,9 @@ const LatestOrders = props => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Payment Method</TableCell>
-                  <TableCell>Revenue</TableCell>
-                  {/* <TableCell sortDirection="desc">
+                  <TableCell>Order Ref</TableCell>
+                  <TableCell>Customer</TableCell>
+                  <TableCell sortDirection="desc">
                     <Tooltip
                       enterDelay={300}
                       title="Sort"
@@ -109,7 +95,7 @@ const LatestOrders = props => {
                       </TableSortLabel>
                     </Tooltip>
                   </TableCell>
-                  <TableCell>Status</TableCell> */}
+                  <TableCell>Status</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -118,9 +104,9 @@ const LatestOrders = props => {
                     hover
                     key={order.id}
                   >
-                    <TableCell>{order.payment_method_title}</TableCell>
+                    <TableCell>{order.number}</TableCell>
                     <TableCell>{order.shipping_total}</TableCell>
-                    {/* <TableCell>
+                    <TableCell>
                       {moment(order.date_created).format('DD/MM/YYYY')}
                     </TableCell>
                     <TableCell>
@@ -132,7 +118,7 @@ const LatestOrders = props => {
                         />
                         {order.status}
                       </div>
-                    </TableCell> */}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
