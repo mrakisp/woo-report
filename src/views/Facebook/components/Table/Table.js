@@ -138,7 +138,6 @@ export default function EnhancedTable(props) {
   let rows = [];
   if (props.tabledata.length > 0){
     props.tabledata.forEach( function (element, index) {
-      
       rows.push(createData(
         element.campaign_name,
         element.objective,
@@ -149,15 +148,16 @@ export default function EnhancedTable(props) {
         Number(element.frequency),
         Number(element.cpc),
         Number(element.ctr),
-        element.action_values && element.action_values.length > 0 && element.action_values[0] ? Number(element.action_values[0].value) : '0',
-        element.action_values && element.action_values.length > 0 && element.action_values[1] ? Number(element.action_values[1].value) : '0',
-        element.action_values && element.action_values.length > 0 && element.action_values[2] ? Number(element.action_values[2].value) : '0',
+        element.action_values && element.action_values.length > 0 && element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_add_to_cart') ? Number(element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_add_to_cart').value) : '0',
+        element.action_values && element.action_values.length > 0 && element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_initiate_checkout') ? Number(element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_initiate_checkout').value) : '0',
+        element.action_values && element.action_values.length > 0 && element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_purchase') ? Number(element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_purchase').value) : '0',
         Number(element.spend),
-        element.purchase_roas && element.purchase_roas.length > 0 && element.purchase_roas[0] ? Number(element.purchase_roas[0].value) : '0'
+        element.purchase_roas && element.purchase_roas.length > 0 && element.purchase_roas[0] && element.purchase_roas[0].action_type === 'omni_purchase' ? Number(element.purchase_roas[0].value) : '0'
         ))
-      // createData(rows.push( element ))
     })
   }
+  
+  
 
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');

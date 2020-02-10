@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Button, CardHeader, Divider } from '@material-ui/core';
-import { currencySymbol  } from '../../Config';
+import { currencySymbol, facebookApi  } from '../../Config';
 import { formatDate } from "../../helpers/Utils";
 import { DatePicker } from "../../helpers";
 import { Table } from './components';
@@ -29,10 +29,11 @@ export default class Facebook extends Component {
 
     //GET ACCOUNT DATA
     window.FB.api(
-       '/act_108444649307331/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
+       '/act_'+facebookApi.account_id+'/insights?access_token='+facebookApi.access_token,
        'GET',
        {"fields":"action_values,clicks,impressions,purchase_roas,cpc,ctr,cpm,spend,reach,frequency","level":"account","time_range":{"since":fromDate,"until":toDate}},
        function(response) {
+       
           self.setState({
             fbTotals: response.data.length > 0 ? response.data[0] : [],
             loading : false
@@ -42,7 +43,7 @@ export default class Facebook extends Component {
         
     //GET CAMPAIGN DATA
     window.FB.api(
-       '/act_108444649307331/insights?access_token=EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I',
+       '/act_'+facebookApi.account_id+'/insights?access_token='+facebookApi.access_token,
        'GET',
        {"level":"campaign","fields":"campaign_name,reach,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
           function(response) {
@@ -71,9 +72,9 @@ export default class Facebook extends Component {
     window.fbAsyncInit = function() {
       
       window.FB.init({
-        appId      : '519580525465323',
+        appId      : facebookApi.app_id,
         xfbml      : true,
-        version    : 'v6.0'
+        version    : facebookApi.app_version
       });
       self.getData()
     }
@@ -99,25 +100,24 @@ export default class Facebook extends Component {
         padding: theme.spacing(4)
       }
     }));
-   
+
     const fbData = this.state.fbTotals;
     const clicks = this.state.fbTotals.clicks;
     const impressions = this.state.fbTotals.impressions;
-    const revenue = fbData.action_values ? Number( this.state.fbTotals.action_values[5].value).toFixed(2) + currencySymbol : '';
+    const finalRevenue = fbData && fbData.action_values && fbData.action_values.length > 0 ? fbData.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_purchase') : ''
+    const revenue = finalRevenue ? Number( finalRevenue.value).toFixed(2) + currencySymbol : '0'+ currencySymbol;
     const cost = Math.round(Number(this.state.fbTotals.spend)) + currencySymbol;
-    const roas = fbData.purchase_roas ? Number(this.state.fbTotals.purchase_roas[0].value).toFixed(2) + '%' : '';
-    const addToCart = fbData.action_values ? Number( this.state.fbTotals.action_values[3].value).toFixed(2) + currencySymbol : '';
-    const initiated_checkout = fbData.action_values ? Number( this.state.fbTotals.action_values[2].value).toFixed(2) + currencySymbol : '';
+    const roas = fbData.purchase_roas ? Number(fbData.purchase_roas[0].value).toFixed(2) + '%' : '0%';
+    const finaladdToCart = fbData && fbData.action_values && fbData.action_values.length > 0 ? fbData.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_add_to_cart') : ''
+    const addToCart = finaladdToCart ? Number( finaladdToCart.value).toFixed(2) + currencySymbol : '0' + currencySymbol;
+    const finalinitiated_checkout = fbData && fbData.action_values && fbData.action_values.length > 0 ? fbData.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_initiate_checkout') : ''
+    const initiated_checkout = finalinitiated_checkout ? Number( finalinitiated_checkout.value).toFixed(2) + currencySymbol : '0'+ currencySymbol;
     const cpc = this.state.fbTotals.cpc + currencySymbol;
     const ctr = this.state.fbTotals.ctr + '%';
     const cpm = this.state.fbTotals.cpm ;
     const reach = this.state.fbTotals.reach;
     const frequency = this.state.fbTotals.frequency;
     const allCampaigns = this.state.fbCampaigns;
-    // let activeCampaigns = allCampaigns.filter(function(active) {
-    //   return active.effective_status == "ACTIVE";
-    // });
-    // let allActiveCampaigns = this.state.allActiveCampaigns;
    
     return (
       <div className={classes.root}>

@@ -20,6 +20,14 @@ export const analytics = {
   groupSources : true //show all sources from facebok & instagram as one parent source ( e.x => i.facebook , m.facebook etc)
 }
 
+//FACEBOOK API CREDS AND CONFIGURATION
+export const facebookApi = {
+  access_token : "EAAHYjkSnDusBAPELxGyLRCOfxZBKEuUwqVWserTUPMT5fLZCwj41m62lSzsH2ZAqDQT2YHP7DdI4plccA9CMQzKCBZCxpbSL1FVZAkfjeSxR66tCm4wxpayeNwxPO07EsNNwlb3tdUd7fLVJpr4rBzLSYx161RgvH87IF5n2S6PtQ0mWxaE6I",
+  account_id: "108444649307331", // BUSINESS ID
+  app_id : "519580525465323",  //APP ID FOR window.FB.init
+  app_version : "v6.0"
+}
+
 
 export const AdwordsCampatingsGoal = [
   null,                  //'CLICKS'
