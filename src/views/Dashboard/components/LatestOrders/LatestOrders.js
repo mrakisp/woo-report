@@ -55,18 +55,28 @@ const LatestOrders = props => {
   const classes = useStyles();
 
   const orders = props.allOrders;
-  // const uniqueAvailableMethods = [...(new Set(orders.map(({ payment_method }) => payment_method)))];
+  const uniqueAvailableMethods = [...(new Set(orders.map(({ payment_method }) => payment_method)))];
+  let finalPayment = []
+// debugger;
+  for (let i = 0; i < uniqueAvailableMethods.length; i++) {
+    var value = 0
+    // debugger;
+    for (let y = 0; y < orders.length; y++) {
+    // orders.forEach( function (element, index) {
+      if (orders[y].status === 'completed' && orders[y].payment_method === uniqueAvailableMethods[i].payment_method){
+        debugger;
+        value += Number(orders[y].total)
+        if (y == orders.length){
+          finalPayment.push({id:orders[y].payment_method, name:orders[y].payment_method_title, total:value })
+        }
+      }
+    }
+  }
   // debugger;
   // let paymentMethods = [];
   // paymentMethods = orders.forEach( function (element, index) {
   //   if (element.status === 'completed'){
-  //     // if(element.payment_method === uniqueAvailableMethods[0])
-  //     uniqueAvailableMethods.forEach( function (item, index) {
-  //         if(element.payment_method === item){
-
-  //         }
-  //     })
-  //     paymentMethods.push({name:element.payment_method_title,value:total})
+      
   //   }
   // })
 
