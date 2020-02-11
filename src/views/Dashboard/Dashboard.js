@@ -6,9 +6,9 @@ import PieChart from "../../components/charts/PieChart";
 import {topSellersEndPoint, salesEndPoint ,ordersEndPoint } from '../../Config';
 import {formatDate} from "../../helpers/Utils";
 import DatePicker from "../../helpers/Date";
-import { LatestOrders } from './components';
+import { PaymentMethodsAndRevenue } from './components';
 import axios from 'axios';
-
+import { Box } from '../Analytics/components';
 
 import {
   Orders,
@@ -60,7 +60,7 @@ export default class Dashboard extends Component {
             }, () => { //CALL FUNCTION AFTER STATE IS UPDATED
                 let per_page = 100;
                 const pages = Math.ceil(this.state.total_orders/per_page);
-                let urlOrders = ordersEndPoint + '&after=2020-02-10T00:00:01' + '&per_page='+per_page;
+                let urlOrders = ordersEndPoint + '&after='+fromDate+'T00:00:01&before='+toDate+'T23:59:59' + '&per_page='+per_page;
                 axios.get(urlOrders).then(res => {
                     this.setState({ 
                       orders : res.data
@@ -120,6 +120,32 @@ export default class Dashboard extends Component {
     const topSellers = this.state.topSellers;
     const allOrders = this.state.orders;
 
+    let ordersInfo = []
+    let processingOrders = 0;
+    let completedOrders = 0;
+    let pendingOrders = 0;
+    let cancelledOrders = 0; 
+    let refundedOrders = 0;
+    let failedOrders = 0;
+  
+    for (let y = 0; y < allOrders.length; y++) {
+      if (allOrders[y].status === "processing" ){
+        processingOrders++; 
+      }else if (allOrders[y].status === "completed" ){
+        completedOrders ++;
+      }else if (allOrders[y].status === "pending" ){
+        pendingOrders++
+      }else if (allOrders[y].status === "cancelled" ){
+        cancelledOrders++
+      }else if (allOrders[y].status === "refunded"){
+        refundedOrders++
+      }else if (allOrders[y].status === "failed"){
+        failedOrders++
+      }
+    }
+    ordersInfo.push({processing:processingOrders, completed:completedOrders, pending:pendingOrders, cancelled: cancelledOrders, refunded:refundedOrders, failed: failedOrders})
+    
+
   return (
     <div className={classes.root}>
       <DatePicker parentCallback = {this.callbackFunction}/>
@@ -136,6 +162,27 @@ export default class Dashboard extends Component {
         <Grid item lg={3} sm={6} xl={3} xs={12} >
           <TotalProfit total_sales={total_sales}/>
         </Grid>
+
+         <Grid item lg={2} sm={3} xl={2} xs={6} >
+            <Box title={'Processing Orders'} data={ordersInfo[0].processing}/>
+         </Grid>
+         <Grid item lg={2} sm={3} xl={2} xs={6} >
+            <Box title={'Completed Orders'} data={ordersInfo[0].completed}/>
+         </Grid>
+         <Grid item lg={2} sm={3} xl={2} xs={6} >
+            <Box title={'Pending Orders'} data={ordersInfo[0].pending}/>
+         </Grid>
+         <Grid item lg={2} sm={3} xl={2} xs={6} >
+            <Box title={'Cancelled Orders'} data={ordersInfo[0].cancelled}/>
+         </Grid>
+         <Grid item lg={2} sm={3} xl={2} xs={6} >
+            <Box title={'Refunded Orders'} data={ordersInfo[0].refunded}/>
+         </Grid>
+         <Grid item lg={2} sm={3} xl={2} xs={6} >
+            <Box title={'Failed Orders'} data={ordersInfo[0].failed}/>
+         </Grid>
+      
+
         <Grid item lg={12} sm={12} xl={12} xs={12} >
           <LineChart sales={sales}/>
           {/* <LatestSales /> */}
@@ -148,7 +195,7 @@ export default class Dashboard extends Component {
           <PieChart topSellers={topSellers}/>
         </Grid>
         <Grid item lg={12} sm={12} xl={12} xs={12} >
-          <LatestOrders allOrders={allOrders}/>
+          <PaymentMethodsAndRevenue allOrders={allOrders}/>
         </Grid>
       </Grid>
     </div>

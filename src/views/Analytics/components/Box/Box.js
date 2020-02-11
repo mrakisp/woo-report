@@ -40,7 +40,6 @@ const Box = props => {
   let title = props.title;
   let loading = props.loading;
   const { className, ...rest } = props;
-
   const classes = useStyles();
 
   return (

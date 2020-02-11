@@ -1,5 +1,5 @@
 export { default as Orders } from './Orders';
-export { default as LatestOrders } from './LatestOrders';
+export { default as PaymentMethodsAndRevenue } from './PaymentMethodsAndRevenue';
 export { default as LatestProducts } from './LatestProducts';
 export { default as LatestSales } from './LatestSales';
 export { default as TotalItems } from './TotalItems';
