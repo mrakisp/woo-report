@@ -60,6 +60,7 @@ export default class Dashboard extends Component {
             }, () => { //CALL FUNCTION AFTER STATE IS UPDATED
                 let per_page = 100;
                 const pages = Math.ceil(this.state.total_orders/per_page);
+				//let urlOrders = ordersEndPoint + '&after=2020-02-03T00:00:01&before=2020-02-03T23:59:59&per_page='+per_page;
                 let urlOrders = ordersEndPoint + '&after='+fromDate+'T00:00:01&before='+toDate+'T23:59:59' + '&per_page='+per_page;
                 axios.get(urlOrders).then(res => {
                     this.setState({ 
@@ -71,10 +72,14 @@ export default class Dashboard extends Component {
                       }) 
                     }
                 })
-                if(pages >1){
+				debugger;
+                if(pages > 1){
+				  
                   for (let i = 0; i < pages; i++) {
-                    urlOrders = urlOrders+'&page='+i
-                    axios.get(urlOrders).then(res => {
+					let page = '';
+					page = '&page='+Number(i+1)
+                    let pagedurlOrders = urlOrders+page
+                    axios.get(pagedurlOrders).then(res => {
                       const existingOrders = this.state.orders;
                       const newOrders = res.data;
                       const allOrders = existingOrders.concat(newOrders);
