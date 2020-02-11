@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
 import EuroIcon from '@material-ui/icons/Euro';
 import {currencySymbol} from '../../../../Config'
+import Loading from '../../../../helpers/Loading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,15 +34,16 @@ const useStyles = makeStyles(theme => ({
 
 const TotalProfit = props => {
   const { className, ...rest } = props;
-
-  let total_sales = props.total_sales;
   const classes = useStyles();
+  let total_sales = props.total_sales;
+  let loading = props.loading;
 
   return (
     <Card
       {...rest}
       className={clsx(classes.root, className)}
     >
+       {loading ? <Loading loading={loading}/> : ''}
       <CardContent>
         <Grid
           container

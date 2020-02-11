@@ -7,10 +7,10 @@ import {
   CardContent,
   Grid,
   Typography,
-  Avatar,
-  LinearProgress
+  Avatar
 } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import Loading from '../../../../helpers/Loading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,6 +44,7 @@ const TasksProgress = props => {
   const { className, ...rest } = props;
 
   let total_items = props.total_items;
+  let loading = props.loading;
   const classes = useStyles();
 
   return (
@@ -51,6 +52,7 @@ const TasksProgress = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
+      {loading ? <Loading loading={loading}/> : ''}
       <CardContent>
         <Grid
           container

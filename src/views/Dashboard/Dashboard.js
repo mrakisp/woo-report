@@ -65,6 +65,11 @@ export default class Dashboard extends Component {
                     this.setState({ 
                       orders : res.data
                     })  
+                    if(pages == 1){
+                      this.setState({ 
+                        loading: false
+                      }) 
+                    }
                 })
                 if(pages >1){
                   for (let i = 0; i < pages; i++) {
@@ -74,7 +79,8 @@ export default class Dashboard extends Component {
                       const newOrders = res.data;
                       const allOrders = existingOrders.concat(newOrders);
                       this.setState({
-                        orders: allOrders
+                        orders: allOrders,
+                        loading: false
                       }); 
                     })
                   }
@@ -151,35 +157,35 @@ export default class Dashboard extends Component {
       <DatePicker parentCallback = {this.callbackFunction}/>
       <Grid container spacing={4} >
         <Grid item lg={3} sm={6} xl={3} xs={12} >  
-          <Orders total_orders={total_orders}/>
+          <Orders total_orders={total_orders} loading={this.state.loading}/>
         </Grid>
         <Grid item lg={3} sm={6} xl={3} xs={12} >
-          <TotalUsers total_customers={total_customers}/>
+          <TotalUsers total_customers={total_customers} loading={this.state.loading}/>
         </Grid>
         <Grid item lg={3} sm={6} xl={3} xs={12} >
-          <TotalItems total_items={total_items}/>
+          <TotalItems total_items={total_items} loading={this.state.loading}/>
         </Grid>
         <Grid item lg={3} sm={6} xl={3} xs={12} >
-          <TotalProfit total_sales={total_sales}/>
+          <TotalProfit total_sales={total_sales} loading={this.state.loading}/>
         </Grid>
 
          <Grid item lg={2} sm={3} xl={2} xs={6} >
-            <Box title={'Processing Orders'} data={ordersInfo[0].processing}/>
+            <Box title={'Processing Orders'} data={ordersInfo[0].processing} loading={this.state.loading}/>
          </Grid>
          <Grid item lg={2} sm={3} xl={2} xs={6} >
-            <Box title={'Completed Orders'} data={ordersInfo[0].completed}/>
+            <Box title={'Completed Orders'} data={ordersInfo[0].completed} loading={this.state.loading}/>
          </Grid>
          <Grid item lg={2} sm={3} xl={2} xs={6} >
-            <Box title={'Pending Orders'} data={ordersInfo[0].pending}/>
+            <Box title={'Pending Orders'} data={ordersInfo[0].pending} loading={this.state.loading}/>
          </Grid>
          <Grid item lg={2} sm={3} xl={2} xs={6} >
-            <Box title={'Cancelled Orders'} data={ordersInfo[0].cancelled}/>
+            <Box title={'Cancelled Orders'} data={ordersInfo[0].cancelled} loading={this.state.loading}/>
          </Grid>
          <Grid item lg={2} sm={3} xl={2} xs={6} >
-            <Box title={'Refunded Orders'} data={ordersInfo[0].refunded}/>
+            <Box title={'Refunded Orders'} data={ordersInfo[0].refunded} loading={this.state.loading}/>
          </Grid>
          <Grid item lg={2} sm={3} xl={2} xs={6} >
-            <Box title={'Failed Orders'} data={ordersInfo[0].failed}/>
+            <Box title={'Failed Orders'} data={ordersInfo[0].failed} loading={this.state.loading}/>
          </Grid>
       
 

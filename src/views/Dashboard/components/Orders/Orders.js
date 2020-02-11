@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
 import MoneyIcon from '@material-ui/icons/Money';
+import Loading from '../../../../helpers/Loading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -41,12 +42,14 @@ const useStyles = makeStyles(theme => ({
 
 const Orders = props => {
   
-  let total_orders = props.total_orders;
   const { className, ...rest } = props;
   const classes = useStyles();
+  let total_orders = props.total_orders;
+  let loading = props.loading;
 
   return (
     <Card {...rest} className={clsx(classes.root, className)} >
+       {loading ? <Loading loading={loading}/> : ''}
       <CardContent>
         <Grid container justify="space-between">
           <Grid item>

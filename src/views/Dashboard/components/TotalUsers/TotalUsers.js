@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+import Loading from '../../../../helpers/Loading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,15 +43,16 @@ const useStyles = makeStyles(theme => ({
 
 const TotalUsers = props => {
   const { className, ...rest } = props;
-
-  let total_customers = props.total_customers;
   const classes = useStyles();
+  let total_customers = props.total_customers;
+  let loading = props.loading;
 
   return (
     <Card
       {...rest}
       className={clsx(classes.root, className)}
     >
+       {loading ? <Loading loading={loading}/> : ''}
       <CardContent>
         <Grid
           container
