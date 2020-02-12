@@ -31,6 +31,7 @@ export default class Dashboard extends Component {
     total_refunds: null,
     orders: [],
     topSellers : [],
+    ordersInfo : [{processing:0, completed:0, pending:0, cancelled: 0, refunded:0, failed: 0}],
     fromDate : formatDate(new Date()),
     toDate : formatDate(new Date()),
     loading: true,
@@ -60,38 +61,44 @@ export default class Dashboard extends Component {
             }, () => { //CALL FUNCTION AFTER STATE IS UPDATED
                 let per_page = 100;
                 const pages = Math.ceil(this.state.total_orders/per_page);
-				//let urlOrders = ordersEndPoint + '&after=2020-02-03T00:00:01&before=2020-02-03T23:59:59&per_page='+per_page;
+                
                 let urlOrders = ordersEndPoint + '&after='+fromDate+'T00:00:01&before='+toDate+'T23:59:59' + '&per_page='+per_page;
-                axios.get(urlOrders).then(res => {
-                    this.setState({ 
-                      orders : res.data
-                    })  
-                    if(pages == 1){
+                if(pages <= 1){
+                  axios.get(urlOrders).then(res => {
                       this.setState({ 
-                        loading: false
-                      }) 
-                    }
-                })
-				debugger;
-                if(pages > 1){
-				  
+                        orders : res.data
+                      }, () => { //CALL FUNCTION AFTER STATE IS UPDATED
+                        this.calculateOrderStatus()
+                      });   
+                      if(pages == 1){
+                        this.setState({ 
+                          loading: false
+                        }) 
+                      }
+                  })
+                }else {
+                  let allOrders = [];
                   for (let i = 0; i < pages; i++) {
-					let page = '';
-					page = '&page='+Number(i+1)
+                    let page = '';
+                    page = '&page='+Number(i+1)
                     let pagedurlOrders = urlOrders+page
                     axios.get(pagedurlOrders).then(res => {
-                      const existingOrders = this.state.orders;
-                      const newOrders = res.data;
-                      const allOrders = existingOrders.concat(newOrders);
+                      // existingOrders.push = res.data;
+                      // const newOrders = res.data;
+                      allOrders = allOrders.concat(res.data);
                       this.setState({
                         orders: allOrders,
                         loading: false
+                      }, () => { //CALL FUNCTION AFTER STATE IS UPDATED
+                        this.calculateOrderStatus()
                       }); 
                     })
                   }
+                  
                 }
             }); 
     })
+
     const urlTopSellers = topSellersEndPoint + endpointParams;
     axios.get(urlTopSellers)
       .then(res => {
@@ -99,7 +106,6 @@ export default class Dashboard extends Component {
           topSellers : res.data
         })  
     })
-
 
   }
 
@@ -113,6 +119,37 @@ export default class Dashboard extends Component {
       this.getData() 
     });
     
+  }
+
+  calculateOrderStatus = () => {
+    const allOrders = this.state.orders;
+    let ordersInfo = []
+    let processingOrders = 0;
+    let completedOrders = 0;
+    let pendingOrders = 0;
+    let cancelledOrders = 0; 
+    let refundedOrders = 0;
+    let failedOrders = 0;
+
+    for (let y = 0; y < allOrders.length; y++) {
+      if (allOrders[y].status === "processing" ){
+        processingOrders++; 
+      }else if (allOrders[y].status === "completed" ){
+        completedOrders ++;
+      }else if (allOrders[y].status === "pending" ){
+        pendingOrders++
+      }else if (allOrders[y].status === "cancelled" ){
+        cancelledOrders++
+      }else if (allOrders[y].status === "refunded"){
+        refundedOrders++
+      }else if (allOrders[y].status === "failed"){
+        failedOrders++
+      }
+    }
+    ordersInfo.push({processing:processingOrders, completed:completedOrders, pending:pendingOrders, cancelled: cancelledOrders, refunded:refundedOrders, failed: failedOrders})
+    this.setState({ 
+      ordersInfo : ordersInfo
+    }) 
   }
 
   render() {
@@ -130,32 +167,7 @@ export default class Dashboard extends Component {
     const total_customers = this.state.total_customers;
     const topSellers = this.state.topSellers;
     const allOrders = this.state.orders;
-
-    let ordersInfo = []
-    let processingOrders = 0;
-    let completedOrders = 0;
-    let pendingOrders = 0;
-    let cancelledOrders = 0; 
-    let refundedOrders = 0;
-    let failedOrders = 0;
-  
-    for (let y = 0; y < allOrders.length; y++) {
-      if (allOrders[y].status === "processing" ){
-        processingOrders++; 
-      }else if (allOrders[y].status === "completed" ){
-        completedOrders ++;
-      }else if (allOrders[y].status === "pending" ){
-        pendingOrders++
-      }else if (allOrders[y].status === "cancelled" ){
-        cancelledOrders++
-      }else if (allOrders[y].status === "refunded"){
-        refundedOrders++
-      }else if (allOrders[y].status === "failed"){
-        failedOrders++
-      }
-    }
-    ordersInfo.push({processing:processingOrders, completed:completedOrders, pending:pendingOrders, cancelled: cancelledOrders, refunded:refundedOrders, failed: failedOrders})
-    
+    const ordersInfo = this.state.ordersInfo;
 
   return (
     <div className={classes.root}>
