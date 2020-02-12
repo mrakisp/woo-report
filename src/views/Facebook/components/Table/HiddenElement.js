@@ -15,9 +15,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import {  currencySymbol } from '../../../../Config';
 
-import Fade from '@material-ui/core/Fade';
-
-
 function createData(campaign_name, objective, clicks, reach, impressions, cpm, frequency, cpc, ctr, addToCart ,checkoutProcess,revenue,spend,roas) {
   return { campaign_name, objective, clicks, reach, impressions, cpm, frequency , cpc , ctr, addToCart ,checkoutProcess,revenue,spend,roas};
 }
@@ -133,14 +130,6 @@ const useStyles = makeStyles(theme => ({
     top: 20,
     width: 1,
   },
-  container: {
-    display: 'flex',
-  },
-  polygon: {
-    fill: theme.palette.common.white,
-    stroke: theme.palette.divider,
-    strokeWidth: 1,
-  },
 }));
 
 export default function EnhancedTable(props) {
@@ -168,7 +157,7 @@ export default function EnhancedTable(props) {
     })
   }
   
-  const [checked, setChecked] = React.useState(false);
+  
 
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
@@ -197,10 +186,6 @@ export default function EnhancedTable(props) {
     setDense(event.target.checked);
   };
 
-  const handleChange = () => {
-    setChecked(prev => !prev);
-  };
-
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -219,21 +204,16 @@ export default function EnhancedTable(props) {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
-            <TableBody className="facebook__table">
+            <TableBody>
               {stableSort(rows, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
-                 <span style={{display: "contents"}}>
                     <TableRow key={index}>
                       <Tooltip title={row.campaign_name} placement="left-start">
                         <TableCell className="first-column" component="th" id={labelId} scope="row" >
                           {row.campaign_name}
-                          <FormControlLabel
-                            control={<Switch checked={checked} onChange={handleChange} />}
-                            label="Show"
-                          />
                         </TableCell>
                       </Tooltip>
                       <TableCell align="left">{row.objective}</TableCell>
@@ -248,30 +228,11 @@ export default function EnhancedTable(props) {
                       <TableCell align="left">{row.checkoutProcess}{currencySymbol}</TableCell>
                       <TableCell align="left">{row.revenue}{currencySymbol}</TableCell>
                       <TableCell align="left">{row.spend}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.roas}</TableCell>
+                      <TableCell align="left">{row.roas}%</TableCell>
                     </TableRow>
-                    
-                    <TableRow className={checked ? '' : 'hidden'}>
-                      <Fade in={checked}>
-                          <TableCell colspan="14" >
-                          {/* <div className={classes.container}> */}
-                            
-                              <Paper elevation={4} className={classes.paper}>
-                                {/* <svg className={classes.svg}>
-                                  <polygon points="0,100 50,00, 100,100" className={classes.polygon} />
-                                </svg> */}
-                                asda
-                              </Paper>
-                           
-                          {/* </div> */}
-                        </TableCell>
-                      </Fade>
-                    </TableRow>
-                    </span>
                   );
                 })}
             </TableBody>
-          
           </Table>
         </TableContainer>
         <TablePagination

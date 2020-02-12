@@ -33,7 +33,6 @@ export default class Facebook extends Component {
        'GET',
        {"fields":"action_values,clicks,impressions,purchase_roas,cpc,ctr,cpm,spend,reach,frequency","level":"account","time_range":{"since":fromDate,"until":toDate}},
        function(response) {
-       
           self.setState({
             fbTotals: response.data.length > 0 ? response.data[0] : [],
             loading : false
@@ -53,6 +52,15 @@ export default class Facebook extends Component {
             })
         }
     );
+
+    // FB.api(
+    //   '/'+facebookApi.account_id+'/campaigns'+facebookApi.access_token,
+    //   'GET',
+    //   {"summary":"insights","fields":"effective_status,name,objective"},
+    //   function(response) {
+    //       // Insert your code here
+    //   }
+    // );
   }
 
   //GET DATA FROM CHILD COMPONENT
@@ -107,7 +115,7 @@ export default class Facebook extends Component {
     const finalRevenue = fbData && fbData.action_values && fbData.action_values.length > 0 ? fbData.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_purchase') : ''
     const revenue = finalRevenue ? Number( finalRevenue.value).toFixed(2) + currencySymbol : '0'+ currencySymbol;
     const cost = Math.round(Number(this.state.fbTotals.spend)) + currencySymbol;
-    const roas = fbData.purchase_roas ? Number(fbData.purchase_roas[0].value).toFixed(2) + '%' : '0%';
+    const roas = fbData.purchase_roas ? Number(fbData.purchase_roas[0].value).toFixed(2) + '' : '0%';
     const finaladdToCart = fbData && fbData.action_values && fbData.action_values.length > 0 ? fbData.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_add_to_cart') : ''
     const addToCart = finaladdToCart ? Number( finaladdToCart.value).toFixed(2) + currencySymbol : '0' + currencySymbol;
     const finalinitiated_checkout = fbData && fbData.action_values && fbData.action_values.length > 0 ? fbData.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_initiate_checkout') : ''
@@ -118,7 +126,7 @@ export default class Facebook extends Component {
     const reach = this.state.fbTotals.reach;
     const frequency = this.state.fbTotals.frequency;
     const allCampaigns = this.state.fbCampaigns;
-   
+  
     return (
       <div className={classes.root}>
         {/* TOP BAR */}
@@ -192,8 +200,7 @@ export default class Facebook extends Component {
         {/* END CAMPAIGN SECTION */}
 
         {/* CAMPAIGN SECTION */}
-        <Card
-          className={classes.root}>
+        <Card className={classes.root}>
           <CardHeader title="Active Campaigns" />
           <Divider />
           <CardContent>
