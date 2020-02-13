@@ -250,7 +250,6 @@ export default function EnhancedTable(props) {
                       <TableCell align="left">{row.spend}{currencySymbol}</TableCell>
                       <TableCell align="left">{row.roas}</TableCell>
                     </TableRow>
-                    {/* <div id={'checked'+index}  style={{display: "none"}}>123</div> */}
                     <TableRow id={'checked'+index} style={{display: "none"}}>
                         dasdasdad
                     </TableRow>
