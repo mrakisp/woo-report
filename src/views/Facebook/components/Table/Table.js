@@ -15,9 +15,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import {  currencySymbol } from '../../../../Config';
 
-import Fade from '@material-ui/core/Fade';
-
-
 function createData(campaign_name, objective, clicks, reach, impressions, cpm, frequency, cpc, ctr, addToCart ,checkoutProcess,revenue,spend,roas) {
   return { campaign_name, objective, clicks, reach, impressions, cpm, frequency , cpc , ctr, addToCart ,checkoutProcess,revenue,spend,roas};
 }
@@ -74,18 +71,9 @@ function EnhancedTableHead(props) {
       <TableRow>
         {headCells.map(headCell => (
           <Tooltip key={headCell.id} title={headCell.toolTips} placement="top-end">
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'left' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              
+          <TableCell key={headCell.id} align={headCell.numeric ? 'left' : 'left'}  padding={headCell.disablePadding ? 'none' : 'default'}
+            sortDirection={orderBy === headCell.id ? order : false} >
+            <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={createSortHandler(headCell.id)} >
               {headCell.label}
               {orderBy === headCell.id ? (
                 <span className={classes.visuallyHidden}>
@@ -135,11 +123,6 @@ const useStyles = makeStyles(theme => ({
   },
   container: {
     display: 'flex',
-  },
-  polygon: {
-    fill: theme.palette.common.white,
-    stroke: theme.palette.divider,
-    strokeWidth: 1,
   },
 }));
 
@@ -208,51 +191,39 @@ export default function EnhancedTable(props) {
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <TableContainer>
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-            aria-label="enhanced table"
-          >
-            <EnhancedTableHead
-              classes={classes}
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
+          <Table className={classes.table}  aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'} aria-label="enhanced table" >
+            <EnhancedTableHead classes={classes} numSelected={selected.length} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} rowCount={rows.length}/>
             <TableBody className="facebook__table">
               {stableSort(rows, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
-                 <span style={{display: "contents"}}>
-                    <TableRow key={index}>
-                      <Tooltip title={row.campaign_name} placement="left-start">
-                        <TableCell className="first-column" component="th" id={labelId} scope="row" >
-                          {row.campaign_name}
-                          <Switch value={index} onChange={handleChange("checked")} />
-                        </TableCell>
-                      </Tooltip>
-                      <TableCell align="left">{row.objective}</TableCell>
-                      <TableCell align="left">{row.clicks}</TableCell>
-                      <TableCell align="left">{row.reach}</TableCell>
-                      <TableCell align="left">{row.impressions}</TableCell>
-                      <TableCell align="left">{row.cpm}</TableCell>
-                      <TableCell align="left">{row.frequency}</TableCell>
-                      <TableCell align="left">{row.cpc}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.ctr}%</TableCell>
-                      <TableCell align="left">{row.addToCart}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.checkoutProcess}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.revenue}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.spend}{currencySymbol}</TableCell>
-                      <TableCell align="left">{row.roas}</TableCell>
-                    </TableRow>
-                    <TableRow id={'checked'+index} style={{display: "none"}}>
-                        dasdasdad
-                    </TableRow>
+                    <span key={index} style={{display: "contents"}}>
+                        <TableRow key={index}>
+                          <Tooltip title={row.campaign_name} placement="left-start">
+                            <TableCell className="first-column" component="th" id={labelId} scope="row" >
+                              {row.campaign_name}
+                              <Switch className={'hidden-row'} value={index} onChange={handleChange("checked")} />
+                            </TableCell>
+                          </Tooltip>
+                          <TableCell align="left">{row.objective}</TableCell>
+                          <TableCell align="left">{row.clicks}</TableCell>
+                          <TableCell align="left">{row.reach}</TableCell>
+                          <TableCell align="left">{row.impressions}</TableCell>
+                          <TableCell align="left">{row.cpm}</TableCell>
+                          <TableCell align="left">{row.frequency}</TableCell>
+                          <TableCell align="left">{row.cpc}{currencySymbol}</TableCell>
+                          <TableCell align="left">{row.ctr}%</TableCell>
+                          <TableCell align="left">{row.addToCart}{currencySymbol}</TableCell>
+                          <TableCell align="left">{row.checkoutProcess}{currencySymbol}</TableCell>
+                          <TableCell align="left">{row.revenue}{currencySymbol}</TableCell>
+                          <TableCell align="left">{row.spend}{currencySymbol}</TableCell>
+                          <TableCell align="left">{row.roas}</TableCell>
+                        </TableRow>
+                        <TableRow id={'checked'+index} style={{display: "none"}}>
+                            dasdasdad
+                        </TableRow>
                     </span>
                   );
                 })}
@@ -260,14 +231,8 @@ export default function EnhancedTable(props) {
           
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 20, 30]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+        <TablePagination rowsPerPageOptions={[10, 20, 30]} component="div" count={rows.length} rowsPerPage={rowsPerPage} page={page}
+          onChangePage={handleChangePage} onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
       <FormControlLabel
