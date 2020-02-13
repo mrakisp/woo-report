@@ -147,8 +147,15 @@ export default function EnhancedTable(props) {
 
   //GET DATA AND PASS IT TO ARRAY
   let rows = [];
+  // let switches = [];
+  // let aa = '';
+  // let bb = {}
   if (props.tabledata.length > 0){
     props.tabledata.forEach( function (element, index) {
+      // bb += "checked"+index+ ":"+ false + ",";
+      // aa += "checked"+index+ ":"+ false + ",";
+      // "{'checked0:false''checked1:false''checked2:false''checked3:false''checked4:false''checked5:false''checked6:false''checked7:false''checked8:false''checked9:false''checked10:false''checked11:false''checked12:false'}"
+      // switches.push('checked'+index)
       rows.push(createData(
         element.campaign_name,
         element.objective,
@@ -166,9 +173,19 @@ export default function EnhancedTable(props) {
         element.purchase_roas && element.purchase_roas.length > 0 && element.purchase_roas[0] && element.purchase_roas[0].action_type === 'omni_purchase' ? Number(element.purchase_roas[0].value) : '0'
         ))
     })
+    // aa += ""
+    // // var object1 = JSON.parse(aa); 
+    // debugger;
+    // switches.push(bb)
   }
-  
-  const [checked, setChecked] = React.useState(false);
+
+  // const [state, setState] =  React.useState({aa});
+    
+  // debugger;
+  const [state, setState] = React.useState({
+    checked0: true,
+    checkedB: true,
+  });
 
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
@@ -197,8 +214,11 @@ export default function EnhancedTable(props) {
     setDense(event.target.checked);
   };
 
-  const handleChange = () => {
-    setChecked(prev => !prev);
+  const handleChange = name => event => {
+    debugger;
+    // this.setState({ [item.id]: event.target.value })
+    // switches[event.target.value].value = event.target.checked
+  //  setState({ ...state, [name]: event.target.checked });
   };
 
   return (
@@ -230,10 +250,7 @@ export default function EnhancedTable(props) {
                       <Tooltip title={row.campaign_name} placement="left-start">
                         <TableCell className="first-column" component="th" id={labelId} scope="row" >
                           {row.campaign_name}
-                          <FormControlLabel
-                            control={<Switch checked={checked} onChange={handleChange} />}
-                            label="Show"
-                          />
+                          <Switch value={"checked"+index} checked={state.checked} onChange={handleChange("checked"+index)} />
                         </TableCell>
                       </Tooltip>
                       <TableCell align="left">{row.objective}</TableCell>
@@ -251,19 +268,11 @@ export default function EnhancedTable(props) {
                       <TableCell align="left">{row.roas}</TableCell>
                     </TableRow>
                     
-                    <TableRow className={checked ? '' : 'hidden'}>
-                      <Fade in={checked}>
+                    <TableRow className={state.checked ? '' : 'hidden'}>
+                      <Fade in={state.checked}>
                           <TableCell colspan="14" >
-                          {/* <div className={classes.container}> */}
-                            
-                              <Paper elevation={4} className={classes.paper}>
-                                {/* <svg className={classes.svg}>
-                                  <polygon points="0,100 50,00, 100,100" className={classes.polygon} />
-                                </svg> */}
-                                asda
-                              </Paper>
-                           
-                          {/* </div> */}
+                          ff
+                             
                         </TableCell>
                       </Fade>
                     </TableRow>
