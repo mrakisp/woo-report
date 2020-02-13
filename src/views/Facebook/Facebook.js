@@ -13,12 +13,33 @@ export default class Facebook extends Component {
     fbTotals : [],
     fbCampaigns : [],
     allActiveCampaigns : [],
+    ads : [],
     fromDate : formatDate(new Date()),
     toDate : formatDate(new Date()),
     loading: true,
   };
 
   
+
+  getDataAds = (campaign_id) => {
+
+    const self = this;
+    const fromDate = this.state.fromDate;
+    const toDate = this.state.toDate;
+
+    window.FB.api(
+      '/'+campaign_id+'/insights?access_token='+facebookApi.access_token,
+      'GET',
+      {"fields":"campaign_id,ad_name,action_values,clicks,impressions,purchase_roas,cpc,ctr,cpm,spend,reach,frequency","time_range":{"since":fromDate,"until":toDate},"level":"ad"},
+      function(response) {
+        debugger;
+        self.setState({
+          ads: response.data.length > 0 ? response.data : [],
+        })
+          // Insert your code here
+      }
+    );
+  }
 
   getData = () => {
 
@@ -44,7 +65,7 @@ export default class Facebook extends Component {
     window.FB.api(
        '/act_'+facebookApi.account_id+'/insights?access_token='+facebookApi.access_token,
        'GET',
-       {"level":"campaign","fields":"campaign_name,reach,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,objective,frequency","time_range":{"since":fromDate,"until":toDate}},
+       {"level":"campaign","fields":"campaign_name,reach,clicks,impressions,action_values,quality_ranking,purchase_roas,cpc,ctr,cpm,spend,objective,frequency,campaign_id","time_range":{"since":fromDate,"until":toDate}},
           function(response) {
             // Insert your code here
             self.setState({
@@ -73,6 +94,12 @@ export default class Facebook extends Component {
       this.getData()
     });
   }
+
+  callbackFunctionService = (campaign_id) => {
+    this.getDataAds(campaign_id);
+  }
+
+  
 
   loadFbLoginApi() {
 
@@ -115,7 +142,7 @@ export default class Facebook extends Component {
     const finalRevenue = fbData && fbData.action_values && fbData.action_values.length > 0 ? fbData.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_purchase') : ''
     const revenue = finalRevenue ? Number( finalRevenue.value).toFixed(2) + currencySymbol : '0'+ currencySymbol;
     const cost = Math.round(Number(this.state.fbTotals.spend)) + currencySymbol;
-    const roas = fbData.purchase_roas ? Number(fbData.purchase_roas[0].value).toFixed(2) + '' : '0%';
+    const roas = fbData.purchase_roas ? Number(fbData.purchase_roas[0].value).toFixed(2) + '' : '0';
     const finaladdToCart = fbData && fbData.action_values && fbData.action_values.length > 0 ? fbData.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_add_to_cart') : ''
     const addToCart = finaladdToCart ? Number( finaladdToCart.value).toFixed(2) + currencySymbol : '0' + currencySymbol;
     const finalinitiated_checkout = fbData && fbData.action_values && fbData.action_values.length > 0 ? fbData.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_initiate_checkout') : ''
@@ -126,6 +153,7 @@ export default class Facebook extends Component {
     const reach = this.state.fbTotals.reach;
     const frequency = this.state.fbTotals.frequency;
     const allCampaigns = this.state.fbCampaigns;
+    const ads = this.state.ads;
   
     return (
       <div className={classes.root}>
@@ -206,7 +234,7 @@ export default class Facebook extends Component {
           <CardContent>
             <Grid container spacing={4} >
               <Grid item lg={12} sm={12} xl={12} xs={12}>
-                <Table tabledata={allCampaigns} loading={this.state.loading}/>
+                <Table ads={ads} tabledata={allCampaigns} parentCallbackData={this.callbackFunctionService}/>
               </Grid>
             </Grid>
           </CardContent>

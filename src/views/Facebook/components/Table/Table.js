@@ -15,8 +15,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import {  currencySymbol } from '../../../../Config';
 
-function createData(campaign_name, objective, clicks, reach, impressions, cpm, frequency, cpc, ctr, addToCart ,checkoutProcess,revenue,spend,roas) {
-  return { campaign_name, objective, clicks, reach, impressions, cpm, frequency , cpc , ctr, addToCart ,checkoutProcess,revenue,spend,roas};
+function createData(campaign_name, objective, clicks, reach, impressions, cpm, frequency, cpc, ctr, addToCart ,checkoutProcess,revenue,spend,roas,campaign_id) {
+  return { campaign_name, objective, clicks, reach, impressions, cpm, frequency , cpc , ctr, addToCart ,checkoutProcess,revenue,spend,roas,campaign_id};
 }
 
 function desc(a, b, orderBy) {
@@ -71,7 +71,7 @@ function EnhancedTableHead(props) {
       <TableRow>
         {headCells.map(headCell => (
           <Tooltip key={headCell.id} title={headCell.toolTips} placement="top-end">
-          <TableCell key={headCell.id} align={headCell.numeric ? 'left' : 'left'}  padding={headCell.disablePadding ? 'none' : 'default'}
+          <TableCell key={headCell.id} align={headCell.numeric ? 'center' : 'center'}  padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false} >
             <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={createSortHandler(headCell.id)} >
               {headCell.label}
@@ -146,12 +146,14 @@ export default function EnhancedTable(props) {
         element.action_values && element.action_values.length > 0 && element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_initiate_checkout') ? Number(element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_initiate_checkout').value) : '0',
         element.action_values && element.action_values.length > 0 && element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_purchase') ? Number(element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_purchase').value) : '0',
         Number(element.spend),
-        element.purchase_roas && element.purchase_roas.length > 0 && element.purchase_roas[0] && element.purchase_roas[0].action_type === 'omni_purchase' ? Number(element.purchase_roas[0].value) : '0'
+        element.purchase_roas && element.purchase_roas.length > 0 && element.purchase_roas[0] && element.purchase_roas[0].action_type === 'omni_purchase' ? Number(element.purchase_roas[0].value) : '0',
+        element.campaign_id
         ))
     })
   }
 
-
+  const ads = props.ads.length > 0 ? props.ads : []
+  debugger;
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('revenue');
@@ -180,10 +182,14 @@ export default function EnhancedTable(props) {
   };
 
   const handleChange = name => event => {
+    const str = event.target.value;
+    const words = str.split(',');
+    debugger;
     if(event.target.checked){
-        document.getElementById('checked'+event.target.value).style.display = "block";
+        props.parentCallbackData(words[1]);
+        document.getElementById('checked'+words[0]).style.display = "block";
     }else{
-      document.getElementById('checked'+event.target.value).style.display = "none";
+      document.getElementById('checked'+words[0]).style.display = "none";
     }
   };
 
@@ -204,22 +210,22 @@ export default function EnhancedTable(props) {
                           <Tooltip title={row.campaign_name} placement="left-start">
                             <TableCell className="first-column" component="th" id={labelId} scope="row" >
                               {row.campaign_name}
-                              <Switch className={'hidden-row'} value={index} onChange={handleChange("checked")} />
+                              <Switch className={'hidden-row'} value={index+','+row.campaign_id} onChange={handleChange("checked")} />
                             </TableCell>
                           </Tooltip>
-                          <TableCell align="left">{row.objective}</TableCell>
-                          <TableCell align="left">{row.clicks}</TableCell>
-                          <TableCell align="left">{row.reach}</TableCell>
-                          <TableCell align="left">{row.impressions}</TableCell>
-                          <TableCell align="left">{row.cpm}</TableCell>
-                          <TableCell align="left">{row.frequency}</TableCell>
-                          <TableCell align="left">{row.cpc}{currencySymbol}</TableCell>
-                          <TableCell align="left">{row.ctr}%</TableCell>
-                          <TableCell align="left">{row.addToCart}{currencySymbol}</TableCell>
-                          <TableCell align="left">{row.checkoutProcess}{currencySymbol}</TableCell>
-                          <TableCell align="left">{row.revenue}{currencySymbol}</TableCell>
-                          <TableCell align="left">{row.spend}{currencySymbol}</TableCell>
-                          <TableCell align="left">{row.roas}</TableCell>
+                          <TableCell align="center">{row.objective}</TableCell>
+                          <TableCell align="center">{row.clicks}</TableCell>
+                          <TableCell align="center">{row.reach}</TableCell>
+                          <TableCell align="center">{row.impressions}</TableCell>
+                          <TableCell align="center">{row.cpm}</TableCell>
+                          <TableCell align="center">{row.frequency}</TableCell>
+                          <TableCell align="center">{row.cpc}{currencySymbol}</TableCell>
+                          <TableCell align="center">{row.ctr}%</TableCell>
+                          <TableCell align="center">{row.addToCart}{currencySymbol}</TableCell>
+                          <TableCell align="center">{row.checkoutProcess}{currencySymbol}</TableCell>
+                          <TableCell align="center">{row.revenue}{currencySymbol}</TableCell>
+                          <TableCell align="center">{row.spend}{currencySymbol}</TableCell>
+                          <TableCell align="center">{row.roas}</TableCell>
                         </TableRow>
                         <TableRow id={'checked'+index} style={{display: "none"}}>
                             dasdasdad
@@ -244,3 +250,13 @@ export default function EnhancedTable(props) {
 }
 
 //https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=act_108444649307331%2Finsights%3Flevel%3Dcampaign%26fields%3Dcampaign_name%2Creach%2Cclicks%2Cimpressions%2Caction_values%2Cquality_ranking%2Cpurchase_roas%2Ccpc%2Cctr%2Ccpm%2Cspend%2Cobjective%2Cfrequency%26time_range[since]%3D2020-02-08%26time_range[until]%3D2020-02-08&version=v6.0
+
+// https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=act_108444649307331%2Fcampaigns%3Fsummary%3Dinsights%26fields%3Deffective_status%2Cname%2Cobjective&version=v6.0
+// https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=act_108444649307331%2Fads%3Ffields%3Deffective_status%2Cname&version=v6.0
+// https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=6151154260107%2Fads%3Finsights%26fields%3Dname&version=v6.0
+// https://developers.facebook.com/tools/explorer/?method=GET&path=6151154260107%2Fads%3Ffields%3Dinsights.date_preset(yesterday)%7Bad_name%2Cadset_name%2Ccampaign_name%2Caccount_name%2Caccount_id%2Cimpressions%2Cinline_link_clicks%2Cspend%2Cad_id%7D%2Cadcreatives%7Bobject_story_spec%7D&version=v6.0
+
+
+// https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=act_108444649307331%2Finsights%3Ffields%3Dcampaign_id%2Cad_name%2Caction_values%2Cclicks%2Cimpressions%2Cpurchase_roas%2Ccpc%2Cctr%2Ccpm%2Cspend%2Creach%2Cfrequency%26time_range[since]%3D2020-02-13%26time_range[until]%3D2020-02-13%26level%3Dad&version=v6.0
+// https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=act_108444649307331%2Fcampaigns%3Fsummary%3Dinsights%26fields%3Deffective_status%2Cname%2Cobjective%26time_range[since]%3D2020-02-13%26time_range[until]%3D2020-02-13&version=v6.0
+// https://developers.facebook.com/tools/explorer/519580525465323/?method=GET&path=6151154260107%2Finsights%3Ffields%3Dcampaign_id%2Cad_name%2Caction_values%2Cclicks%2Cimpressions%2Cpurchase_roas%2Ccpc%2Cctr%2Ccpm%2Cspend%2Creach%2Cfrequency%26time_range[since]%3D2020-02-13%26time_range[until]%3D2020-02-13%26level%3Dad&version=v6.0
