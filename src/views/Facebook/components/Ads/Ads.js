@@ -1,54 +1,14 @@
 import React from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
-import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
-// import Loading from '../../../../helpers/Loading';
-
-// const useStyles = makeStyles(theme => ({
-//   root: {
-//     height: '100%'
-//   },
-//   content: {
-//     alignItems: 'center',
-//     display: 'flex'
-//   },
-//   title: {
-//     fontWeight: 700,
-//     color: 'white'
-//   },
-//   avatar: {
-//     backgroundColor: theme.palette.error.main,
-//     height: 56,
-//     width: 56
-//   },
-//   icon: {
-//     height: 32,
-//     width: 32
-//   },
-//   difference: {
-//     marginTop: theme.spacing(2),
-//     display: 'flex',
-//     alignItems: 'center'
-//   },
-//   differenceIcon: {
-//     color: theme.palette.error.dark
-//   },
-//   differenceValue: {
-//     color: theme.palette.error.dark,
-//     marginRight: theme.spacing(1)
-//   }
-// }));
+import {  currencySymbol } from '../../../../Config';
 
 const Ads = props => {
   debugger;
   let data = props.adsData;
-  // let title = props.title;
 
   const { className, ...rest } = props;
 
-  // const classes = useStyles();
   let CampaignAds = props.adsData.map((element, i) => {
+    // const aa = element.action_values && element.action_values.length > 0  ? element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_add_to_cart') : 'a'
     if(element.campaign_id ===  props.campaign_id)
       return (
         <div className={'item'} key={i}> 
@@ -56,25 +16,55 @@ const Ads = props => {
             {element.ad_name}
           </div> 
           <div className="item__value">
-            <div className="item__value__title">{'clicks: '}</div>
+            <div className="item__value__title">{'Clicks: '}</div>
             <div className="item__value__key">{element.clicks}</div>
           </div>
           <div className="item__value">
-            <div className="item__value__title">{'impressions: '}</div>
-            <div lassName="item__value__key">{element.impressions}</div>
-          </div>
-          <div className="item__value">
-            <div className="item__value__title">{'cpc: '}</div>
-            <div className="item__value__key">{element.cpc}</div>
-          </div>
-          <div className="item__value">
-            <div className="item__value__title">{'reach: '}</div>
+            <div className="item__value__title">{'Reach: '}</div>
             <div className="item__value__key">{element.reach}</div>
+          </div>
+          <div className="item__value">
+            <div className="item__value__title">{'Impressions: '}</div>
+            <div className="item__value__key">{element.impressions}</div>
+          </div>
+          <div className="item__value">
+            <div className="item__value__title">{'CPM: '}</div>
+            <div className="item__value__key">{element.cpm}</div>
+          </div>
+          <div className="item__value">
+            <div className="item__value__title">{'Frequency: '}</div>
+            <div className="item__value__key">{element.frequency}</div>
+          </div>
+          <div className="item__value">
+            <div className="item__value__title">{'CPC: '}</div>
+            <div className="item__value__key">{element.cpc}{currencySymbol}</div>
+          </div>
+          <div className="item__value">
+            <div className="item__value__title">{'CTR: '}</div>
+            <div className="item__value__key">{element.ctr}%</div>
+          </div>
+          <div className="item__value">
+            <div className="item__value__title">{'Add to Cart: '}</div>
+            <div className="item__value__key">{element.addToCart ? element.addToCart+currencySymbol : '0'+currencySymbol}</div>
+          </div>
+          <div className="item__value">
+            <div className="item__value__title" title="Proceed to Checkout Process">{'Checkout Pr.: '}</div>
+            <div className="item__value__key">{element.checkoutProcess ? element.checkoutProcess+currencySymbol : '0'+currencySymbol}</div></div>
+          <div className="item__value">
+            <div className="item__value__title">{'Revenue: '}</div>
+            <div className="item__value__key">{element.purchase ? element.purchase+currencySymbol : '0'+currencySymbol}</div></div>
+          <div className="item__value">
+            <div className="item__value__title">{'Spend: '}</div>
+            <div className="item__value__key">{element.spend}{currencySymbol}</div>
+          </div>
+          <div className="item__value">
+            <div className="item__value__title">{'Roas: '}</div>
+            <div className="item__value__key">{element.purchase_roas ? element.purchase_roas[0].value : '0'}</div>
           </div>
         </div>
       )
   })
-
+  
   return (
     <div className={'ads-container'}>
       {CampaignAds}

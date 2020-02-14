@@ -124,12 +124,15 @@ export default class Facebook extends Component {
     const self = this;
     window.fbAsyncInit = function() {
       
-      window.FB.init({
-        appId      : facebookApi.app_id,
-        xfbml      : true,
-        version    : facebookApi.app_version
-      });
-      self.getData()
+      if (window.FB){
+        window.FB.init({
+          appId      : facebookApi.app_id,
+          xfbml      : true,
+          version    : facebookApi.app_version
+        });
+      
+        self.getData()
+      }
     }
 
     // Load the SDK asynchronously

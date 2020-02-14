@@ -155,7 +155,17 @@ export default function EnhancedTable(props) {
   }
 
   const ads = props.ads.length > 0 ? props.ads : []
-
+  ads.forEach( function (element, index) {
+     if (element.action_values && element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_initiate_checkout')){
+      element.checkoutProcess = element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_initiate_checkout').value
+     }
+     if (element.action_values && element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_add_to_cart')){
+      element.addToCart = element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_add_to_cart').value
+     }
+     if (element.action_values && element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_purchase')){
+      element.purchase = element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_purchase').value
+     }
+  })
  
   const [modal, setModal] = React.useState(false);
   const [selectedModal, setSelectedModal] = React.useState("-1");
