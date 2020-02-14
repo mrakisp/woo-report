@@ -220,13 +220,14 @@ export default function EnhancedTable(props) {
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                         <TableRow key={index}>
-                          <Tooltip title={row.campaign_name} placement="left-start">
-                            <TableCell className="first-column" component="th" id={labelId} scope="row" >
-                              {row.campaign_name}
-                              <Switch className={'hidden-row'} checked={modal && Number(selectedModal) == index ? "true" : ''} value={index+','+row.campaign_id} onChange={handleChange("checked")} />
-                            </TableCell>
+                          
+                          <TableCell className="first-column" component="th" id={labelId} scope="row" >
+                            {row.campaign_name}
+                            <Switch className={'hidden-row'} checked={modal && Number(selectedModal) == index ? "true" : ''} value={index+','+row.campaign_id} onChange={handleChange("checked")} />
+                          </TableCell>
+                          <Tooltip title={row.objective} placement="right-end">
+                            <TableCell align="center">{row.objective}</TableCell>
                           </Tooltip>
-                          <TableCell align="center">{row.objective}</TableCell>
                           <TableCell align="center">{row.clicks}</TableCell>
                           <TableCell align="center">{row.reach}</TableCell>
                           <TableCell align="center">{row.impressions}</TableCell>

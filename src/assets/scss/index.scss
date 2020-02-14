@@ -148,3 +148,11 @@ a.canvasjs-chart-credit {
   padding-bottom: 50px;
 }
     
+
+.facebook__table td:nth-child(2) {
+    max-width: 60px;
+    white-space: pre-wrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    border-left: 1px solid #eee;
+}
