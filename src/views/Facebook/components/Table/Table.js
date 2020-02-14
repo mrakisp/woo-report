@@ -225,9 +225,9 @@ export default function EnhancedTable(props) {
                             {row.campaign_name}
                             <Switch className={'hidden-row'} checked={modal && Number(selectedModal) == index ? "true" : ''} value={index+','+row.campaign_id} onChange={handleChange("checked")} />
                           </TableCell>
-                          <Tooltip title={row.objective} placement="right-end">
-                            <TableCell align="center">{row.objective}</TableCell>
-                          </Tooltip>
+                          {/* <Tooltip title={row.objective} placement="right-end"> */}
+                            <TableCell title={row.objective} align="center">{row.objective}</TableCell>
+                          {/* </Tooltip> */}
                           <TableCell align="center">{row.clicks}</TableCell>
                           <TableCell align="center">{row.reach}</TableCell>
                           <TableCell align="center">{row.impressions}</TableCell>
