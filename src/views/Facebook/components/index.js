@@ -3,6 +3,7 @@ export { default as Tabs } from './Tabs';
 export { default as AdsCampaign } from './AdsCampaign';
 export { default as UsersByDevice } from './UsersByDevice';
 export { default as Table } from './Table';
+export { default as Ads } from './Ads';
 
 // export { default as LatestOrders } from './LatestOrders';
 // export { default as LatestProducts } from './LatestProducts';

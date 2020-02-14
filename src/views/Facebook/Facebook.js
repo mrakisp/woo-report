@@ -30,15 +30,33 @@ export default class Facebook extends Component {
     window.FB.api(
       '/'+campaign_id+'/insights?access_token='+facebookApi.access_token,
       'GET',
-      {"fields":"campaign_id,ad_name,action_values,clicks,impressions,purchase_roas,cpc,ctr,cpm,spend,reach,frequency","time_range":{"since":fromDate,"until":toDate},"level":"ad"},
+      {"fields":"campaign_id,ad_id,ad_name,action_values,clicks,impressions,purchase_roas,cpc,ctr,cpm,spend,reach,frequency","time_range":{"since":fromDate,"until":toDate},"level":"ad"},
       function(response) {
-        debugger;
-        self.setState({
-          ads: response.data.length > 0 ? response.data : [],
-        })
-          // Insert your code here
+        self.collectAds(response.data.length > 0 ? response.data : [])
       }
     );
+  }
+
+  collectAds = (ads) => {
+    let allAds = [];
+    if(this.state.ads.length > 0){
+      allAds = this.state.ads;
+
+      ads.forEach( function (element, index) {
+
+         if(allAds.findIndex(x => x.ad_id === element.ad_id) > -1){  //CHECK IF VALUES EXISTS AND REPLACE WITH LAST ONE
+           allAds[allAds.findIndex(x => x.ad_id === element.ad_id)] = element
+         }else{ //IF VALUES ARE NEW ONES PUSH IT
+           allAds.push(element)
+         }
+      })
+    }else{
+      allAds = ads;
+    }
+
+    this.setState({
+      ads: allAds,
+    })
   }
 
   getData = () => {

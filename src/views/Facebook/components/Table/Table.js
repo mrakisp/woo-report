@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import {  currencySymbol } from '../../../../Config';
+import { Ads } from '..'
 
 function createData(campaign_name, objective, clicks, reach, impressions, cpm, frequency, cpc, ctr, addToCart ,checkoutProcess,revenue,spend,roas,campaign_id) {
   return { campaign_name, objective, clicks, reach, impressions, cpm, frequency , cpc , ctr, addToCart ,checkoutProcess,revenue,spend,roas,campaign_id};
@@ -124,6 +125,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
   },
+
 }));
 
 export default function EnhancedTable(props) {
@@ -153,7 +155,10 @@ export default function EnhancedTable(props) {
   }
 
   const ads = props.ads.length > 0 ? props.ads : []
-  debugger;
+
+ 
+  const [modal, setModal] = React.useState(false);
+  const [selectedModal, setSelectedModal] = React.useState("-1");
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('revenue');
@@ -172,6 +177,14 @@ export default function EnhancedTable(props) {
     setPage(newPage);
   };
 
+  
+  const handleChangeModal = event => {
+    debugger;
+    setModal(false)
+    setSelectedModal("-1");
+  };
+
+
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -182,16 +195,22 @@ export default function EnhancedTable(props) {
   };
 
   const handleChange = name => event => {
+
     const str = event.target.value;
     const words = str.split(',');
-    debugger;
     if(event.target.checked){
         props.parentCallbackData(words[1]);
-        document.getElementById('checked'+words[0]).style.display = "block";
+         setModal(true);
+         setSelectedModal(words[0]);
+        // document.getElementById('checked'+words[0]).style.display = "block";
     }else{
-      document.getElementById('checked'+words[0]).style.display = "none";
+      setModal(false);
+      setSelectedModal("-1");
+      // document.getElementById('checked'+words[0]).style.display = "none";
     }
   };
+
+
 
   return (
     <div className={classes.root}>
@@ -205,7 +224,6 @@ export default function EnhancedTable(props) {
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
-                    <span key={index} style={{display: "contents"}}>
                         <TableRow key={index}>
                           <Tooltip title={row.campaign_name} placement="left-start">
                             <TableCell className="first-column" component="th" id={labelId} scope="row" >
@@ -226,11 +244,11 @@ export default function EnhancedTable(props) {
                           <TableCell align="center">{row.revenue}{currencySymbol}</TableCell>
                           <TableCell align="center">{row.spend}{currencySymbol}</TableCell>
                           <TableCell align="center">{row.roas}</TableCell>
+                          {modal && Number(selectedModal) == index ? <div className="modal" id={'checked'+index} >
+                            <div>MODAL <div onClick={handleChangeModal} >X</div></div>
+                            <Ads adsData={ads} campaign_id={row.campaign_id}/>
+                          </div> : 'a'}                          
                         </TableRow>
-                        <TableRow id={'checked'+index} style={{display: "none"}}>
-                            dasdasdad
-                        </TableRow>
-                    </span>
                   );
                 })}
             </TableBody>
