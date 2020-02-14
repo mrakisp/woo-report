@@ -67,6 +67,10 @@ const Ads = props => {
             <div className="item__value__title">{'cpc: '}</div>
             <div className="item__value__key">{element.cpc}</div>
           </div>
+          <div className="item__value">
+            <div className="item__value__title">{'reach: '}</div>
+            <div className="item__value__key">{element.reach}</div>
+          </div>
         </div>
       )
   })
