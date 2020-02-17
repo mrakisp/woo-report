@@ -100,7 +100,7 @@ const TopCustomers = props => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dataSorted.map(topCustomer => (
+                {dataSorted.slice(0, 20).map(topCustomer => (
                   <TableRow hover key={topCustomer.id} >
                     <TableCell>{topCustomer.fullName}</TableCell>
                     <TableCell>{topCustomer.email}</TableCell>
