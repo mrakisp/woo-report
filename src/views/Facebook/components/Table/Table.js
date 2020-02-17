@@ -221,7 +221,7 @@ export default function EnhancedTable(props) {
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <TableContainer>
-          <Table className={classes.table}  aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'} aria-label="enhanced table" >
+         <Table stickyHeader aria-label="sticky table">
             <EnhancedTableHead classes={classes} numSelected={selected.length} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} rowCount={rows.length}/>
             <TableBody className="facebook__table">
               {stableSort(rows, getSorting(order, orderBy))

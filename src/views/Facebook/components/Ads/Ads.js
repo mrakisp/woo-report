@@ -2,14 +2,13 @@ import React from 'react';
 import {  currencySymbol } from '../../../../Config';
 
 const Ads = props => {
-  debugger;
+
   let data = props.adsData;
 
   const { className, ...rest } = props;
 
   let CampaignAds = props.adsData.map((element, i) => {
-    // const aa = element.action_values && element.action_values.length > 0  ? element.action_values.find(x => x.action_type  === 'offsite_conversion.fb_pixel_add_to_cart') : 'a'
-    if(element.campaign_id ===  props.campaign_id)
+   if(element.campaign_id ===  props.campaign_id)
       return (
         <div className={'item'} key={i}> 
           <div className="item__title">

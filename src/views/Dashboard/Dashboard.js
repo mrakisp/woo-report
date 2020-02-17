@@ -6,7 +6,7 @@ import PieChart from "../../components/charts/PieChart";
 import {topSellersEndPoint, salesEndPoint ,ordersEndPoint } from '../../Config';
 import {formatDate} from "../../helpers/Utils";
 import DatePicker from "../../helpers/Date";
-import { PaymentMethodsAndRevenue } from './components';
+import { PaymentMethodsAndRevenue, TopCustomers } from './components';
 import axios from 'axios';
 import { Box } from '../Analytics/components';
 
@@ -107,7 +107,14 @@ export default class Dashboard extends Component {
         })  
     })
 
+
+// fetch("https://us14.api.mailchimp.com/3.0/ecommerce/stores?apikey=1977d27db0689da35d5a32b7f98aae84-us14&id=loveshoes&email[email]=info@solidcube.gr&client_id=239959056780&client_secret=8f98e0803c3e34b1e7e4d9c66de518279c5efbfc0d9855bb8c").
+//   then(response => response.json()).then((repos) => {
+//       debugger
+//     });  
+   
   }
+
 
    //GET DATA FROM CHILD COMPONENT
    callbackFunction = (from,to) => {
@@ -212,7 +219,6 @@ export default class Dashboard extends Component {
         </Grid>
         <Grid item lg={4} sm={6} xl={4} xs={12} >
            <TopSellers topSellers={topSellers} />
-          {/* <LatestProducts /> */}
         </Grid>
         <Grid item lg={8} sm={6} xl={8} xs={12} >
           <PieChart topSellers={topSellers}/>
@@ -220,6 +226,10 @@ export default class Dashboard extends Component {
         <Grid item lg={12} sm={12} xl={12} xs={12} >
           <PaymentMethodsAndRevenue allOrders={allOrders}/>
         </Grid>
+        <Grid item lg={12} sm={12} xl={12} xs={12} >
+          <TopCustomers allorders={allOrders} />
+        </Grid>
+         
       </Grid>
     </div>
   );
