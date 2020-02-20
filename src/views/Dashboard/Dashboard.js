@@ -107,11 +107,6 @@ export default class Dashboard extends Component {
         })  
     })
 
-
-// fetch("https://us14.api.mailchimp.com/3.0/ecommerce/stores?apikey=1977d27db0689da35d5a32b7f98aae84-us14&id=loveshoes&email[email]=info@solidcube.gr&client_id=239959056780&client_secret=8f98e0803c3e34b1e7e4d9c66de518279c5efbfc0d9855bb8c").
-//   then(response => response.json()).then((repos) => {
-//       debugger
-//     });  
    
   }
 
