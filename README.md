@@ -1,4 +1,7 @@
-React Analytics & Woocommerce Reporting Dashboard based on Material Ui -> https://material-ui.com/
+Google Analytics, Facebook Ads & Woocommerce Reporting Dashboard based on React & Material Ui
+
+# Preview - 
+![](app.gif)
 
 ## Quick start
 
@@ -11,9 +14,10 @@ React Analytics & Woocommerce Reporting Dashboard based on Material Ui -> https:
 - Views are on: `localhost:3000`
 
 - App configuration file: `Config.js`
-	- `ENABLE/DISABLE DASHBOARD VIEW`
+	- `ENABLE/DISABLE DASHBOARD VIEWS`
 	- `ENABLE REST API TO YOUR WOOCOMMERCE STORE AND SET THE CREDS -> https://docs.woocommerce.com/document/woocommerce-rest-api/`
 	- `SET ANALYTICS CREDS -> https://developers.google.com/analytics/devguides/reporting/core/v4`
+	- `SET FACEBOOK API CREDS 
 	- `SET ADWORDS CAMPAIGNS GOALS`
 	- `SET CURRENCY `
 
